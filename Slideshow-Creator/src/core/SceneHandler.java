@@ -1,4 +1,4 @@
-package creator;
+package core;
 
 public class SceneHandler {
 

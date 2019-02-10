@@ -1,4 +1,4 @@
-package viewer;
+package core;
 
 public class TimelineParser {
 
