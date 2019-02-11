@@ -52,6 +52,7 @@ public class SceneHandler {
 	 */
 	private JFrame mainFrame;
 	
+	//TODO Might be useful to have this as a dictionary instead
 	private List<Scene> scenes;
 	private int sceneIndex = 0;
 	
@@ -77,19 +78,22 @@ public class SceneHandler {
 	 */
 	public boolean launch()
 	{
-		//set up main window
+		//set up default window
 		mainFrame = new JFrame();
 		mainFrame.setSize(800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		
 		
-		//open main window
-		//mainFrame.setVisible(true);
-		
 		return true;
 	}
 	
+	/**
+	 * SwitchToScene - Switches to the scene that is passed in and sets it active. 
+	 * Automatically adds a scene to the master scene list if it doesn't already exist
+	 * 
+	 * @param target - the scene object to be switched to
+	 */
 	public void SwitchToScene(Scene target) {
 		
 		if(!scenes.contains(target)) {
@@ -103,4 +107,16 @@ public class SceneHandler {
 		mainFrame = target;
 		mainFrame.setVisible(true);
 	}
+	
+	/**
+	 * SwitchToScene - switches to a scene already in the list by its index 
+	 * 
+	 * @param sceneIndex
+	 */
+	public void SwitchToScene(int sceneIndex) {
+		mainFrame.setVisible(false);
+		mainFrame = scenes.get(sceneIndex);
+		mainFrame.setVisible(true);
+	}
+	
 }
