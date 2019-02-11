@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /**
  * ViewerMain.java
  * Launches the viewer program
@@ -9,7 +7,6 @@
  * CS 499 Senior Design with Dr. Rick Coleman
  * 2/7/19
  */
->>>>>>> 0b8426232594cfcd73fd8963d0618f0b27b1513b
 package viewer;
 
 import core.SceneHandler;
