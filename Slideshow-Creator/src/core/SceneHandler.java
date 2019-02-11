@@ -9,8 +9,7 @@
  */
 package core;
 
-import java.util.Map;
-
+import java.util.*;
 import javax.swing.JFrame;
 
 public class SceneHandler {
@@ -51,17 +50,22 @@ public class SceneHandler {
 	/**
 	 * mainFrame - window frame of program
 	 */
-	public JFrame mainFrame;
+	private JFrame mainFrame;
+	
+	private List<Scene> scenes;
+	private int sceneIndex = 0;
 	
 	/**
 	 * SceneHandler - creates program with specified app type
 	 * @param aT AppType to open
 	 * 
 	 * @author Timothy Couch
+	 * @author austinvickers
 	 */
 	public SceneHandler(AppType aT)
 	{
 		appType = aT;
+		scenes = new ArrayList<Scene>();
 		launch();
 	}
 	
@@ -81,8 +85,22 @@ public class SceneHandler {
 		
 		
 		//open main window
-		mainFrame.setVisible(true);
+		//mainFrame.setVisible(true);
 		
 		return true;
+	}
+	
+	public void SwitchToScene(Scene target) {
+		
+		if(!scenes.contains(target)) {
+			scenes.add(target);
+			sceneIndex = scenes.indexOf(target);
+		}
+		else {
+			sceneIndex = scenes.indexOf(target);
+		}
+		mainFrame.setVisible(false);
+		mainFrame = target;
+		mainFrame.setVisible(true);
 	}
 }

@@ -22,5 +22,6 @@ public class CreatorMain
 	public static void main(String[] args)
 	{
 		SceneHandler handler = new SceneHandler(SceneHandler.AppType.CREATOR);
+		handler.SwitchToScene(new DirectoryExplorer());
 	}
 }
