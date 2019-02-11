@@ -1,4 +1,4 @@
-package creator;
+package viewer;
 
 public class ViewerMain {
 

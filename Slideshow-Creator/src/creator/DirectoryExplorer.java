@@ -1,5 +1,12 @@
 package creator;
 
-public class DirectoryExplorer {
+import javax.swing.JFrame;
+import core.*;
 
+public class DirectoryExplorer extends Scene {
+
+	public DirectoryExplorer() {
+		
+	}
+	
 }

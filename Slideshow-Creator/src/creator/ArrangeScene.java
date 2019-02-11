@@ -1,5 +1,7 @@
 package creator;
 
-public class ArrangeScene {
+import core.*;
+
+public class ArrangeScene extends Scene{
 
 }

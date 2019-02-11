@@ -1,5 +1,7 @@
 package creator;
 
-public class SelectScene {
+import core.*;
+
+public class SelectScene extends Scene {
 
 }

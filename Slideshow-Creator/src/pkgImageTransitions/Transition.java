@@ -39,7 +39,7 @@ public class Transition
 	
 	//--------------------------------------------------------
 	/** Perform the transition from one image to another */
-	// All subclasses must over ride this.  This only does
+	// All subclasses must override this.  This only does
 	//  an instant switch from one to the other
 	// Args:  
 	//  imgPanel - Panel the images are drawn into
