@@ -9,38 +9,14 @@
  */
 package core;
 
+import java.io.Console;
 import java.util.*;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class SceneHandler {
-
-	/**
-	 * AppType - enum of which program is running
-	 * 
-	 * @author Timothy Couch
-	 * 
-	 * Special thanks to flash at https://stackoverflow.com/questions/8063852/how-can-i-associate-a-string-with-each-member-of-an-enum
-	 *
-	 */
-	public enum AppType {
-		CREATOR("Creator"), 
-		VIEWER("Viewer");
-		
-		/**
-		 * title - name of app 
-		 */
-		private String title;
-		
-	    AppType(String title)
-	    {
-	        this.title = title;
-	    }
-
-	    public String getTitle()
-	    {
-	        return title;
-	    }
-	}
 	
 	/**
 	 * appType - which program is running
@@ -52,9 +28,7 @@ public class SceneHandler {
 	 */
 	private JFrame mainFrame;
 	
-	//TODO Might be useful to have this as a dictionary instead
-	private List<Scene> scenes;
-	private int sceneIndex = 0;
+	private HashMap<SceneType, Scene> scenes;
 	
 	/**
 	 * SceneHandler - creates program with specified app type
@@ -66,7 +40,7 @@ public class SceneHandler {
 	public SceneHandler(AppType aT)
 	{
 		appType = aT;
-		scenes = new ArrayList<Scene>();
+		scenes = new HashMap<SceneType, Scene>();
 		launch();
 	}
 	
@@ -84,39 +58,47 @@ public class SceneHandler {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		
+		JPanel defaultPanel = new JPanel();
+		defaultPanel.add(new JButton("Hello World"));
+		
+		mainFrame.setVisible(true);
 		
 		return true;
 	}
-	
 	/**
-	 * SwitchToScene - Switches to the scene that is passed in and sets it active. 
-	 * Automatically adds a scene to the master scene list if it doesn't already exist
+	 * AddScene - adds a new scene to the context. There may only be one of each type of scene.
 	 * 
-	 * @param target - the scene object to be switched to
+	 * @param type - the scene type
+	 * @param scene - an instance of the scene you want to add
+	 * 
+	 * @author austinvickers
 	 */
-	public void SwitchToScene(Scene target) {
+	public void AddScene(SceneType type, Scene scene) {
 		
-		if(!scenes.contains(target)) {
-			scenes.add(target);
-			sceneIndex = scenes.indexOf(target);
+		if(!scenes.containsKey(type)) {
+			scenes.put(type, scene);
 		}
 		else {
-			sceneIndex = scenes.indexOf(target);
+			System.out.println("That scene already exists in the context. Use SwitchToScene() to switch to it");
 		}
-		mainFrame.setVisible(false);
-		mainFrame = target;
-		mainFrame.setVisible(true);
 	}
 	
 	/**
-	 * SwitchToScene - switches to a scene already in the list by its index 
-	 * 
-	 * @param sceneIndex
+	 * SwitchToScene - Switches to a scene based on the type that was passed in
+	 * @param target - the scene object to be switched to
 	 */
-	public void SwitchToScene(int sceneIndex) {
-		mainFrame.setVisible(false);
-		mainFrame = scenes.get(sceneIndex);
-		mainFrame.setVisible(true);
+	public void SwitchToScene(SceneType target) {
+		
+		if(scenes.containsKey(target)) {
+			mainFrame.setVisible(false);
+			mainFrame.getContentPane().removeAll();
+			mainFrame.getContentPane().add(scenes.get(target));
+			mainFrame.setVisible(true);
+		}
+		else {
+			System.out.println("That scene does not exist in the current context.");
+		}
+		
 	}
 	
 }

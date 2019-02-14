@@ -1,8 +1,8 @@
 package core;
 
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class Scene extends JFrame {
+public class Scene extends JPanel {
 	
 	public Scene() {
 		

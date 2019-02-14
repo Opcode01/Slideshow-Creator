@@ -11,13 +11,13 @@ public class DirectoryExplorer extends Scene {
 		
 		this.setSize(800, 600);
 				
-		getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel label = new JLabel("This is the directory explorer scene!");
-		getContentPane().add(label);
+		this.add(label);
 		
 		JButton testButton = new JButton("Hello World!");
-		getContentPane().add(testButton);
+		this.add(testButton);
 	}
 	
 	public void GoToSelectScene() {
