@@ -9,7 +9,7 @@
  */
 package viewer;
 
-import core.SceneHandler;
+import core.*;
 
 public class ViewerMain
 {
@@ -21,6 +21,6 @@ public class ViewerMain
 	 */
 	public static void main(String[] args)
 	{
-		SceneHandler handler = new SceneHandler(SceneHandler.AppType.VIEWER);
+		SceneHandler handler = new SceneHandler(AppType.VIEWER);
 	}
 }

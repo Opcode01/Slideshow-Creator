@@ -110,8 +110,8 @@ public class ImageTransitionsMain extends JFrame
 		
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
-        m_iScnWidth = d.width - 10;
-        m_iScnHeight = d.height - 10;
+        m_iScnWidth = d.width - 100;
+        m_iScnHeight = d.height - 100;
         
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLocation(5, 5);
@@ -443,7 +443,7 @@ public class ImageTransitionsMain extends JFrame
 	 * @param args - Array of strings from the command line
 	 */
 	//----------------------------------------------------------------------
-	public static void main(String[] args) 
+/*	public static void main(String[] args) 
 	{
 		// When you start this application this function gets called by the
 		//  operating system.  Main just creates an ImageViewer object.
@@ -451,5 +451,6 @@ public class ImageTransitionsMain extends JFrame
 		//  constructor.
 		ImageTransitionsMain IV = new ImageTransitionsMain();
 	}
+	*/
 
 }
