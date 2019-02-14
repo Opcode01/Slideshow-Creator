@@ -9,7 +9,7 @@
  */
 package creator;
 
-import core.SceneHandler;
+import core.*;
 
 public class CreatorMain
 {
@@ -21,6 +21,10 @@ public class CreatorMain
 	 */
 	public static void main(String[] args)
 	{
-		SceneHandler handler = new SceneHandler(SceneHandler.AppType.CREATOR);
+		SceneHandler handler = new SceneHandler(AppType.CREATOR);
+		handler.AddScene(SceneType.DIRECTORY, new DirectoryExplorer());
+		handler.AddScene(SceneType.SELECTION, new SelectScene());
+		handler.AddScene(SceneType.ARRANGE, new ArrangeScene());
+		handler.SwitchToScene(SceneType.DIRECTORY);
 	}
 }

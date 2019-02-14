@@ -56,3 +56,6 @@ local.properties
 
 # VSCode stuff :)
 .vscode
+
+.project
+
