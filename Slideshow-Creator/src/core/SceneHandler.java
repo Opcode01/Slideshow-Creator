@@ -9,9 +9,7 @@
  */
 package core;
 
-import java.io.Console;
 import java.util.*;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,8 +25,10 @@ public class SceneHandler {
 	 * mainFrame - window frame of program
 	 */
 	private JFrame mainFrame;
-	
+	/* The dictionary of scenes in the current context */
 	private HashMap<SceneType, Scene> scenes;
+	/* The currently selected scene type */
+	private SceneType currentScene;
 	
 	/**
 	 * SceneHandler - creates program with specified app type
@@ -41,6 +41,7 @@ public class SceneHandler {
 	{
 		appType = aT;
 		scenes = new HashMap<SceneType, Scene>();
+		currentScene = SceneType.NONE;
 		launch();
 	}
 	
@@ -60,6 +61,8 @@ public class SceneHandler {
 		
 		JPanel defaultPanel = new JPanel();
 		defaultPanel.add(new JButton("Hello World"));
+		
+		mainFrame.add(defaultPanel);
 		
 		mainFrame.setVisible(true);
 		
@@ -94,11 +97,20 @@ public class SceneHandler {
 			mainFrame.getContentPane().removeAll();
 			mainFrame.getContentPane().add(scenes.get(target));
 			mainFrame.setVisible(true);
+			
+			currentScene = target;
 		}
 		else {
 			System.out.println("That scene does not exist in the current context.");
-		}
-		
+		}	
+	}
+	
+	/**
+	 * GetCurrentScene - returns the Scene object that is currently active
+	 * @return - the active Scene
+	 */
+	public Scene GetCurrentScene() {
+		return scenes.get(currentScene);
 	}
 	
 }
