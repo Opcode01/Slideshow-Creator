@@ -1,6 +1,7 @@
 package core;
 
 public enum SceneType {
+	NONE("None"),
 	DIRECTORY("Directory"),
 	SELECTION("Selection"),
 	ARRANGE("Arrange"),
