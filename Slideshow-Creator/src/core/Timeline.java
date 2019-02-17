@@ -12,8 +12,8 @@ package core;
 
 public class Timeline
 {
-    public Thumbnails thumbnails;
-    public Transitions transitions;
+    public Thumbnails thumbnailList;
+    public Transitions transitionList;
 
     /**
      * Timeline - initializes an empty timeline
@@ -22,7 +22,7 @@ public class Timeline
      */
     public Timeline()
     {
-        thumbnails = new Thumbnails();
-        transitions = new Transitions();
+        thumbnailList = new Thumbnails();
+        transitionList = new Transitions();
     }
 }
