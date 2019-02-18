@@ -39,6 +39,16 @@ public class SceneHandler {
 	private HashMap<SceneType, Scene> scenes;
 	/* The currently selected scene type */
 	private SceneType currentScene;
+
+	public void setDirectory(String dir)
+	{
+		directory = dir;
+	}
+
+	public String getDirectory()
+	{
+		return directory;
+	}
 	
 	/**
 	 * SceneHandler - creates program with specified app type
@@ -50,7 +60,7 @@ public class SceneHandler {
 	public SceneHandler(AppType aT)
 	{
 		//the first created SceneHandler is the real one. There should never be another one, but just making sure
-		if (singleton != null)
+		if (singleton == null)
 			singleton = this;
 		appType = aT;
 		scenes = new HashMap<SceneType, Scene>();
@@ -63,6 +73,7 @@ public class SceneHandler {
 	 * @return true if successfully opened, false otherwise
 	 * 
 	 * @author Timothy Couch
+	 * @author austinvickers
 	 */
 	public boolean launch()
 	{
@@ -71,11 +82,6 @@ public class SceneHandler {
 		mainFrame.setSize(800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
-		
-		JPanel defaultPanel = new JPanel();
-		defaultPanel.add(new JButton("Hello World"));
-		
-		mainFrame.add(defaultPanel);
 		
 		mainFrame.setVisible(true);
 		
@@ -112,7 +118,8 @@ public class SceneHandler {
 
 			//hide scene
 			mainFrame.setVisible(false);
-			GetCurrentScene().hide();
+			if (GetCurrentScene() != null)
+				GetCurrentScene().hide();
 			mainFrame.getContentPane().removeAll();
 
 			//show scene

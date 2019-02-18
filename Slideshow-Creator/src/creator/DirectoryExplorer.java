@@ -1,3 +1,12 @@
+/**
+ * DirectoryExplorer.java
+ * Scene in which user chooses directory or file to load
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 2/10/19
+ */
 package creator;
 
 import core.*;
@@ -9,6 +18,11 @@ import java.awt.event.ActionListener;
 
 public class DirectoryExplorer extends Scene {
 
+	/**
+	 * sets up directory explorer with GUI stuff
+	 * 
+	 * @author austinvickers
+	 */
 	public DirectoryExplorer() {
 
 		this.setSize(800, 600);
@@ -31,13 +45,13 @@ public class DirectoryExplorer extends Scene {
 	
 	/**
 	 * GoToSelectScene() - sends to select scene with specified path
-	 * @param path is directory path
+	 * @param dir is directory
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void GoToSelectScene(String path)
+	public void GoToSelectScene(String dir)
 	{
-
+		SceneHandler.singleton.setDirectory(dir);
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 	}
 	
