@@ -1,6 +1,7 @@
 /**
  * SceneHandler.java
  * Controls and manages the overall program
+ * Singleton class
  * 
  * Slideshow Creator
  * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
@@ -17,9 +18,18 @@ import javax.swing.JPanel;
 public class SceneHandler {
 	
 	/**
+	 * the one instance of SceneHandler that exists
+	 */
+	public static SceneHandler singleton;
+
+	/**
 	 * appType - which program is running
 	 */
-	public AppType appType;
+	private AppType appType;
+	/**
+	 * directory - directory where the slideshow is working and using images
+	 */
+	private String directory = "";
 	
 	/**
 	 * mainFrame - window frame of program
@@ -39,6 +49,9 @@ public class SceneHandler {
 	 */
 	public SceneHandler(AppType aT)
 	{
+		//the first created SceneHandler is the real one. There should never be another one, but just making sure
+		if (singleton != null)
+			singleton = this;
 		appType = aT;
 		scenes = new HashMap<SceneType, Scene>();
 		currentScene = SceneType.NONE;
@@ -89,16 +102,24 @@ public class SceneHandler {
 	/**
 	 * SwitchToScene - Switches to a scene based on the type that was passed in
 	 * @param target - the scene object to be switched to
+	 * 
+	 * @author austinvickers
+	 * @author Timothy Couch
 	 */
 	public void SwitchToScene(SceneType target) {
 		
 		if(scenes.containsKey(target)) {
+
+			//hide scene
 			mainFrame.setVisible(false);
+			GetCurrentScene().hide();
 			mainFrame.getContentPane().removeAll();
-			mainFrame.getContentPane().add(scenes.get(target));
-			mainFrame.setVisible(true);
-			
+
+			//show scene
 			currentScene = target;
+			mainFrame.getContentPane().add(GetCurrentScene());
+			GetCurrentScene().show();
+			mainFrame.setVisible(true);
 		}
 		else {
 			System.out.println("That scene does not exist in the current context.");
@@ -108,6 +129,8 @@ public class SceneHandler {
 	/**
 	 * GetCurrentScene - returns the Scene object that is currently active
 	 * @return - the active Scene
+	 * 
+	 * @author austinvickers
 	 */
 	public Scene GetCurrentScene() {
 		return scenes.get(currentScene);
