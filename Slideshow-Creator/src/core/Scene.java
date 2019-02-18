@@ -35,7 +35,7 @@ public abstract class Scene extends JPanel
 	}
 
 	/**
-	 * show - runs right before the scene gets opened
+	 * show - runs right after the scene gets opened
 	 * 
 	 * @author Timothy Couch
 	 */
@@ -46,7 +46,7 @@ public abstract class Scene extends JPanel
 	}
 
 	/**
-	 * hide - runs right after the scene gets closed
+	 * hide - runs right before the scene gets closed
 	 * 
 	 * @author Timothy Couch
 	 */

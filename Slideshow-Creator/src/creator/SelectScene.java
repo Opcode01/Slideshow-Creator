@@ -59,13 +59,4 @@ public class SelectScene extends Scene
     {
         directoryLabel.setText(directoryLabel.getText() + SceneHandler.singleton.getDirectory());
     }
-
-    /**
-     * show - shows the scene
-     */
-    @Override
-    public void show()
-    {
-        super.show();
-    }
 }

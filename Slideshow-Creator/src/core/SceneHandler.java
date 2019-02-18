@@ -117,7 +117,6 @@ public class SceneHandler {
 		if(scenes.containsKey(target)) {
 
 			//hide scene
-			mainFrame.setVisible(false);
 			if (GetCurrentScene() != null)
 				GetCurrentScene().hide();
 			mainFrame.getContentPane().removeAll();
@@ -126,7 +125,6 @@ public class SceneHandler {
 			currentScene = target;
 			mainFrame.getContentPane().add(GetCurrentScene());
 			GetCurrentScene().show();
-			mainFrame.setVisible(true);
 		}
 		else {
 			System.out.println("That scene does not exist in the current context.");
