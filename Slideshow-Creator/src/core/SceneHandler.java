@@ -30,15 +30,6 @@ public class SceneHandler {
 	 * directory - directory where the slideshow is working and using images
 	 */
 	private String directory = "";
-	
-	/**
-	 * mainFrame - window frame of program
-	 */
-	private JFrame mainFrame;
-	/* The dictionary of scenes in the current context */
-	private HashMap<SceneType, Scene> scenes;
-	/* The currently selected scene type */
-	private SceneType currentScene;
 
 	public void setDirectory(String dir)
 	{
@@ -49,6 +40,15 @@ public class SceneHandler {
 	{
 		return directory;
 	}
+	
+	/**
+	 * mainFrame - window frame of program
+	 */
+	private JFrame mainFrame;
+	/* The dictionary of scenes in the current context */
+	private HashMap<SceneType, Scene> scenes;
+	/* The currently selected scene type */
+	private SceneType currentScene;
 	
 	/**
 	 * SceneHandler - creates program with specified app type

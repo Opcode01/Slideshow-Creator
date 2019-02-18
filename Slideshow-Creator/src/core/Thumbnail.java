@@ -23,10 +23,18 @@ public class Thumbnail
      */
     private String imagePath;
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
     /**
      * Publicly read-only image itself
      */
     private Image imageRaw;
+
+    public Image getImageRaw() {
+        return imageRaw;
+    }
 
     /**
      * Thumbnail - creates an image from given path
@@ -38,16 +46,6 @@ public class Thumbnail
     {
         this.imagePath = imagePath;
         imageRaw = loadImage(imagePath);
-    }
-
-    public String getImagePath()
-    {
-        return imagePath;
-    }
-
-    public Image getImageRaw()
-    {
-        return imageRaw;
     }
 
     /**
