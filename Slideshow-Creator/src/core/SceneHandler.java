@@ -10,6 +10,8 @@
 package core;
 
 import java.util.*;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -54,10 +56,14 @@ public class SceneHandler {
 	public boolean launch()
 	{
 		//set up default window
+		
+		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
+		
 		mainFrame = new JFrame();
-		mainFrame.setSize(800, 600);
+		mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
+		mainFrame.setIconImage(slideshowIcon.getImage());
 		
 		JPanel defaultPanel = new JPanel();
 		defaultPanel.add(new JButton("Hello World"));
