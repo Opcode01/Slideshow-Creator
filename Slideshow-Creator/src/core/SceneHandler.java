@@ -11,6 +11,8 @@
 package core;
 
 import java.util.*;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,6 +28,7 @@ public class SceneHandler {
 	 * appType - which program is running
 	 */
 	private AppType appType;
+	
 	/**
 	 * directory - directory where the slideshow is working and using images
 	 */
@@ -77,16 +80,20 @@ public class SceneHandler {
 	 */
 	public boolean launch()
 	{
+		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
+		
 		//set up default window
 		mainFrame = new JFrame();
-		mainFrame.setSize(800, 600);
+		mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
+		mainFrame.setIconImage(slideshowIcon.getImage());
 		
 		mainFrame.setVisible(true);
 		
 		return true;
 	}
+	
 	/**
 	 * AddScene - adds a new scene to the context. There may only be one of each type of scene.
 	 * 
@@ -115,7 +122,7 @@ public class SceneHandler {
 	public void SwitchToScene(SceneType target) {
 		
 		if(scenes.containsKey(target)) {
-
+			
 			//hide scene
 			if (GetCurrentScene() != null)
 				GetCurrentScene().hide();
@@ -125,6 +132,7 @@ public class SceneHandler {
 			currentScene = target;
 			mainFrame.getContentPane().add(GetCurrentScene());
 			GetCurrentScene().show();
+			mainFrame.setVisible(true);
 		}
 		else {
 			System.out.println("That scene does not exist in the current context.");
