@@ -1,6 +1,6 @@
 /**
- * Transitions.java
- * Holds a list of transitions
+ * Thumbnails.java
+ * Holds a list of thumbnails
  * 
  * Slideshow Creator
  * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
@@ -10,7 +10,7 @@
 
 package core;
 
-public class Transitions
+public class ThumbnailsList
 {
 
 }
