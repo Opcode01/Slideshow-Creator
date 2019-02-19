@@ -132,7 +132,8 @@ public class SceneHandler {
 			currentScene = target;
 			mainFrame.getContentPane().add(GetCurrentScene());
 			GetCurrentScene().show();
-			mainFrame.setVisible(true);
+			mainFrame.revalidate();
+			mainFrame.repaint();
 		}
 		else {
 			System.out.println("That scene does not exist in the current context.");
