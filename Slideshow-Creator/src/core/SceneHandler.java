@@ -150,4 +150,15 @@ public class SceneHandler {
 		return scenes.get(currentScene);
 	}
 	
+	public Scene GetSceneInstanceByType(SceneType type) {
+		
+		if(scenes.containsKey(type)) {
+			return scenes.get(type);
+		}
+		else {
+			System.out.println("That scene does not exist in the current context.");
+			return null;
+		}
+	}
+	
 }
