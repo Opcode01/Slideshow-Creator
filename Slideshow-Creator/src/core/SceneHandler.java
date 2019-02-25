@@ -47,7 +47,7 @@ public class SceneHandler {
 	/**
 	 * mainFrame - window frame of program
 	 */
-	private JFrame mainFrame;
+	public JFrame mainFrame;
 	/* The dictionary of scenes in the current context */
 	private HashMap<SceneType, Scene> scenes;
 	/* The currently selected scene type */

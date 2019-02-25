@@ -2,6 +2,7 @@ package creator;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -25,6 +27,9 @@ public class ArrangeScene extends Scene{
 	
 	/** Create custom color */
 	private JPanel timelinePanel;
+	
+	/** Create Settings Pane */
+	private SettingsPane settingsPane;
 	
 	/** Back button */
 	private JButton backButton;
@@ -111,7 +116,14 @@ public class ArrangeScene extends Scene{
 		settingsButton.setRolloverIcon(highlightedSettings);
 		settingsButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	//TODO: Open settings pane
+		    	//Open settings pane in the center of our workspace
+		    	JFrame parent = SceneHandler.singleton.mainFrame;
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(300, 150));
+		    	parent.setEnabled(false);
 		    }
 		});
 		
