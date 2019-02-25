@@ -14,8 +14,11 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
@@ -29,6 +32,15 @@ public class DirectoryExplorer extends Scene {
 	
 	/** Directory path */
 	private File directoryPath;
+	
+	/** Bg panel */
+	private JPanel bgPanel;
+	
+	/** Bg label */
+	private JLabel bgLabel;
+	
+	/** Header label */
+	private JLabel headerLabel;
 	
 	/** Select directory button */
 	private JButton selectDirectoryButton;
@@ -45,11 +57,17 @@ public class DirectoryExplorer extends Scene {
 	/** Select existing file custom button image */
 	private ImageIcon selectExisting;
 	
+	/** bg image */
+	private ImageIcon bg;
+	
+	/** bg image */
+	private ImageIcon header;
+	
 	/** Highlighted select existing file custom button image */
 	private ImageIcon highlightedSelectExisting;
 	
 	/** Create custom color */
-	private Color light_gray = new Color(60, 60, 60);
+	private Color dark_gray = new Color(30, 30, 30);
 
 	/**
 	 * DirectoryExplorer() - sets up directory explorer with GUI stuff
@@ -57,13 +75,20 @@ public class DirectoryExplorer extends Scene {
 	 * @author Fernando Palacios
 	 * @author austinvickers
 	 */
-	public DirectoryExplorer() {
+	public DirectoryExplorer()
+	{
+		
+		// Create GridBagLayout object and constraints
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
 		
 		// Create images
 		selectDirectory = new ImageIcon(getClass().getResource("Images/selectDirectoryButton.png"));
 		highlightedSelectDirectory = new ImageIcon(getClass().getResource("Images/highlightedSelectDirectoryButton.png"));
 		selectExisting = new ImageIcon(getClass().getResource("Images/selectExistingButton.png"));
 		highlightedSelectExisting = new ImageIcon(getClass().getResource("Images/highlightedSelectExistingButton.png"));
+		bg = new ImageIcon(getClass().getResource("Images/bg.jpg"));
+		header = new ImageIcon(getClass().getResource("Images/header.png"));
 		
 		// Change look and feel
 		try {
@@ -82,17 +107,8 @@ public class DirectoryExplorer extends Scene {
 			e1.printStackTrace();
 		}
 		
-		// Create GridBagLayout object and constraints
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		
-		// Set panel configurations
-		this.setLayout(gridBag);
-		this.setBackground(light_gray);
-		
-		// Set constraints
-		c.gridx = 0;
-		c.gridy = 0;
+		// Set frame configurations
+		this.setLayout(new BorderLayout());
 		
 		// Create select directory button
 		selectDirectoryButton = new JButton(selectDirectory);
@@ -107,13 +123,6 @@ public class DirectoryExplorer extends Scene {
 		    }
 		});
 		
-		this.add(selectDirectoryButton, c);
-		
-		// Set constraints
-		c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(10,0,0,0);
-		
 		// Create existing directory button
 		selectExistingButton = new JButton(selectExisting);
 		selectExistingButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -122,8 +131,41 @@ public class DirectoryExplorer extends Scene {
 		selectExistingButton.setFocusable(false);
 		selectExistingButton.setRolloverIcon(highlightedSelectExisting);
 		
-		this.add(selectExistingButton, c);
-		this.revalidate();
+		// Create and add label
+		bgLabel = new JLabel(bg);
+		this.add(bgLabel);
+		
+		// Create header label
+		headerLabel = new JLabel(header);
+		
+		// Set panel configurations
+		bgPanel = new JPanel();
+		bgPanel.setLayout(gridBag);
+		bgPanel.setBackground(dark_gray);
+		
+		// Set constraints and add directory button
+		c.gridx = 0;
+		c.gridy = 0;
+		c.insets = new Insets(15, 100, 5, 100);
+		bgPanel.add(headerLabel, c);
+		
+		// Set constraints and add directory button
+		c.gridx = 0;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridy = 1;
+		c.insets = new Insets(0, 100, 7, 100);
+		bgPanel.add(selectDirectoryButton, c);
+		
+		// Set constraints and add existing button
+		c.gridx = 0;
+		c.gridy = 2;
+		c.insets = new Insets(7, 100, 100, 100);
+		bgPanel.add(selectExistingButton, c);
+		
+		
+		// Configure label and add bg panel
+		bgLabel.setLayout(gridBag);
+		bgLabel.add(bgPanel);
 		
 	}
 	
@@ -137,7 +179,7 @@ public class DirectoryExplorer extends Scene {
     	JFileChooser chooser = new JFileChooser();
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    	int returnVal = chooser.showSaveDialog(DirectoryExplorer.this);
+    	int returnVal = chooser.showDialog(DirectoryExplorer.this, "Choose Directory");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    directoryPath = chooser.getSelectedFile();
     		GoToSelectScene(directoryPath.getAbsolutePath());

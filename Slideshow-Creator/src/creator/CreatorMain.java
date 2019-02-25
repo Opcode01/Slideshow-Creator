@@ -25,6 +25,7 @@ public class CreatorMain
 		handler.AddScene(SceneType.DIRECTORY, new DirectoryExplorer());
 		handler.AddScene(SceneType.SELECTION, new SelectScene());
 		handler.AddScene(SceneType.ARRANGE, new ArrangeScene());
+		handler.AddScene(SceneType.VIEWER, new SettingsPane());
 		handler.SwitchToScene(SceneType.DIRECTORY);
 	}
 }

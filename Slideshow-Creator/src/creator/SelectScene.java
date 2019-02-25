@@ -74,8 +74,8 @@ public class SelectScene extends Scene
 	/** Create custom light gray color */
 	private Color light_gray = new Color(60, 60, 60);
 	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
+	/** Create custom image_gray color */
+	private Color image_gray = new Color(30, 30, 30);
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -90,9 +90,7 @@ public class SelectScene extends Scene
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		
-		// Set panel configurations
-		this.setLayout(gridBag);
-		
+		// Set image locations
 		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
 		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
 		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
@@ -101,6 +99,9 @@ public class SelectScene extends Scene
 		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
 		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
 		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
+		
+		// Set frame configurations
+		this.setLayout(gridBag);
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -185,24 +186,21 @@ public class SelectScene extends Scene
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(aqua);
+		imagePanel.setBackground(image_gray);
 		
-		// Set constraints
-
+		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0.01;
-		c.weighty = 1.0;
+		c.weightx = 0;
+		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 0;
-		
 		this.add(optionsPanel, c);
 		
-		// Set constraints
+		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
-		
 		this.add(imagePanel, c);
 		this.revalidate();
 

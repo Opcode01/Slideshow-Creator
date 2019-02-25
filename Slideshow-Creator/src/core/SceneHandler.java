@@ -10,12 +10,10 @@
  */
 package core;
 
+import java.awt.Dimension;
 import java.util.*;
-
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class SceneHandler {
 	
@@ -88,6 +86,7 @@ public class SceneHandler {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		mainFrame.setIconImage(slideshowIcon.getImage());
+		mainFrame.setMinimumSize(new Dimension(600, 490));
 		
 		mainFrame.setVisible(true);
 		

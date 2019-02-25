@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -65,22 +66,24 @@ public class ArrangeScene extends Scene{
 	/** Create custom light gray color */
 	private Color light_gray = new Color(60, 60, 60);
 	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
+	/** Create custom image_panel color */
+	private Color image_gray = new Color(30, 30, 30);
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
 	 * @author Fernando Palacios
 	 */
-	public ArrangeScene () {
+	public ArrangeScene ()
+	{
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		
-		// Set panel configurations
+		// Set frame configurations
 		this.setLayout(gridBag);
 		
+		// Set images
 		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
 		directory = new ImageIcon(getClass().getResource("Images/directoryButton.png"));
 		settings = new ImageIcon(getClass().getResource("Images/settingsButton.png"));
@@ -125,7 +128,7 @@ public class ArrangeScene extends Scene{
 		settingsButton.setRolloverIcon(highlightedSettings);
 		settingsButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	SceneHandler.singleton.SwitchToScene(SceneType.VIEWER);
 		    }
 		});
 		
@@ -173,17 +176,17 @@ public class ArrangeScene extends Scene{
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(aqua);
+		imagePanel.setBackground(image_gray);
 		
 		// Set timeline panel configurations
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(gridBag);
 		timelinePanel.setBackground(light_gray);
 		
-		// Set constraints and add options panels
+		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0.01;
-		c.weighty = 1.0;
+		c.weightx = 0;
+		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(optionsPanel, c);
@@ -198,9 +201,10 @@ public class ArrangeScene extends Scene{
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
-		c.weighty = 0.7;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 1;
+		c.insets = new Insets(10,0,0,0);
 		this.add(timelinePanel, c);
 		this.revalidate();
 	}
