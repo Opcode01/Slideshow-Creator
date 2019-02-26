@@ -97,7 +97,7 @@ public class SceneHandler {
 		mainFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    int confirmed = JOptionPane.showConfirmDialog(null, 
-			        "Are you sure you want to exit the program?", "Confirm Exit",
+			        "Are you sure you want to exit the program?\nAny unsaved changes will be lost.", "Confirm Exit",
 			        JOptionPane.YES_NO_OPTION);
 
 			    if (confirmed == JOptionPane.YES_OPTION) {
