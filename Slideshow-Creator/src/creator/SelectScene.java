@@ -105,7 +105,6 @@ public class SelectScene extends Scene
 		// Create back button
 		backButton = new JButton(back);
 		backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		backButton.setToolTipText("Back");
 		backButton.setBorder(BorderFactory.createEmptyBorder());
 		backButton.setContentAreaFilled(false);
 		backButton.setFocusable(false);
@@ -119,7 +118,6 @@ public class SelectScene extends Scene
 		// Create select all button
 		arrangeButton = new JButton(arrange);
 		arrangeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		arrangeButton.setToolTipText("Arrange Images");
 		arrangeButton.setBorder(BorderFactory.createEmptyBorder());
 		arrangeButton.setContentAreaFilled(false);
 		arrangeButton.setFocusable(false);
@@ -133,7 +131,6 @@ public class SelectScene extends Scene
 		// Create select all button
 		selectAllButton = new JButton(selectAll);
 		selectAllButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		selectAllButton.setToolTipText("Select All");
 		selectAllButton.setBorder(BorderFactory.createEmptyBorder());
 		selectAllButton.setContentAreaFilled(false);
 		selectAllButton.setFocusable(false);
@@ -147,7 +144,6 @@ public class SelectScene extends Scene
 		// Create deselect all button
 		deselectAllButton = new JButton(deselectAll);
 		deselectAllButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		deselectAllButton.setToolTipText("Deselect All");
 		deselectAllButton.setBorder(BorderFactory.createEmptyBorder());
 		deselectAllButton.setContentAreaFilled(false);
 		deselectAllButton.setFocusable(false);
@@ -209,8 +205,7 @@ public class SelectScene extends Scene
 		
 		this.add(imagePanel, c);
 		this.revalidate();
-		
-		//TODO: Either implement this and make visible, or remove it
+
         directoryLabel = new JLabel("Select Scene! Directory: ");
 
     }
