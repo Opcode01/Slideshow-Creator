@@ -45,7 +45,7 @@ public class SceneHandler {
 	/**
 	 * mainFrame - window frame of program
 	 */
-	private JFrame mainFrame;
+	public JFrame mainFrame;
 	/* The dictionary of scenes in the current context */
 	private HashMap<SceneType, Scene> scenes;
 	/* The currently selected scene type */
@@ -147,6 +147,17 @@ public class SceneHandler {
 	 */
 	public Scene GetCurrentScene() {
 		return scenes.get(currentScene);
+	}
+	
+	public Scene GetSceneInstanceByType(SceneType type) {
+		
+		if(scenes.containsKey(type)) {
+			return scenes.get(type);
+		}
+		else {
+			System.out.println("That scene does not exist in the current context.");
+			return null;
+		}
 	}
 	
 }

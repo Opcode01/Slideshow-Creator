@@ -1,5 +1,7 @@
 package creator;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -16,7 +18,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.IOException;
-
+import javax.swing.JFrame;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -25,6 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
@@ -32,7 +35,7 @@ import javax.swing.filechooser.FileFilter;
 
 import core.*;
 
-public class SettingsPane extends Scene
+public class SettingsPane extends FloatingPane
 {
 	/** Audio file */
 	private File audioFile;
@@ -48,6 +51,12 @@ public class SettingsPane extends Scene
 	
 	/** Create audio label */
 	private JLabel audioLabel;
+	
+	/** Create transitions length label */
+	private JLabel audioLoopLabel;
+	
+	/** Create audio label */
+	private JLabel slideshowLoopLabel;
 	
 	/** Create transitions length label */
 	private JLabel lengthLabel;
@@ -121,11 +130,14 @@ public class SettingsPane extends Scene
 	/** Create custom white color */
 	private Color white = new Color(255, 255, 255);
 	
-	/** Create common font for appliation usage */
+	/** Create common font for application usage */
 	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 15);
 	
-	public SettingsPane()
+	public SettingsPane(JFrame parent, String title, Coord2 position, Dimension size)
 	{
+		//Call the parent constructor
+		super(parent, title, position, size);
+		
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -142,9 +154,10 @@ public class SettingsPane extends Scene
 		highlightedManual = new ImageIcon(getClass().getResource("Images/highlightedManualButton.png"));
 		highlightedAudio = new ImageIcon(getClass().getResource("Images/highlightedAudioButton.png"));
 		
-		// Set frame configurations
-		this.setLayout(gridBag);
-		this.setBackground(light_gray);
+		//Construct original panel container and configurations
+		JPanel settingsGui = new JPanel();
+		settingsGui.setLayout(gridBag);
+		settingsGui.setBackground(light_gray);
 		
 		// Create save button
 		saveButton = new JButton(save);
@@ -235,9 +248,19 @@ public class SettingsPane extends Scene
 		lengthLabel.setForeground(white);
 		
 		// Configure duration label
-		durationLabel = new JLabel("Slideshow Duration");
+		durationLabel = new JLabel("Slide Duration");
 		durationLabel.setFont(commonFont);
 		durationLabel.setForeground(white);
+		
+		// Configure audio loop label
+		audioLoopLabel = new JLabel("Loop Audio");
+		audioLoopLabel.setFont(commonFont);
+		audioLoopLabel.setForeground(white);
+		
+		// Configure audio loop label
+		slideshowLoopLabel = new JLabel("Loop Slideshow");
+		slideshowLoopLabel.setFont(commonFont);
+		slideshowLoopLabel.setForeground(white);
 		
 		// Create text field for audio
 		audioText = new JTextField(13);
@@ -257,63 +280,85 @@ public class SettingsPane extends Scene
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(gridBag);
 		settingsPanel.setBackground(light_gray);
-		settingsPanel.setBorder(BorderFactory.createCompoundBorder(
-	            BorderFactory.createTitledBorder(null, "SETTINGS", TitledBorder.CENTER , TitledBorder.DEFAULT_POSITION, commonFont, Color.WHITE),
-	            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		
 		// Set constraints and add type label
 		c.gridx = 0;
-		c.gridy = 0;
+		c.gridy = 2;
 		c.anchor = GridBagConstraints.WEST;
 		c.insets = new Insets(7, 0, 7, 5);
 		settingsPanel.add(typeLabel, c);
 		
 		// Set constraints and add audio label
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 3;
 		settingsPanel.add(audioLabel, c);
 		
 		// Set constraints and add length label
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 4;
 		settingsPanel.add(lengthLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 5;
 		settingsPanel.add(durationLabel, c);
+		
+		// Set constraints and add duration label
+		c.gridx = 0;
+		c.gridy = 7;
+		settingsPanel.add(audioLoopLabel, c);
+		
+		// Set constraints and add duration label
+		c.gridx = 0;
+		c.gridy = 8;
+		settingsPanel.add(slideshowLoopLabel, c);
 		
 		// Set constraints and add audio text display
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 3;
 		c.insets = new Insets(7, 20, 7, 0);
 		settingsPanel.add(audioText, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
-		c.gridy = 0;
+		c.gridy = 2;
 		settingsPanel.add(autoButton, c);
 		
 		// Set constraints and add manual button
 		c.gridx = 2;
-		c.gridy = 0;
+		c.gridy = 2;
 		settingsPanel.add(manualButton, c);
 		
 		// Set constraints and add audio button
 		c.gridx = 2;
-		c.gridy = 1;
+		c.gridy = 3;
 		c.insets = new Insets(5, 5, 5, 5);
 		settingsPanel.add(audioButton, c);
 		
+		// Set constraints and add length drop down
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 4;
 		c.insets = new Insets(7, 20, 7, 0);
 		settingsPanel.add(lengthDropDown, c);
 		
+		// Set constraints and add duration drop down
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 5;
 		c.insets = new Insets(7, 20, 7, 0);
 		settingsPanel.add(durationDropDown, c);
+		
+		// Set constraints and add duration label
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 3;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(10, 10, 10, 10);
+		settingsPanel.add(new JSeparator(), c);
+		
+		// Set constraints and add duration label
+		c.gridx = 0;
+		c.gridy = 6;
+		settingsPanel.add(new JSeparator(), c);
 		
 		// Set options panel configurations
 		confirmationPanel = new JPanel();
@@ -323,6 +368,7 @@ public class SettingsPane extends Scene
 		// Set constraints and add back button
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 1;
 		c.insets = new Insets(10, 10, 10, 10);
 		confirmationPanel.add(saveButton, c);
 		
@@ -337,13 +383,17 @@ public class SettingsPane extends Scene
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.weighty = 1;
-		this.add(settingsPanel);
+		settingsGui.add(settingsPanel);
 		
 		// Set constraints and add confirmation panel
+		c.gridx = 0;
 		c.gridy = 1;
 		c.weighty = 0;
-		c.insets = new Insets(10,0,10,0);
-		this.add(confirmationPanel, c);
+		c.insets = new Insets(0,0,10,0);
+		settingsGui.add(confirmationPanel, c);
+		
+		// Set settings into floating pane
+		getContentPane().add(settingsGui, BorderLayout.CENTER);
 	}
 	
 	/**
@@ -364,6 +414,7 @@ public class SettingsPane extends Scene
         	display.setText(audioFile.getName());
     	}
 	}
+
 	
 //	class AudioFilter extends FileFilter {
 //		 
