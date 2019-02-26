@@ -82,12 +82,6 @@ public class SettingsPane extends Scene
 	/** Create button group fr manual and auto */
 	private ButtonGroup typeGroup;
 	
-	/** Audio custom button image */
-	private ImageIcon selectAudio;
-	
-	/** Highlighted audio custom button image */
-	private ImageIcon highlightedSelectAudio;
-	
 	/** Auto custom button image */
 	private ImageIcon auto;
 	
@@ -250,6 +244,14 @@ public class SettingsPane extends Scene
 		audioText.setBackground(light_gray);
 		audioText.setForeground(white);
         audioText.setEditable(false);
+        
+        String[] petStrings = { "Slow", "Medium", "Fast" };
+        
+        // Create length drop down
+        lengthDropDown = new JComboBox(petStrings);
+        
+        // Create duration drop down
+        durationDropDown = new JComboBox();
 		
 		// Set settings panel configurations
 		settingsPanel = new JPanel();
@@ -263,7 +265,7 @@ public class SettingsPane extends Scene
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(5, 0, 5, 5);
+		c.insets = new Insets(7, 0, 7, 5);
 		settingsPanel.add(typeLabel, c);
 		
 		// Set constraints and add audio label
@@ -284,25 +286,34 @@ public class SettingsPane extends Scene
 		// Set constraints and add audio text display
 		c.gridx = 1;
 		c.gridy = 1;
+		c.insets = new Insets(7, 20, 7, 0);
 		settingsPanel.add(audioText, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
 		c.gridy = 0;
-		c.insets = new Insets(5, 0, 5, 0);
 		settingsPanel.add(autoButton, c);
 		
 		// Set constraints and add manual button
 		c.gridx = 2;
 		c.gridy = 0;
-		c.anchor = GridBagConstraints.WEST;
 		settingsPanel.add(manualButton, c);
 		
-		// Set constraints and add manual button
+		// Set constraints and add audio button
 		c.gridx = 2;
 		c.gridy = 1;
-		c.insets = new Insets(5, 0, 5, 5);
+		c.insets = new Insets(5, 5, 5, 5);
 		settingsPanel.add(audioButton, c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
+		c.insets = new Insets(7, 20, 7, 0);
+		settingsPanel.add(lengthDropDown, c);
+		
+		c.gridx = 1;
+		c.gridy = 3;
+		c.insets = new Insets(7, 20, 7, 0);
+		settingsPanel.add(durationDropDown, c);
 		
 		// Set options panel configurations
 		confirmationPanel = new JPanel();

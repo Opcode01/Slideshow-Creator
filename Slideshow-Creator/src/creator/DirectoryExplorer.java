@@ -146,20 +146,20 @@ public class DirectoryExplorer extends Scene {
 		// Set constraints and add directory button
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(15, 100, 5, 100);
+		c.insets = new Insets(50, 80, 5, 80);
 		bgPanel.add(headerLabel, c);
 		
 		// Set constraints and add directory button
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridy = 1;
-		c.insets = new Insets(0, 100, 7, 100);
+		c.insets = new Insets(0, 80, 7, 80);
 		bgPanel.add(selectDirectoryButton, c);
 		
 		// Set constraints and add existing button
 		c.gridx = 0;
 		c.gridy = 2;
-		c.insets = new Insets(7, 100, 100, 100);
+		c.insets = new Insets(7, 80, 100, 80);
 		bgPanel.add(selectExistingButton, c);
 		
 		
