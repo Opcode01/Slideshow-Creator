@@ -23,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -45,6 +46,9 @@ public class SettingsPane extends FloatingPane
 	
 	/** Create confirmation panel */
 	private JPanel confirmationPanel;
+	
+	/** Create settings label */
+	private JLabel settingsLabel;
 	
 	/** Create type label */
 	private JLabel typeLabel;
@@ -73,6 +77,12 @@ public class SettingsPane extends FloatingPane
 	/** Create duration dropdown */
 	private JComboBox durationDropDown;
 	
+	/** Create duration dropdown */
+	private JCheckBox audioLoopCheck;
+	
+	/** Create duration dropdown */
+	private JCheckBox slideshowLoopCheck;
+	
 	/** Create auto button */
 	private JToggleButton autoButton;
 	
@@ -90,6 +100,9 @@ public class SettingsPane extends FloatingPane
 	
 	/** Create button group fr manual and auto */
 	private ButtonGroup typeGroup;
+	
+	/** Settings header custom button image */
+	private ImageIcon settingsHeader;
 	
 	/** Auto custom button image */
 	private ImageIcon auto;
@@ -131,7 +144,7 @@ public class SettingsPane extends FloatingPane
 	private Color white = new Color(255, 255, 255);
 	
 	/** Create common font for application usage */
-	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 15);
+	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 12);
 	
 	public SettingsPane(JFrame parent, String title, Coord2 position, Dimension size)
 	{
@@ -143,6 +156,7 @@ public class SettingsPane extends FloatingPane
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
+		settingsHeader = new ImageIcon(getClass().getResource("Images/settingsHeader.png"));
 		save = new ImageIcon(getClass().getResource("Images/saveButton.png"));
 		cancel = new ImageIcon(getClass().getResource("Images/cancelButton.png"));
 		auto = new ImageIcon(getClass().getResource("Images/autoButton.png"));
@@ -233,6 +247,9 @@ public class SettingsPane extends FloatingPane
 		typeGroup.add(manualButton);
 		
 		// Configure type label
+		settingsLabel = new JLabel(settingsHeader);
+		
+		// Configure type label
 		typeLabel = new JLabel("Type");
 		typeLabel.setFont(commonFont);
 		typeLabel.setForeground(white);
@@ -274,23 +291,39 @@ public class SettingsPane extends FloatingPane
         lengthDropDown = new JComboBox(petStrings);
         
         // Create duration drop down
-        durationDropDown = new JComboBox();
+        durationDropDown = new JComboBox(petStrings);
+        
+        // Create audio loop check box
+        audioLoopCheck = new JCheckBox();
+        
+        // Create slideshow loop checkbox
+        slideshowLoopCheck = new JCheckBox();
 		
 		// Set settings panel configurations
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(gridBag);
 		settingsPanel.setBackground(light_gray);
 		
+		// Set constraints and add header label
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 3;
+		//c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(10, 0, 10, 0);
+		settingsPanel.add(settingsLabel, c);
+		
 		// Set constraints and add type label
 		c.gridx = 0;
 		c.gridy = 2;
+		c.gridwidth = 1;
 		c.anchor = GridBagConstraints.WEST;
-		c.insets = new Insets(7, 0, 7, 5);
+		c.insets = new Insets(30, 0, 10, 15);
 		settingsPanel.add(typeLabel, c);
 		
 		// Set constraints and add audio label
 		c.gridx = 0;
 		c.gridy = 3;
+		c.insets = new Insets(10, 0, 10, 15);
 		settingsPanel.add(audioLabel, c);
 		
 		// Set constraints and add length label
@@ -301,27 +334,31 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add duration label
 		c.gridx = 0;
 		c.gridy = 5;
+		c.insets = new Insets(10, 0, 30, 15);
 		settingsPanel.add(durationLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
 		c.gridy = 7;
+		c.insets = new Insets(20, 0, 5, 0);
 		settingsPanel.add(audioLoopLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
 		c.gridy = 8;
+		c.insets = new Insets(5, 0, 10, 0);
 		settingsPanel.add(slideshowLoopLabel, c);
 		
 		// Set constraints and add audio text display
 		c.gridx = 1;
 		c.gridy = 3;
-		c.insets = new Insets(7, 20, 7, 0);
+		c.insets = new Insets(10, 0, 10, 0);
 		settingsPanel.add(audioText, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
 		c.gridy = 2;
+		c.insets = new Insets(30, 0, 10, 5);
 		settingsPanel.add(autoButton, c);
 		
 		// Set constraints and add manual button
@@ -338,24 +375,39 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add length drop down
 		c.gridx = 1;
 		c.gridy = 4;
-		c.insets = new Insets(7, 20, 7, 0);
+		c.insets = new Insets(7, 7, 7, 0);
 		settingsPanel.add(lengthDropDown, c);
 		
 		// Set constraints and add duration drop down
 		c.gridx = 1;
 		c.gridy = 5;
-		c.insets = new Insets(7, 20, 7, 0);
+		c.insets = new Insets(10, 7, 30, 0);
 		settingsPanel.add(durationDropDown, c);
 		
-		// Set constraints and add duration label
+		// Set constraints and add audio loop check
+		c.gridx = 1;
+		c.gridy = 7;
+		c.gridwidth = 2;
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(20, 0, 5, 0);
+		settingsPanel.add(audioLoopCheck, c);
+		
+		// Set constraints and add slideshow loop checkbox
+		c.gridx = 1;
+		c.gridy = 8;
+		c.insets = new Insets(5, 0, 10, 0);
+		settingsPanel.add(slideshowLoopCheck, c);
+		
+		// Set constraints and separator
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
+		c.anchor = GridBagConstraints.WEST;
 		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(0, 0, 0, 0);
 		settingsPanel.add(new JSeparator(), c);
 		
-		// Set constraints and add duration label
+		// Set constraints and add separator
 		c.gridx = 0;
 		c.gridy = 6;
 		settingsPanel.add(new JSeparator(), c);

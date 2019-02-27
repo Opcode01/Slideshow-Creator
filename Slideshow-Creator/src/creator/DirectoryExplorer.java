@@ -146,7 +146,7 @@ public class DirectoryExplorer extends Scene {
 		// Set constraints and add directory button
 		c.gridx = 0;
 		c.gridy = 0;
-		c.insets = new Insets(50, 80, 5, 80);
+		c.insets = new Insets(20, 80, 5, 80);
 		bgPanel.add(headerLabel, c);
 		
 		// Set constraints and add directory button

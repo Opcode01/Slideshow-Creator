@@ -67,8 +67,8 @@ public class ArrangeScene extends Scene{
 	/** Create custom light gray color */
 	private Color light_gray = new Color(60, 60, 60);
 	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
+	/** Create custom dark_gray color */
+	private Color dark_gray = new Color(30, 30, 30);
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -122,7 +122,7 @@ public class ArrangeScene extends Scene{
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(430, 400));
+		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(370, 500));
 		    	parent.setEnabled(false);
 		    }
 		});
@@ -148,6 +148,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
+		c.weightx = 0;
 		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -167,7 +168,7 @@ public class ArrangeScene extends Scene{
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(aqua);
+		imagePanel.setBackground(dark_gray);
 		
 		// Set timeline panel configurations
 		timelinePanel = new JPanel();
@@ -176,7 +177,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set constraints and add options panels
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0.01;
+		c.weightx = 0;
 		c.weighty = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
