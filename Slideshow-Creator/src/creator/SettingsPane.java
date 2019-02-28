@@ -18,6 +18,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
+
 import javax.swing.JFrame;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -26,13 +28,16 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.NumberFormatter;
 
 import core.*;
 
@@ -98,7 +103,7 @@ public class SettingsPane extends FloatingPane
 	/** Create cancel button */
 	private JButton cancelButton;
 	
-	/** Create button group fr manual and auto */
+	/** Create button group for manual and auto */
 	private ButtonGroup typeGroup;
 	
 	/** Settings header custom button image */
@@ -198,7 +203,7 @@ public class SettingsPane extends FloatingPane
 		saveButton.setRolloverIcon(highlightedSave);
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	ClosePane();
 		    }
 		});
 		
@@ -211,7 +216,7 @@ public class SettingsPane extends FloatingPane
 		cancelButton.setRolloverIcon(highlightedCancel);
 		cancelButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	ClosePane();
 		    }
 		});
 		
@@ -298,12 +303,16 @@ public class SettingsPane extends FloatingPane
 		// Create text field for audio
 		audioText = new JTextField(13);
 		audioText.setBackground(light_gray);
+		Border audioBorder = BorderFactory.createLineBorder(white, 1);
+		audioText.setBorder(audioBorder);
 		audioText.setForeground(white);
         audioText.setEditable(false);
         
-		// Create text field for duration
+        // Create text field for duration
 		durationText = new JTextField(13);
 		durationText.setBackground(light_gray);
+		Border durationBorder = BorderFactory.createLineBorder(white, 1);
+		durationText.setBorder(durationBorder);
 		durationText.setForeground(white);
         
         // Create length drop down
@@ -493,5 +502,9 @@ public class SettingsPane extends FloatingPane
     	    audioFile = chooser.getSelectedFile();
         	display.setText(audioFile.getName());
     	}
+	}
+	
+	public void UpdateProjectSettings() {
+		
 	}
 }
