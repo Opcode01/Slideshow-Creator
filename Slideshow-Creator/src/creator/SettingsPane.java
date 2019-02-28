@@ -485,43 +485,13 @@ public class SettingsPane extends FloatingPane
     	JFileChooser chooser = new JFileChooser();
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	
-        //chooser.addChoosableFileFilter(new AudioFilter());
-        //chooser.setAcceptAllFileFilterUsed(false);
+    	chooser.addChoosableFileFilter(new CustomFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }) );
+        chooser.setAcceptAllFileFilterUsed(false);
+        
     	int returnVal = chooser.showDialog(SettingsPane.this, "Open");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    audioFile = chooser.getSelectedFile();
         	display.setText(audioFile.getName());
     	}
 	}
-
-	
-//	class AudioFilter extends FileFilter {
-//		 
-//	    //Accept all directories and all gif, jpg, tiff, or png files.
-//	    public boolean accept(File f) {
-//	        if (f.isDirectory()) {
-//	            return true;
-//	        }
-//	 
-//	        String extension = Utils.getExtension(f);
-//	        if (extension != null) {
-//	            if (extension.equals(Utils.tiff) ||
-//	                extension.equals(Utils.tif) ||
-//	                extension.equals(Utils.gif) ||
-//	                extension.equals(Utils.jpeg) ||
-//	                extension.equals(Utils.jpg) ||
-//	                extension.equals(Utils.png)) {
-//	                    return true;
-//	            } else {
-//	                return false;
-//	            }
-//	        }
-//	 
-//	        return false;
-//	    }
-//
-//		@Override
-//		public String getDescription() {
-//			return "Just Audio Files";
-//		}
 }
