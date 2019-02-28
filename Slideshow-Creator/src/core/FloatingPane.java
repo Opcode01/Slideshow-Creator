@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,20 +25,18 @@ public class FloatingPane extends JDialog {
 		
 		//Set the location (need to offset for size of window)
 		setLocation(position.x-size.width/2, position.y-size.height/2);
-		
-        //Add Close button at the bottom
-        JPanel buttonPane = new JPanel();
-        JButton button = new JButton("Close");
-        buttonPane.add(button);
-        // set action listener on the button
-        button.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+        getContentPane();
+        
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         		setVisible(false);
         		parent.setEnabled(true);
         		dispose();
-        	}
-        });
-        getContentPane().add(buttonPane, BorderLayout.PAGE_END);
+        		
+		    }
+		});
+		
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         setVisible(true);

@@ -117,6 +117,7 @@ public class DirectoryExplorer extends Scene {
 		selectDirectoryButton.setContentAreaFilled(false);
 		selectDirectoryButton.setFocusable(false);
 		selectDirectoryButton.setRolloverIcon(highlightedSelectDirectory);
+		selectDirectoryButton.setPressedIcon(highlightedSelectDirectory);
 		selectDirectoryButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	SelectDirectory();
@@ -130,6 +131,7 @@ public class DirectoryExplorer extends Scene {
 		selectExistingButton.setContentAreaFilled(false);
 		selectExistingButton.setFocusable(false);
 		selectExistingButton.setRolloverIcon(highlightedSelectExisting);
+		selectExistingButton.setPressedIcon(highlightedSelectExisting);
 		
 		// Create and add label
 		bgLabel = new JLabel(bg);

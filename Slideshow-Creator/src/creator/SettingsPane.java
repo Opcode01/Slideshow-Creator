@@ -71,11 +71,11 @@ public class SettingsPane extends FloatingPane
 	/** Create audio text field */
 	private JTextField audioText;
 	
+	/** Create duration text field */
+	private JTextField durationText;
+	
 	/** Create length dropdown */
 	private JComboBox lengthDropDown;
-	
-	/** Create duration dropdown */
-	private JComboBox durationDropDown;
 	
 	/** Create duration dropdown */
 	private JCheckBox audioLoopCheck;
@@ -131,8 +131,20 @@ public class SettingsPane extends FloatingPane
 	/** Audio custom button image */
 	private ImageIcon audio;
 	
-	/** Highlighted manual custom button image */
+	/** Highlighted audio custom button image */
 	private ImageIcon highlightedAudio;
+	
+	/** Checkbox custom button image */
+	private ImageIcon checkbox;
+	
+	/** Selected checkbox custom button image */
+	private ImageIcon selectedCheckbox;
+	
+	/** Highlighted checkbox custom button image */
+	private ImageIcon highlightedCheckbox;
+	
+	/** Highlighted selected checkbox custom button image */
+	private ImageIcon highlightedSelectedCheckbox;
 	
 	/** Create custom light gray color */
 	private Color light_gray = new Color(30, 30, 30);
@@ -167,6 +179,10 @@ public class SettingsPane extends FloatingPane
 		highlightedAuto = new ImageIcon(getClass().getResource("Images/highlightedAutoButton.png"));
 		highlightedManual = new ImageIcon(getClass().getResource("Images/highlightedManualButton.png"));
 		highlightedAudio = new ImageIcon(getClass().getResource("Images/highlightedAudioButton.png"));
+		checkbox = new ImageIcon(getClass().getResource("Images/checkbox.png"));
+		selectedCheckbox = new ImageIcon(getClass().getResource("Images/selectedCheckbox.png"));
+		highlightedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedCheckbox.png"));
+		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedSelectedCheckbox.png"));
 		
 		//Construct original panel container and configurations
 		JPanel settingsGui = new JPanel();
@@ -285,20 +301,31 @@ public class SettingsPane extends FloatingPane
 		audioText.setForeground(white);
         audioText.setEditable(false);
         
-        String[] petStrings = { "Slow", "Medium", "Fast" };
+		// Create text field for duration
+		durationText = new JTextField(13);
+		durationText.setBackground(light_gray);
+		durationText.setForeground(white);
         
         // Create length drop down
-        lengthDropDown = new JComboBox(petStrings);
-        
-        // Create duration drop down
-        durationDropDown = new JComboBox(petStrings);
+        String[] lengths = { "Slow", "Medium", "Fast" };
+        lengthDropDown = new JComboBox(lengths);
         
         // Create audio loop check box
-        audioLoopCheck = new JCheckBox();
+        audioLoopCheck = new JCheckBox(checkbox);
+        audioLoopCheck.setSelectedIcon(selectedCheckbox);
+        audioLoopCheck.setRolloverIcon(highlightedCheckbox);
+        audioLoopCheck.setPressedIcon(highlightedCheckbox);
+        audioLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
+        audioLoopCheck.setBackground(light_gray);
         
         // Create slideshow loop checkbox
-        slideshowLoopCheck = new JCheckBox();
-		
+        slideshowLoopCheck = new JCheckBox(checkbox);
+        slideshowLoopCheck.setSelectedIcon(selectedCheckbox);
+        slideshowLoopCheck.setRolloverIcon(highlightedCheckbox);
+        slideshowLoopCheck.setPressedIcon(highlightedCheckbox);
+        slideshowLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
+        slideshowLoopCheck.setBackground(light_gray);
+        
 		// Set settings panel configurations
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(gridBag);
@@ -308,8 +335,7 @@ public class SettingsPane extends FloatingPane
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 3;
-		//c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(10, 0, 10, 0);
+		c.insets = new Insets(0, 0, 10, 0);
 		settingsPanel.add(settingsLabel, c);
 		
 		// Set constraints and add type label
@@ -329,13 +355,13 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add length label
 		c.gridx = 0;
 		c.gridy = 4;
-		settingsPanel.add(lengthLabel, c);
+		settingsPanel.add(durationLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
 		c.gridy = 5;
 		c.insets = new Insets(10, 0, 30, 15);
-		settingsPanel.add(durationLabel, c);
+		settingsPanel.add(lengthLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
@@ -352,18 +378,25 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add audio text display
 		c.gridx = 1;
 		c.gridy = 3;
-		c.insets = new Insets(10, 0, 10, 0);
+		c.insets = new Insets(10, 7, 10, 0);
 		settingsPanel.add(audioText, c);
+		
+		// Set constraints and add duration text
+		c.gridx = 1;
+		c.gridy = 4;
+		c.insets = new Insets(7, 7, 7, 0);
+		settingsPanel.add(durationText, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(30, 0, 10, 5);
+		c.insets = new Insets(30, 7, 10, 0);
 		settingsPanel.add(autoButton, c);
 		
 		// Set constraints and add manual button
 		c.gridx = 2;
 		c.gridy = 2;
+		c.insets = new Insets(30, 0, 10, 0);
 		settingsPanel.add(manualButton, c);
 		
 		// Set constraints and add audio button
@@ -374,15 +407,9 @@ public class SettingsPane extends FloatingPane
 		
 		// Set constraints and add length drop down
 		c.gridx = 1;
-		c.gridy = 4;
-		c.insets = new Insets(7, 7, 7, 0);
-		settingsPanel.add(lengthDropDown, c);
-		
-		// Set constraints and add duration drop down
-		c.gridx = 1;
 		c.gridy = 5;
 		c.insets = new Insets(10, 7, 30, 0);
-		settingsPanel.add(durationDropDown, c);
+		settingsPanel.add(lengthDropDown, c);
 		
 		// Set constraints and add audio loop check
 		c.gridx = 1;

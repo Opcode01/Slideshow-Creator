@@ -122,7 +122,7 @@ public class ArrangeScene extends Scene{
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(370, 500));
+		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(370, 470));
 		    	parent.setEnabled(false);
 		    }
 		});
