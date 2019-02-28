@@ -80,7 +80,7 @@ public class SettingsPane extends FloatingPane
 	private JTextField durationText;
 	
 	/** Create length dropdown */
-	private JComboBox lengthDropDown;
+	private JComboBox<String> lengthDropDown;
 	
 	/** Create duration dropdown */
 	private JCheckBox audioLoopCheck;
@@ -203,6 +203,7 @@ public class SettingsPane extends FloatingPane
 		saveButton.setRolloverIcon(highlightedSave);
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	UpdateProjectSettings();
 		    	ClosePane();
 		    }
 		});
@@ -317,7 +318,7 @@ public class SettingsPane extends FloatingPane
         
         // Create length drop down
         String[] lengths = { "Slow", "Medium", "Fast" };
-        lengthDropDown = new JComboBox(lengths);
+        lengthDropDown = new JComboBox<String>(lengths);
         
         // Create audio loop check box
         audioLoopCheck = new JCheckBox(checkbox);
@@ -505,6 +506,40 @@ public class SettingsPane extends FloatingPane
 	}
 	
 	public void UpdateProjectSettings() {
+		Timeline t = SceneHandler.singleton.getTimeline();
 		
+		boolean loopSlides = slideshowLoopCheck.isSelected();
+		boolean loopAudio =  audioLoopCheck.isSelected();
+		boolean isManual = false;			//Default is false - overridden below
+		if(manualButton.isSelected()) {
+			isManual = true;
+		}
+		String audioFilePath;
+		if(audioFile != null) {
+			audioFilePath = audioFile.getAbsolutePath();
+		}
+		else {
+			audioFilePath = "none";
+		}
+		String transitionText = (String)lengthDropDown.getSelectedItem();
+		int transitionTime = 1;
+		if(transitionText == "Slow") {
+			transitionTime = 5;
+		}else if(transitionText == "Medium") {
+			transitionTime = 3;
+		}else if(transitionText == "Fast") {
+			transitionTime = 1;
+		}else {
+			System.out.println("Transition time is invalid!");
+		}
+		int slideTime = 1;
+		try {
+			slideTime = Integer.parseInt(durationText.getText());
+		}catch(NumberFormatException e) {
+			System.out.println("Slide duration not a valid integer - using default value of 1.");
+		}
+		
+		Settings s = new Settings(loopSlides, loopAudio, isManual, audioFilePath, transitionTime, slideTime);
+		t.UpdateProjectSettings(s);
 	}
 }

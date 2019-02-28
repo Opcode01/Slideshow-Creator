@@ -28,6 +28,20 @@ public class SceneHandler {
 	private AppType appType;
 	
 	/**
+	 * timeline - to be created on startup if running as creator
+	 * 			- to be loaded in by TimelineParser if running as viewer
+	 */
+	private Timeline timeline;
+	
+	public void setNewTimeline(Timeline t) {
+		timeline = t;
+	}
+	
+	public Timeline getTimeline() {
+		return timeline;
+	}
+	
+	/**
 	 * directory - directory where the slideshow is working and using images
 	 */
 	private String directory = "";
@@ -79,6 +93,10 @@ public class SceneHandler {
 	public boolean launch()
 	{
 		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
+		
+		if(appType == AppType.CREATOR) {
+			timeline = new Timeline();
+		}
 		
 		//set up default window
 		mainFrame = new JFrame();
