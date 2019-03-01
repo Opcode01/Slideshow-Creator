@@ -25,4 +25,9 @@ public class Timeline
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
     }
+    
+    public void UpdateProjectSettings(Settings s) {
+    	s.PrintAll();
+    	System.out.println("Timeline Settings updated!");
+    }
 }
