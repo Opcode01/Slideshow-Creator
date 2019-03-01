@@ -10,6 +10,9 @@
 package viewer;
 
 import core.*;
+import creator.ArrangeScene;
+import creator.DirectoryExplorer;
+import creator.SelectScene;
 
 public class ViewerMain
 {
@@ -22,5 +25,8 @@ public class ViewerMain
 	public static void main(String[] args)
 	{
 		SceneHandler handler = new SceneHandler(AppType.VIEWER);
+		handler.AddScene(SceneType.FILESELECT, new FileSelectExplorer());
+		handler.AddScene(SceneType.PLAY, new SelectScene());
+		handler.SwitchToScene(SceneType.FILESELECT);
 	}
 }
