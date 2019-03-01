@@ -10,6 +10,7 @@
  */
 package core;
 
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.*;
@@ -18,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class SceneHandler {
 	
@@ -31,6 +31,20 @@ public class SceneHandler {
 	 * appType - which program is running
 	 */
 	private AppType appType;
+	
+	/**
+	 * timeline - to be created on startup if running as creator
+	 * 			- to be loaded in by TimelineParser if running as viewer
+	 */
+	private Timeline timeline;
+	
+	public void setNewTimeline(Timeline t) {
+		timeline = t;
+	}
+	
+	public Timeline getTimeline() {
+		return timeline;
+	}
 	
 	/**
 	 * directory - directory where the slideshow is working and using images
@@ -50,7 +64,7 @@ public class SceneHandler {
 	/**
 	 * mainFrame - window frame of program
 	 */
-	private JFrame mainFrame;
+	public JFrame mainFrame;
 	/* The dictionary of scenes in the current context */
 	private HashMap<SceneType, Scene> scenes;
 	/* The currently selected scene type */
@@ -85,11 +99,16 @@ public class SceneHandler {
 	{
 		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
 		
+		if(appType == AppType.CREATOR) {
+			timeline = new Timeline();
+		}
+		
 		//set up default window
 		mainFrame = new JFrame();
 		mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		mainFrame.setIconImage(slideshowIcon.getImage());
+		mainFrame.setMinimumSize(new Dimension(600, 490));
 		
 		//set up quit confirmation dialog
 		//Thanks to https://stackoverflow.com/questions/21330682/confirmation-before-press-yes-to-exit-program-in-java
@@ -97,7 +116,7 @@ public class SceneHandler {
 		mainFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 			    int confirmed = JOptionPane.showConfirmDialog(null, 
-			        "Are you sure you want to exit the program?\nAny unsaved changes will be lost.", "Confirm Exit",
+			    	"Are you sure you want to exit the program?\n\nAny unsaved changes will be lost.", "Confirm Exit",
 			        JOptionPane.YES_NO_OPTION);
 
 			    if (confirmed == JOptionPane.YES_OPTION) {
@@ -105,6 +124,8 @@ public class SceneHandler {
 			    }
 			  }
 			});
+
+		mainFrame.setVisible(true);
 		
 		mainFrame.setVisible(true);
 		
@@ -165,6 +186,17 @@ public class SceneHandler {
 	 */
 	public Scene GetCurrentScene() {
 		return scenes.get(currentScene);
+	}
+	
+	public Scene GetSceneInstanceByType(SceneType type) {
+		
+		if(scenes.containsKey(type)) {
+			return scenes.get(type);
+		}
+		else {
+			System.out.println("That scene does not exist in the current context.");
+			return null;
+		}
 	}
 	
 }
