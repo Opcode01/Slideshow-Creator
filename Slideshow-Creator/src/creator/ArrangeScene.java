@@ -2,6 +2,7 @@ package creator;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -117,7 +118,7 @@ public class ArrangeScene extends Scene{
 		settingsButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	//Open settings pane in the center of our workspace
-		    	JFrame parent = SceneHandler.singleton.mainFrame;
+		    	JFrame parent = SceneHandler.singleton.getMainFrame();
 		    	Coord2 point = new Coord2(
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
@@ -183,6 +184,19 @@ public class ArrangeScene extends Scene{
 		c.gridy = 0;
 		this.add(optionsPanel, c);
 		
+		///////////////////////
+		//Add example image - this is approximately what you should do to set up the display image! :)
+		JLabel testLabel = new JLabel() {
+			  @Override
+			  public void paintComponent(Graphics g) {
+				  new Thumbnail("src/creator/TransitionImages/crossFade.png").drawFill(g, this);
+				  }
+			  };
+		c.weightx = 0.01;
+		c.anchor = GridBagConstraints.NORTH;
+		imagePanel.add(testLabel, c);
+		///////////////////////
+		
 		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
@@ -197,6 +211,7 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 1;
 		this.add(timelinePanel, c);
+		
 		this.revalidate();
 	}
 	
