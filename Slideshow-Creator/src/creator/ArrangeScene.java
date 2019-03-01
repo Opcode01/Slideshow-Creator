@@ -192,6 +192,7 @@ public class ArrangeScene extends Scene{
 				  new Thumbnail("src/creator/TransitionImages/crossFade.png").drawFill(g, this);
 				  }
 			  };
+		c.weightx = 0.01;
 		c.anchor = GridBagConstraints.NORTH;
 		imagePanel.add(testLabel, c);
 		///////////////////////
