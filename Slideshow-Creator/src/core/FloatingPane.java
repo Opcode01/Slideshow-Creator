@@ -1,17 +1,8 @@
 package core;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
 
 public class FloatingPane extends JDialog {
 	
@@ -26,7 +17,7 @@ public class FloatingPane extends JDialog {
 		setPreferredSize(size);
 		setResizable(false);
 		
-		setUndecorated(true);
+		//setUndecorated(true);
 		
 		//Set the location (need to offset for size of window)
 		setLocation(position.x-size.width/2, position.y-size.height/2);
@@ -37,8 +28,8 @@ public class FloatingPane extends JDialog {
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         		setVisible(false);
         		parent.setEnabled(true);
+        		parent.setVisible(true);
         		dispose();
-        		
 		    }
 		});
 		
@@ -50,6 +41,7 @@ public class FloatingPane extends JDialog {
 	public void ClosePane() {
 		setVisible(false);
 		parentFrame.setEnabled(true);
+		parentFrame.setVisible(true);
 		dispose();
 	}
 }
