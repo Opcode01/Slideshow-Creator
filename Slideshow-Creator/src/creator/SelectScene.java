@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 
 import core.*;
@@ -31,6 +32,9 @@ public class SelectScene extends Scene
 	
 	/** Create custom color */
 	private JPanel imagePanel;
+	
+	/** Create Settings Pane */
+	private JScrollPane imageScroller;
 	
 	/** Back button */
 	private JButton backButton;
@@ -187,6 +191,12 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
 		imagePanel.setBackground(image_gray);
+		ShowImages(imagePanel);
+		
+		// Set scroll pane configurations
+		imageScroller = new JScrollPane(imagePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		imageScroller.getVerticalScrollBar().setBackground(light_gray);
+		imageScroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -201,7 +211,7 @@ public class SelectScene extends Scene
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
-		this.add(imagePanel, c);
+		this.add(imageScroller, c);
 		this.revalidate();
 
         directoryLabel = new JLabel("Select Scene! Directory: ");
@@ -226,6 +236,43 @@ public class SelectScene extends Scene
 	public void GoToArrangeScene()
 	{
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
+	}
+	
+    /**
+     * ShowImages() - creates thumbnail icons to display in scrollpane
+     * 
+     * @precondition must run after project directory has been determined
+     */
+	public void ShowImages(JPanel panel)
+	{
+		int i = 0; //counter for buttons
+		int gridxCounter = 0; //layout counter x
+		int gridyCounter = 0; // layout counter y
+		JButton[] buttons = new JButton[100]; //input thumbnails list length
+		GridBagConstraints c = new GridBagConstraints();
+
+		for(i = 0; i < buttons.length; i++) {
+			
+			if (gridxCounter > 4) {
+				gridxCounter = 0;
+				gridyCounter++;
+			}
+			
+			//set constraints
+			c.gridx = gridxCounter++;
+			c.gridy = gridyCounter;
+			c.insets = new Insets(40, 40, 40, 40);
+	
+			buttons[i] = new JButton("hi");
+			buttons[i].setSize(330, 330);
+			//buttons[i].setIcon(b.imageresize[i]); [gotta figure out how to access the image from thumbnail list and resize it using TJ's thing? or do they get resized automatically in thumbnailslist?
+			buttons[i].addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+				});
+			panel.add(buttons[i], c);
+		}
 	}
 
     /**
