@@ -16,6 +16,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -76,6 +78,8 @@ public class SelectScene extends Scene
 	
 	/** Create custom image_gray color */
 	private Color image_gray = new Color(30, 30, 30);
+	
+	private ThumbnailsList allThumbs;
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -86,6 +90,8 @@ public class SelectScene extends Scene
      */
     public SelectScene()
     {
+    	allThumbs = new ThumbnailsList();
+    	
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -237,5 +243,24 @@ public class SelectScene extends Scene
     public void initialize()
     {
         directoryLabel.setText(directoryLabel.getText() + SceneHandler.singleton.getDirectory());
+        
+        //set up thumbnail list
+        addImagesInDirectory(new File(SceneHandler.singleton.getDirectory()));
+    }
+    
+    /**
+     * Adds all images that are in the supplied directory to allThumbs
+     * @param currDir the directory to add images from and below
+     */
+    private void addImagesInDirectory(File currDir) {
+    	//Scraping directory credit to RoflCopterException at https://stackoverflow.com/questions/5694385/getting-the-filenames-of-all-files-in-a-folder
+    	File[] files = currDir.listFiles();
+
+    	for (File f : files) {
+    		if (f.isFile()) {
+    			System.out.println("File " + f.getName());
+    			allThumbs.addThumbnail(new Thumbnail(f.getAbsolutePath()));
+			}
+    	}
     }
 }
