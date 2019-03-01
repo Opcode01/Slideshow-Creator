@@ -25,13 +25,11 @@ import core.*;
 public class FileSelectExplorer extends Scene {
 
 	public FileSelectExplorer()
-	{
-		Thumbnail thumb = new Thumbnail("src/creator/TransitionImages/crossFade.png");
-		
+	{		
 		JLabel iconLbl = new JLabel() {
 			  @Override
 			  public void paintComponent(Graphics g) {
-				  thumb.drawFill(g, this);
+				  new Thumbnail("src/creator/TransitionImages/crossFade.png").drawFill(g, this);
 				  }
 			  };
 			  
