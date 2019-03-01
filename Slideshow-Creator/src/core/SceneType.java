@@ -5,7 +5,8 @@ public enum SceneType {
 	DIRECTORY("Directory"),
 	SELECTION("Selection"),
 	ARRANGE("Arrange"),
-	VIEWER("Viewer");
+	FILESELECT("File Select"),
+	PLAY("Play");
 	
 	/**
 	 * title - name of scene 

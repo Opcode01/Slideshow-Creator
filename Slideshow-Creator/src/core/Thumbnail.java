@@ -10,6 +10,9 @@
 
 package core;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -95,5 +98,76 @@ public class Thumbnail
     {
     	//x is negative to preserve aspect ratio
     	return image.getScaledInstance(-thumbSize.x, thumbSize.y, Image.SCALE_DEFAULT);
+    }
+    
+    /**
+     * drawFill - draws the thumbnail image into the specified graphics in the container
+     * @param g graphics to draw into (JLabel paintComponent method argument)
+     * @param container the container in which to draw this image
+     * @return the result of g.drawImage (false if still in process of drawing, true otherwise)
+     * 
+     * @author Timothy Couch
+     */
+    public boolean drawFill(Graphics g, Container container)
+    {
+	  Image displayImage = imageRaw;
+	  
+	  //calculate position and size to draw image with proper aspect ratio
+	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
+	  
+	  //draw image
+	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+    }
+    
+    /**
+     * getLetterBoxCoords - returns the x, y, width, and height of the proper display position for the image in the container at a letterbox aspect ratio
+     * @param image the image to draw
+     * @param container the container to fit the image in
+     * @return int[4]: {x, y, width, height}
+     * 
+     * @author Timothy Couch
+     */
+    private static int[] getLetterBoxCoords(Image image, Container container)
+    {
+    	int[] dimensions = new int[4];
+    	
+    	//get raw dimensions
+		Dimension containerDim = container.getSize();
+		double containerWidth = containerDim.getWidth();
+		double containerHeight = containerDim.getHeight();
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
+		
+		//determine if borders need to be vertical or horizontal
+		double imageAspect = (double) imageWidth / imageHeight;
+		double containerAspect = containerWidth / containerHeight;
+		
+		//borders on top and bottom
+		if (imageAspect > containerAspect)
+		{
+			//get multiplier to make image smaller
+			double imageScale = containerWidth / imageWidth;
+			
+			//y is down some to make image in middle
+			dimensions[1] = (int) Math.round(((containerHeight - imageHeight * imageScale) / 2));
+			
+			//make image smaller
+			dimensions[2] = (int) Math.round(containerWidth);
+			dimensions[3] = (int) Math.round(imageHeight * imageScale);
+		}
+		else//borders on left and right
+		{
+			//get multiplier to make image smaller
+			double imageScale = containerHeight / imageHeight;
+			
+			//x is down some to make image in middle
+			dimensions[0] = (int) Math.round(((containerWidth - imageWidth * imageScale) / 2));
+			
+			//make image smaller
+			dimensions[2] = (int) Math.round(imageWidth * imageScale);
+			dimensions[3] = (int) Math.round(containerHeight);
+		}
+    	
+    	return dimensions;
     }
 }
