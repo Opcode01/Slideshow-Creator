@@ -13,6 +13,7 @@ package core;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.*;
 
 import javax.swing.ImageIcon;
@@ -38,10 +39,6 @@ public class SceneHandler {
 	 */
 	private Timeline timeline;
 	
-	public void setTimeline(Timeline t) {
-		timeline = t;
-	}
-	
 	public Timeline getTimeline() {
 		return timeline;
 	}
@@ -54,6 +51,20 @@ public class SceneHandler {
 	public void setDirectory(String dir)
 	{
 		directory = dir;
+		timeline = new Timeline();
+	}
+	
+	/**
+	 * set directory based on the file supplied
+	 * @param file the file to parse and make a timeline from
+	 */
+	public void setDirectory(File file)
+	{
+		directory = file.getParentFile().getAbsolutePath();
+		timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
+		
+		System.out.println("Dir: " + directory);
+		System.out.println("File: " + file.getAbsolutePath());
 	}
 
 	public String getDirectory()
