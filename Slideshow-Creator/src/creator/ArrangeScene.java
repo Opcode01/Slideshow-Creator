@@ -118,7 +118,7 @@ public class ArrangeScene extends Scene{
 		settingsButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	//Open settings pane in the center of our workspace
-		    	JFrame parent = SceneHandler.singleton.mainFrame;
+		    	JFrame parent = SceneHandler.singleton.getMainFrame();
 		    	Coord2 point = new Coord2(
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2

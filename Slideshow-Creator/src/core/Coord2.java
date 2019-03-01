@@ -10,9 +10,9 @@
 
 package core;
 
-public class Coord2 {
-	public int x;
-	public int y;
+public final class Coord2 {
+	public final int x;
+	public final int y;
 	
 	public Coord2(int x, int y)
 	{
