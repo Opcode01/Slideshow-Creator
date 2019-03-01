@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,16 +27,16 @@ import core.*;
 public class FileSelectExplorer extends Scene {
 
 	public FileSelectExplorer()
-	{		
-		JLabel iconLbl = new JLabel() {
-			  @Override
-			  public void paintComponent(Graphics g) {
-				  new Thumbnail("src/creator/TransitionImages/crossFade.png").drawFill(g, this);
-				  }
-			  };
-			  
+	{
+		JButton testGoPlay = new JButton("Go to play scene");
+		testGoPlay.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	SceneHandler.singleton.SwitchToScene(SceneType.PLAY);
+		    }
+		});
+
 		this.setLayout(new BorderLayout());
-		this.add(iconLbl, BorderLayout.CENTER);
+		this.add(testGoPlay, BorderLayout.CENTER);
 		
 		this.revalidate();
 	}

@@ -26,7 +26,7 @@ public class ViewerMain
 	{
 		SceneHandler handler = new SceneHandler(AppType.VIEWER);
 		handler.AddScene(SceneType.FILESELECT, new FileSelectExplorer());
-		handler.AddScene(SceneType.PLAY, new SelectScene());
+		handler.AddScene(SceneType.PLAY, new PlayScene());
 		handler.SwitchToScene(SceneType.FILESELECT);
 	}
 }

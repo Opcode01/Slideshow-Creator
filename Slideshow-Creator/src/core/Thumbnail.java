@@ -127,7 +127,7 @@ public class Thumbnail
      * 
      * @author Timothy Couch
      */
-    public static int[] getLetterBoxCoords(Image image, Container container)
+    private static int[] getLetterBoxCoords(Image image, Container container)
     {
     	int[] dimensions = new int[4];
     	
