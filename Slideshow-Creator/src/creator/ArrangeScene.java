@@ -2,6 +2,7 @@ package creator;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -26,11 +28,11 @@ public class ArrangeScene extends Scene{
 	/** Create custom color */
 	private JPanel timelinePanel;
 	
+	/** Create Settings Pane */
+	private SettingsPane settingsPane;
+	
 	/** Back button */
 	private JButton backButton;
-	
-	/** Arrange button */
-	private JButton directoryButton;
 	
 	/** Select all button */
 	private JButton settingsButton;
@@ -93,6 +95,7 @@ public class ArrangeScene extends Scene{
 		// Create back button
 		backButton = new JButton(back);
 		backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		backButton.setToolTipText("Back");
 		backButton.setBorder(BorderFactory.createEmptyBorder());
 		backButton.setContentAreaFilled(false);
 		backButton.setFocusable(false);
@@ -103,22 +106,10 @@ public class ArrangeScene extends Scene{
 		    }
 		});
 		
-		// Create select all button
-		directoryButton = new JButton(directory);
-		directoryButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		directoryButton.setBorder(BorderFactory.createEmptyBorder());
-		directoryButton.setContentAreaFilled(false);
-		directoryButton.setFocusable(false);
-		directoryButton.setRolloverIcon(highlightedDirectory);
-		directoryButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
-		
-		// Create select all button
+		// Create settings button
 		settingsButton = new JButton(settings);
 		settingsButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		settingsButton.setToolTipText("Project Settings");
 		settingsButton.setBorder(BorderFactory.createEmptyBorder());
 		settingsButton.setContentAreaFilled(false);
 		settingsButton.setFocusable(false);
@@ -132,19 +123,21 @@ public class ArrangeScene extends Scene{
 		    			parent.getY() + parent.getSize().height/2
 		    			);
 		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 470));
-		    	parent.setEnabled(false);		    }
+		    	parent.setEnabled(false);
+		    }
 		});
 		
-		// Create deselect all button
+		// Create remove current button
 		removeCurrentButton = new JButton(removeCurrent);
 		removeCurrentButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		removeCurrentButton.setToolTipText("Remove Selected Image");
 		removeCurrentButton.setBorder(BorderFactory.createEmptyBorder());
 		removeCurrentButton.setContentAreaFilled(false);
 		removeCurrentButton.setFocusable(false);
 		removeCurrentButton.setRolloverIcon(highlightedRemoveCurrent);
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	//TODO: Remove the currently selected thumbnail and transition from timeline
 		    }
 		});
 		
@@ -160,11 +153,6 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 0;
 		optionsPanel.add(backButton, c);
-		
-		// Set constraints and add directory button
-		c.gridx = 0;
-		c.gridy = 1;
-		optionsPanel.add(directoryButton, c);
 		
 		// Set constraints and add settings button
 		c.gridx = 0;
