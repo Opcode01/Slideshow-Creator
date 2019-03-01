@@ -16,22 +16,11 @@ public class FloatingPane extends JDialog {
 		//Set the size of the pane
 		setPreferredSize(size);
 		setResizable(false);
-		
-		//setUndecorated(true);
+		setUndecorated(true);
 		
 		//Set the location (need to offset for size of window)
 		setLocation(position.x-size.width/2, position.y-size.height/2);
         getContentPane();
-        
-		this.addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        		setVisible(false);
-        		parent.setEnabled(true);
-        		parent.setVisible(true);
-        		dispose();
-		    }
-		});
 		
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
@@ -39,9 +28,9 @@ public class FloatingPane extends JDialog {
 	}
 	
 	public void ClosePane() {
-		setVisible(false);
 		parentFrame.setEnabled(true);
 		parentFrame.setVisible(true);
+		setVisible(false);
 		dispose();
 	}
 }
