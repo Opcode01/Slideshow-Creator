@@ -33,8 +33,8 @@ public class SceneHandler {
 	private AppType appType;
 	
 	/**
-	 * timeline - to be created on startup if running as creator
-	 * 			- to be loaded in by TimelineParser if running as viewer
+	 * timeline - to be created on startup if loading a directory
+	 * 			- to be loaded in by TimelineParser if loading a file
 	 */
 	private Timeline timeline;
 	
@@ -64,7 +64,13 @@ public class SceneHandler {
 	/**
 	 * mainFrame - window frame of program
 	 */
-	public JFrame mainFrame;
+	private JFrame mainFrame;
+	
+	public JFrame getMainFrame()
+	{
+		return mainFrame;
+	}
+	
 	/* The dictionary of scenes in the current context */
 	private HashMap<SceneType, Scene> scenes;
 	/* The currently selected scene type */
