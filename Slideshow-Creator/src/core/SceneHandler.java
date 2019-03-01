@@ -38,7 +38,7 @@ public class SceneHandler {
 	 */
 	private Timeline timeline;
 	
-	public void setNewTimeline(Timeline t) {
+	public void setTimeline(Timeline t) {
 		timeline = t;
 	}
 	
