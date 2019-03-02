@@ -11,12 +11,14 @@ package creator;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -187,19 +189,39 @@ public class SelectScene extends Scene
 		c.gridy = 3;
 		optionsPanel.add(deselectAllButton, c);
 		
+		///////fake thumbnailslist for testing
+		ThumbnailsList thumbList = new ThumbnailsList();
+
+		for(int i = 0; i < 10; i++) {
+			thumbList.addThumbnail(new Thumbnail("src/creator/Images/nicki.jpg"));
+		}
+		
+		for(int i = 0; i < 10; i++) {
+			thumbList.addThumbnail(new Thumbnail("src/creator/Images/okButton.png"));
+		}
+		///////
+		
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
 		imagePanel.setBackground(image_gray);
-		ShowImages(imagePanel);
+		ShowImages(imagePanel, thumbList);
+		
+		// Create outerpanel that houses the image panel for layout and whitespace
+		JPanel outerPanel = new JPanel();
+		outerPanel.setLayout(gridBag);
+		outerPanel.setBackground(image_gray);
+		c.insets = new Insets(44, 44, 44, 44);
+		outerPanel.add(imagePanel, c);
 		
 		// Set scroll pane configurations
-		imageScroller = new JScrollPane(imagePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		imageScroller = new JScrollPane(outerPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(0, 0, 0, 0);
 		c.weightx = 0;
 		c.weighty = 1;
 		c.gridx = 0;
@@ -241,31 +263,37 @@ public class SelectScene extends Scene
     /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
-     * @precondition must run after project directory has been determined
+     * @AUTHOR Fernando Palacios
      */
-	public void ShowImages(JPanel panel)
+	public void ShowImages(JPanel panel, ThumbnailsList list)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		JButton[] buttons = new JButton[100]; //input thumbnails list length
+		JButton[] buttons = new JButton[list.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
 		for(i = 0; i < buttons.length; i++) {
 			
-			if (gridxCounter > 4) {
+			if (gridxCounter > 2) {
 				gridxCounter = 0;
 				gridyCounter++;
 			}
 			
 			//set constraints
-			c.gridx = gridxCounter++;
+			c.gridx = gridxCounter;
 			c.gridy = gridyCounter;
+			c.fill = GridBagConstraints.BOTH;
 			c.insets = new Insets(40, 40, 40, 40);
+			
+			gridxCounter++;
 	
-			buttons[i] = new JButton("hi");
-			buttons[i].setSize(330, 330);
-			//buttons[i].setIcon(b.imageresize[i]); [gotta figure out how to access the image from thumbnail list and resize it using TJ's thing? or do they get resized automatically in thumbnailslist?
+			buttons[i] = new JButton(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			buttons[i].setPreferredSize(new Dimension(320, 200));
+			//buttons[i].setRolloverIcon(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
+			buttons[i].setFocusable(false);
 			buttons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					
