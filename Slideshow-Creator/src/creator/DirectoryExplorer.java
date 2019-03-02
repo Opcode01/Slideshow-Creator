@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -132,6 +134,11 @@ public class DirectoryExplorer extends Scene {
 		selectExistingButton.setFocusable(false);
 		selectExistingButton.setRolloverIcon(highlightedSelectExisting);
 		selectExistingButton.setPressedIcon(highlightedSelectExisting);
+		selectExistingButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SelectFile();
+			}
+		});
 		
 		// Create and add label
 		bgLabel = new JLabel(bg);
@@ -189,6 +196,22 @@ public class DirectoryExplorer extends Scene {
 	}
 	
 	/**
+	 * SelectFile - brings up dialogue box to select slideshow file
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void SelectFile() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("."));//start at this directory
+		chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+		int returnVal = chooser.showDialog(DirectoryExplorer.this, "Choose Slideshow File");
+    	if(returnVal == JFileChooser.APPROVE_OPTION) {
+    	    File slFile = chooser.getSelectedFile();
+    		GoToSelectScene(slFile);
+    	}
+	}
+	
+	/**
 	 * GoToSelectScene() - sends to select scene with specified path
 	 * @param dir is directory
 	 * 
@@ -197,6 +220,18 @@ public class DirectoryExplorer extends Scene {
 	public void GoToSelectScene(String dir)
 	{
 		SceneHandler.singleton.setDirectory(dir);
+		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+	}
+	
+	/**
+	 * GoToSelectScene - sends to select scene with specified file
+	 * @param slFile slideshow file to open
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void GoToSelectScene(File slFile)
+	{
+		SceneHandler.singleton.setDirectory(slFile);
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 	}
 	
