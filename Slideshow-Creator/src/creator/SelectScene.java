@@ -268,12 +268,14 @@ public class SelectScene extends Scene
     		if (f.isFile()) {
 				//if image, add it to the list of thumbnails
 				if (imageFileFilter.accept(f))
+				{
+					System.out.println(f.getPath());
 					allThumbs.addThumbnail(new Thumbnail(f.getAbsolutePath()));
+				}
 			}
 			//if it's a directory, check in it
 			else if (f.isDirectory())
 				addImagesInDirectory(f);
-
     	}
-    }
+	}
 }

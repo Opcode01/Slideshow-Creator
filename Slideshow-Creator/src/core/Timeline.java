@@ -30,4 +30,30 @@ public class Timeline
     	s.PrintAll();
     	System.out.println("Timeline Settings updated!");
     }
+
+    /**
+     * Adds the given slide to the timeline with a default transition
+     * @param thumbnail the thumbnail to add
+     * 
+     * @author Timothy Couch
+     */
+    public void addSlide(Thumbnail thumbnail)
+    {
+        thumbnailsList.addThumbnail(thumbnail);
+        transitionsList.addTransition(new Transition());
+    }
+
+    /**
+     * Removes the slide at the specified index from the timeline
+     * @param index thumbnail and transition combo to remove
+     * @return whether successful
+     * 
+     * @author Timothy Couch
+     */
+    public boolean removeSlide(int index)
+    {
+        thumbnailsList.removeThumbnail(thumbnailsList.getThumbnail(index));
+        transitionsList.removeTransition(transitionsList.getTransition(index));
+        return true;
+    }
 }
