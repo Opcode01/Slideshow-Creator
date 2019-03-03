@@ -238,6 +238,8 @@ public class SelectScene extends Scene
      * initialize() - opens the images and sets up the scene for use
      * 
      * @precondition must run after project directory has been determined
+	 * 
+	 * @author Timothy Couch
      */
     @Override
     public void initialize()
@@ -251,6 +253,8 @@ public class SelectScene extends Scene
     /**
      * Adds all images that are in the supplied directory to allThumbs
      * @param currDir the directory to add images from and below
+	 * 
+	 * @author Timothy Couch
      */
     private void addImagesInDirectory(File currDir) {
     	//Scraping directory credit to RoflCopterException at https://stackoverflow.com/questions/5694385/getting-the-filenames-of-all-files-in-a-folder
