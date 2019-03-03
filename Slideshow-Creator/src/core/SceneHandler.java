@@ -144,8 +144,6 @@ public class SceneHandler {
 
 		mainFrame.setVisible(true);
 		
-		mainFrame.setVisible(true);
-		
 		return true;
 	}
 	
