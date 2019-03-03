@@ -22,12 +22,15 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
 
 import core.*;
 
 public class SelectScene extends Scene
 {
+	private static final FileNameExtensionFilter imageFileFilter = new FileNameExtensionFilter("Image File", "jpg", "jpeg", "png", "gif", "bmp");
+
 	/** Create custom color */
 	private JPanel optionsPanel;
 	
@@ -251,7 +254,7 @@ public class SelectScene extends Scene
     }
     
     /**
-     * Adds all images that are in the supplied directory to allThumbs
+     * Adds all images that are in the supplied directory to allThumbs recursively (searches subfolders)
      * @param currDir the directory to add images from and below
 	 * 
 	 * @author Timothy Couch
@@ -261,10 +264,16 @@ public class SelectScene extends Scene
     	File[] files = currDir.listFiles();
 
     	for (File f : files) {
+			//if it's a file
     		if (f.isFile()) {
-    			System.out.println("File " + f.getName());
-    			allThumbs.addThumbnail(new Thumbnail(f.getAbsolutePath()));
+				//if image, add it to the list of thumbnails
+				if (imageFileFilter.accept(f))
+					allThumbs.addThumbnail(new Thumbnail(f.getAbsolutePath()));
 			}
+			//if it's a directory, check in it
+			else if (f.isDirectory())
+				addImagesInDirectory(f);
+
     	}
     }
 }
