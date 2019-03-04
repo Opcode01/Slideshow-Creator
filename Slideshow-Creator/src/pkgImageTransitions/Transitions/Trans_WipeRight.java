@@ -5,18 +5,10 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import pkgImageTransitions.Transition;
+import pkgImageTransitions.ColemanTransition;
 
-public class Trans_WipeRight extends Transition
+public class Trans_WipeRight extends ColemanTransition
 {
-	//---------------------------------------------------
-	// Default constructor
-	//---------------------------------------------------
-	public Trans_WipeRight()
-	{
-		m_sType = "WIPE_RIGHT";
-	}
-	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
 	// Args:  
@@ -76,15 +68,6 @@ public class Trans_WipeRight extends Transition
 		ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
 		// And one final draw to the panel to be sure it's all there
 		gPan.drawImage(ImageA, 0,0, imgPanel); 
-	}
-	
-	//---------------------------------------------------
-	/** Identifies what type of transition this is. */
-	// See defined types above
-	//---------------------------------------------------
-	public String getTransitionType()
-	{
-		return m_sType;
 	}
 
 }

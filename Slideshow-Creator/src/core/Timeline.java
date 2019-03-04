@@ -10,6 +10,8 @@
 
 package core;
 
+import java.util.ArrayList;
+
 public class Timeline
 {
     public ThumbnailsList thumbnailsList;
@@ -28,6 +30,13 @@ public class Timeline
     
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
+    	
+    	//Update all transition lengths
+    	ArrayList<Transition> list = transitionsList.getTransitions();
+    	for(Transition t : list) {
+    		t.setTransitionLength(s.transitionLength);
+    	}
+    	
     	System.out.println("Timeline Settings updated!");
     }
 }
