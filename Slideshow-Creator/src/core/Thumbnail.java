@@ -182,4 +182,23 @@ public class Thumbnail
 
         return dimensions;
     }
+
+    /**
+     * Checks if this thumbnail has the same image path as comparing thumbnail
+     * @param o object to compare
+     * 
+     * @author Timothy Couch
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        //thanks to GeeksforGeeks for general form https://www.geeksforgeeks.org/overriding-equals-method-in-java/
+        if (o == this)
+            return true;
+        if (!(o instanceof Thumbnail))
+            return false;
+        
+        Thumbnail t = (Thumbnail) o;
+        return imagePath.equals(t.getImagePath());
+    }
 }

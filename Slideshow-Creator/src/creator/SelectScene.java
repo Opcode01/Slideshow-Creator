@@ -248,7 +248,7 @@ public class SelectScene extends Scene
 	 * @author Fernando Palacios
 	 * @author Timothy Couch
 	 */
-	private void setupImagePanel(boolean revalidate)
+	public void setupImagePanel(boolean revalidate)
 	{		
 		// Create image panel with new images
 		imagePanel = new JPanel();
@@ -283,15 +283,19 @@ public class SelectScene extends Scene
      */
 	public void GoToArrangeScene()
 	{
+		System.out.println("Thumbnails in Timeline:");
+		for (Thumbnail t : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
+			System.out.println(t.getImagePath());
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
 	}
 	
     /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
-     * @AUTHOR Fernando Palacios
+     * @author Fernando Palacios
+	 * @author Timothy Couch
      */
-	public void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages(JPanel panel, ThumbnailsList list)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
@@ -313,16 +317,31 @@ public class SelectScene extends Scene
 			c.insets = new Insets(40, 40, 40, 40);
 			
 			gridxCounter++;
-	
-			buttons[i] = new JButton(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			
+			Thumbnail buttonThumb = list.getThumbnail(i);
+			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			buttons[i].setPreferredSize(new Dimension(320, 200));
-			//buttons[i].setRolloverIcon(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			//buttons[i].setRolloverIcon(new ImageIcon(buttonThumb.getImageThumb()));
 			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
 			buttons[i].setFocusable(false);
 			buttons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
-					
+					//add button to or remove button from timeline
+					Timeline timeline = SceneHandler.singleton.getTimeline();
+
+					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+					//if thumbnail is in the timeline, remove it
+					if (slideIndex >= 0)
+					{
+						timeline.removeSlide(slideIndex);
+						//TODO: remove button highlight @Fernando
+					}
+					else//thumbnail not on timeline, add it
+					{
+						timeline.addSlide(buttonThumb);
+						//TODO: highlight button @Fernando
+					}
 				}
 				});
 			panel.add(buttons[i], c);
