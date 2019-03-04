@@ -17,11 +17,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 
@@ -29,11 +32,19 @@ import core.*;
 
 public class SelectScene extends Scene
 {
+	private static final FileNameExtensionFilter imageFileFilter = new FileNameExtensionFilter("Image File", "jpg", "jpeg", "png", "gif", "bmp");
+
 	/** Create custom color */
 	private JPanel optionsPanel;
 	
 	/** Create custom color */
 	private JPanel imagePanel;
+
+	/** main image selection panel constraints */
+	private GridBagConstraints imagePanelConstraints;
+
+	/** container for image panel */
+	private JPanel imagePanelContainer;
 	
 	/** Create Settings Pane */
 	private JScrollPane imageScroller;
@@ -82,6 +93,8 @@ public class SelectScene extends Scene
 	
 	/** Create custom image_gray color */
 	private Color image_gray = new Color(30, 30, 30);
+	
+	private ThumbnailsList allThumbs;
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -92,6 +105,8 @@ public class SelectScene extends Scene
      */
     public SelectScene()
     {
+    	allThumbs = new ThumbnailsList();
+    	
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -193,33 +208,19 @@ public class SelectScene extends Scene
 		c.gridy = 3;
 		optionsPanel.add(deselectAllButton, c);
 		
-		///////fake thumbnailslist for testing
-		ThumbnailsList thumbList = new ThumbnailsList();
-
-		for(int i = 0; i < 10; i++) {
-			thumbList.addThumbnail(new Thumbnail("src/creator/Images/nicki.jpg"));
-		}
-		
-		for(int i = 0; i < 10; i++) {
-			thumbList.addThumbnail(new Thumbnail("src/creator/Images/okButton.png"));
-		}
-		///////
-		
-		// Set image panel configurations
-		imagePanel = new JPanel();
-		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(image_gray);
-		ShowImages(imagePanel, thumbList);
-		
 		// Create outerpanel that houses the image panel for layout and whitespace
-		JPanel outerPanel = new JPanel();
-		outerPanel.setLayout(gridBag);
-		outerPanel.setBackground(image_gray);
+		imagePanelContainer = new JPanel();
+		imagePanelContainer.setLayout(gridBag);
+		imagePanelContainer.setBackground(image_gray);
+		// set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
-		outerPanel.add(imagePanel, c);
+		imagePanelConstraints = (GridBagConstraints) c.clone();
+		//set up blank image panel
+		setupImagePanel(false);
+		imagePanelContainer.add(imagePanel, c);
 		
 		// Set scroll pane configurations
-		imageScroller = new JScrollPane(outerPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
 		
@@ -242,7 +243,30 @@ public class SelectScene extends Scene
 
         directoryLabel = new JLabel("Select Scene! Directory: ");
 
-    }
+	}
+	
+	/**
+	 * populates the image panel with images from allThumbs
+	 * @param revalidate whether to revalidate the scene once finished
+	 * 
+	 * @author Fernando Palacios
+	 * @author Timothy Couch
+	 */
+	public void setupImagePanel(boolean revalidate)
+	{		
+		// Create image panel with new images
+		imagePanel = new JPanel();
+		imagePanel.setLayout(new GridBagLayout());
+		imagePanel.setBackground(image_gray);
+		ShowImages(imagePanel, allThumbs);
+		
+		// add to outer panel that houses the image panel for layout and whitespace
+		imagePanelContainer.removeAll();
+		imagePanelContainer.add(imagePanel, imagePanelConstraints);
+
+		if (revalidate)
+			this.revalidate();
+	}
     
 	/**
 	 * GoToDirectoryScene() - changes scene to directory
@@ -251,6 +275,8 @@ public class SelectScene extends Scene
      */
 	public void GoToDirectoryScene()
 	{
+		//restart program when returning to directory to clear the scene
+		SceneHandler.singleton.restartProgram();
 		SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
 	}
 	
@@ -261,15 +287,19 @@ public class SelectScene extends Scene
      */
 	public void GoToArrangeScene()
 	{
+		System.out.println("Thumbnails in Timeline:");
+		for (Thumbnail t : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
+			System.out.println(t.getImagePath());
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
 	}
 	
     /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
-     * @AUTHOR Fernando Palacios
+     * @author Fernando Palacios
+	 * @author Timothy Couch
      */
-	public void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages(JPanel panel, ThumbnailsList list)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
@@ -291,16 +321,31 @@ public class SelectScene extends Scene
 			c.insets = new Insets(40, 40, 40, 40);
 			
 			gridxCounter++;
-	
-			buttons[i] = new JButton(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			
+			Thumbnail buttonThumb = list.getThumbnail(i);
+			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			buttons[i].setPreferredSize(new Dimension(320, 200));
-			//buttons[i].setRolloverIcon(new ImageIcon(list.getThumbnail(i).getImageThumb()));
+			//buttons[i].setRolloverIcon(new ImageIcon(buttonThumb.getImageThumb()));
 			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
 			buttons[i].setFocusable(false);
 			buttons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
-					
+					//add button to or remove button from timeline
+					Timeline timeline = SceneHandler.singleton.getTimeline();
+
+					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+					//if thumbnail is in the timeline, remove it
+					if (slideIndex >= 0)
+					{
+						timeline.removeSlide(slideIndex);
+						//TODO: remove button highlight @Fernando
+					}
+					else//thumbnail not on timeline, add it
+					{
+						timeline.addSlide(buttonThumb);
+						//TODO: highlight button @Fernando
+					}
 				}
 				});
 			panel.add(buttons[i], c);
@@ -311,10 +356,44 @@ public class SelectScene extends Scene
      * initialize() - opens the images and sets up the scene for use
      * 
      * @precondition must run after project directory has been determined
+	 * 
+	 * @author Timothy Couch
      */
     @Override
     public void initialize()
     {
+		super.initialize();
+
         directoryLabel.setText(directoryLabel.getText() + SceneHandler.singleton.getDirectory());
+        
+		//set up thumbnail list
+		allThumbs = new ThumbnailsList();
+		addImagesInDirectory(new File(SceneHandler.singleton.getDirectory()));
+		setupImagePanel(true);
     }
+    
+    /**
+     * Adds all images that are in the supplied directory to allThumbs recursively (searches subfolders)
+     * @param currDir the directory to add images from and below
+	 * 
+	 * @author Timothy Couch
+     */
+    private void addImagesInDirectory(File currDir) {
+    	//Scraping directory credit to RoflCopterException at https://stackoverflow.com/questions/5694385/getting-the-filenames-of-all-files-in-a-folder
+    	File[] files = currDir.listFiles();
+
+    	for (File f : files) {
+			//if it's a file
+    		if (f.isFile()) {
+				//if image, add it to the list of thumbnails
+				if (imageFileFilter.accept(f))
+				{
+					allThumbs.addThumbnail(new Thumbnail(f.getAbsolutePath()));
+				}
+			}
+			//if it's a directory, check in it
+			else if (f.isDirectory())
+				addImagesInDirectory(f);
+    	}
+	}
 }

@@ -96,8 +96,8 @@ public class Thumbnail
      */
     private Image resizeImageThumb(Image image)
     {
-    	//x is negative to preserve aspect ratio
-    	return image.getScaledInstance(-thumbSize.x, thumbSize.y, Image.SCALE_DEFAULT);
+        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
+        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
     }
     
     /**
@@ -123,51 +123,82 @@ public class Thumbnail
      * getLetterBoxCoords - returns the x, y, width, and height of the proper display position for the image in the container at a letterbox aspect ratio
      * @param image the image to draw
      * @param container the container to fit the image in
-     * @return int[4]: {x, y, width, height}
+     * @return int[4]: {x, y, width, height} of new image dimensions
      * 
      * @author Timothy Couch
      */
     private static int[] getLetterBoxCoords(Image image, Container container)
-    {
-    	int[] dimensions = new int[4];
-    	
+    {    	
     	//get raw dimensions
 		Dimension containerDim = container.getSize();
 		double containerWidth = containerDim.getWidth();
 		double containerHeight = containerDim.getHeight();
 		int imageWidth = image.getWidth(null);
 		int imageHeight = image.getHeight(null);
-		
-		//determine if borders need to be vertical or horizontal
-		double imageAspect = (double) imageWidth / imageHeight;
-		double containerAspect = containerWidth / containerHeight;
-		
-		//borders on top and bottom
-		if (imageAspect > containerAspect)
-		{
-			//get multiplier to make image smaller
-			double imageScale = containerWidth / imageWidth;
-			
-			//y is down some to make image in middle
-			dimensions[1] = (int) Math.round(((containerHeight - imageHeight * imageScale) / 2));
-			
-			//make image smaller
-			dimensions[2] = (int) Math.round(containerWidth);
-			dimensions[3] = (int) Math.round(imageHeight * imageScale);
-		}
-		else//borders on left and right
-		{
-			//get multiplier to make image smaller
-			double imageScale = containerHeight / imageHeight;
-			
-			//x is down some to make image in middle
-			dimensions[0] = (int) Math.round(((containerWidth - imageWidth * imageScale) / 2));
-			
-			//make image smaller
-			dimensions[2] = (int) Math.round(imageWidth * imageScale);
-			dimensions[3] = (int) Math.round(containerHeight);
-		}
     	
-    	return dimensions;
+    	return getLetterBoxCoords(imageWidth, imageHeight, containerWidth, containerHeight);
+    }
+
+    /**
+     * getLetterBoxCoords - returns x, y, width, and height of the proper display position for the supplied "image" fitting into supplied "container"
+     * @param imageWidth width of image to calculate
+     * @param imageHeight height of image to calculate
+     * @param containerWidth width of container to calculate
+     * @param containerHeight height of container to calculate
+     * @return int[4]: {x, y, width, height} of new image dimensions
+     * 
+     * @author Timothy Couch
+     */
+    private static int[] getLetterBoxCoords(int imageWidth, int imageHeight, double containerWidth, double containerHeight) {
+        int[] dimensions = new int[4];
+
+        // determine if borders need to be vertical or horizontal
+        double imageAspect = (double) imageWidth / imageHeight;
+        double containerAspect = containerWidth / containerHeight;
+
+        // borders on top and bottom
+        if (imageAspect > containerAspect) {
+            // get multiplier to make image smaller
+            double imageScale = containerWidth / imageWidth;
+
+            // y is down some to make image in middle
+            dimensions[1] = (int) Math.round(((containerHeight - imageHeight * imageScale) / 2));
+
+            // make image smaller
+            dimensions[2] = (int) Math.round(containerWidth);
+            dimensions[3] = (int) Math.round(imageHeight * imageScale);
+        } else// borders on left and right
+        {
+            // get multiplier to make image smaller
+            double imageScale = containerHeight / imageHeight;
+
+            // x is down some to make image in middle
+            dimensions[0] = (int) Math.round(((containerWidth - imageWidth * imageScale) / 2));
+
+            // make image smaller
+            dimensions[2] = (int) Math.round(imageWidth * imageScale);
+            dimensions[3] = (int) Math.round(containerHeight);
+        }
+
+        return dimensions;
+    }
+
+    /**
+     * Checks if this thumbnail has the same image path as comparing thumbnail
+     * @param o object to compare
+     * 
+     * @author Timothy Couch
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        //thanks to GeeksforGeeks for general form https://www.geeksforgeeks.org/overriding-equals-method-in-java/
+        if (o == this)
+            return true;
+        if (!(o instanceof Thumbnail))
+            return false;
+        
+        Thumbnail t = (Thumbnail) o;
+        return imagePath.equals(t.getImagePath());
     }
 }
