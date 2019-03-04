@@ -214,4 +214,19 @@ public class SceneHandler {
 		}
 	}
 	
+	/**
+	 * makes all scenes rerun initialize method on next show (effectively clears out the working information in the scene)
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void restartProgram()
+	{
+		//thanks to karim79 for how to iterate through a map https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
+		Iterator<Map.Entry<SceneType, Scene>> scenesIt = scenes.entrySet().iterator();
+		while (scenesIt.hasNext())
+		{
+			Scene scene = scenesIt.next().getValue();
+			scene.destroy();
+		}
+	}
 }
