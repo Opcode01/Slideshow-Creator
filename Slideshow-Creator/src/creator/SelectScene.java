@@ -271,6 +271,9 @@ public class SelectScene extends Scene
      */
 	public void GoToDirectoryScene()
 	{
+		//destroy select scene when returning to directory to clear the scene
+		//TODO: this probably needs to be globalized into destroying all scenes
+		destroy();
 		SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
 	}
 	
