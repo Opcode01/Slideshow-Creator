@@ -5,18 +5,11 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import pkgImageTransitions.Transition;
+import pkgImageTransitions.ColemanTransition;
 
-public class Trans_WipeUp extends Transition
+public class Trans_WipeUp extends ColemanTransition
 {
-	//---------------------------------------------------
-	// Default constructor
-	//---------------------------------------------------
-	public Trans_WipeUp()
-	{
-		m_sType = "WIPE_UP";
-	}
-	
+
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
 	// Args:  
@@ -78,13 +71,5 @@ public class Trans_WipeUp extends Transition
 		gPan.drawImage(ImageA, 0,0, imgPanel); 
 	}
 	
-	//---------------------------------------------------
-	/** Identifies what type of transition this is. */
-	// See defined types above
-	//---------------------------------------------------
-	public String getTransitionType()
-	{
-		return m_sType;
-	}
 
 }

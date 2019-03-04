@@ -46,7 +46,7 @@ public class ImagePanel extends JPanel
 
 	//----- Transition variables -----
 	/** Vector of transition objects */
-	private Vector<Transition> m_vTransitions;
+	private Vector<ColemanTransition> m_vTransitions;
 	
 	/** Random number generator used to select the transition to use */
 	private Random m_RandGen;
@@ -73,35 +73,32 @@ public class ImagePanel extends JPanel
 		// Create an instance of all transitions available in the Transitions folder
 		// For now we just hard code this.  Later read the directory and dynamically
 		// create them
-		m_vTransitions = new Vector<Transition>();
+		m_vTransitions = new Vector<ColemanTransition>();
 		// Index 0
-		Transition baseTrans = new Transition(this); // Make sure everything gets initialized here
-		m_vTransitions.add(baseTrans);
-		// Index 1
 		Trans_WipeLeft twl = new Trans_WipeLeft();
 		m_vTransitions.add(twl);
-		// Index 2
+		// Index 1
 		Trans_WipeRight twr = new Trans_WipeRight();
 		m_vTransitions.add(twr);
-		// Index 3
+		// Index 2
 		Trans_WipeUp twu = new Trans_WipeUp();
 		m_vTransitions.add(twu);
-		// Index 4
+		// Index 3
 		Trans_WipeDown twd = new Trans_WipeDown();
 		m_vTransitions.add(twd);
-		// Index 5
+		// Index 4
 		Trans_CrossDissolve tcd = new Trans_CrossDissolve();
 		m_vTransitions.add(tcd);
-		// Index 6
+		// Index 5
 		Trans_PushLeft tpl = new Trans_PushLeft();
 		m_vTransitions.add(tpl);
-		// Index 7
+		// Index 6
 		Trans_PushRight tpr = new Trans_PushRight();
 		m_vTransitions.add(tpr);
-		// Index 8
+		// Index 7
 		Trans_PushUp tpu = new Trans_PushUp();
 		m_vTransitions.add(tpu);
-		// Index 9
+		// Index 8
 		Trans_PushDown tpd = new Trans_PushDown();
 		m_vTransitions.add(tpd);
 		

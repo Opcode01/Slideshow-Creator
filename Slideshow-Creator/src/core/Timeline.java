@@ -10,6 +10,8 @@
 
 package core;
 
+import java.util.ArrayList;
+
 public class Timeline
 {
     public ThumbnailsList thumbnailsList;
@@ -28,6 +30,39 @@ public class Timeline
     
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
+    	
+    	//Update all transition lengths
+    	ArrayList<Transition> list = transitionsList.getTransitions();
+    	for(Transition t : list) {
+    		t.setTransitionLength(s.transitionLength);
+    	}
+    	
     	System.out.println("Timeline Settings updated!");
+    }
+
+    /**
+     * Adds the given slide to the timeline with a default transition
+     * @param thumbnail the thumbnail to add
+     * 
+     * @author Timothy Couch
+     */
+    public void addSlide(Thumbnail thumbnail)
+    {
+        thumbnailsList.addThumbnail(thumbnail);
+        transitionsList.addTransition(new Transition());
+    }
+
+    /**
+     * Removes the slide at the specified index from the timeline
+     * @param index thumbnail and transition combo to remove
+     * @return whether successful
+     * 
+     * @author Timothy Couch
+     */
+    public boolean removeSlide(int index)
+    {
+        thumbnailsList.removeThumbnail(thumbnailsList.getThumbnail(index));
+        transitionsList.removeTransition(transitionsList.getTransition(index));
+        return true;
     }
 }

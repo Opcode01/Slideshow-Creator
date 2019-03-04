@@ -153,4 +153,15 @@ public class ThumbnailsList
         }
     }
 
+    /**
+     * gets index of supplied thumbnail or -1 if not found
+     * @param thumbnail thumbnail to search for
+     * 
+     * @return index of supplied thumbnail or -1 if not found
+     */
+    public int indexOf(Thumbnail thumbnail)
+    {
+        return thumbnails.indexOf(thumbnail);
+    }
+
 }
