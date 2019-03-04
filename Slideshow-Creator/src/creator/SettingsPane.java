@@ -37,6 +37,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.NumberFormatter;
 
 import core.*;
@@ -495,8 +496,8 @@ public class SettingsPane extends FloatingPane
     	JFileChooser chooser = new JFileChooser();
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	
-    	chooser.addChoosableFileFilter(new CustomFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }) );
         chooser.setAcceptAllFileFilterUsed(false);
+        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
         
     	int returnVal = chooser.showDialog(SettingsPane.this, "Open");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {

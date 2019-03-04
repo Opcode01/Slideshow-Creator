@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 
 public class Thumbnail
 {
-	private static Coord2 thumbSize = new Coord2(100, 75);
+	private static Coord2 thumbSize = new Coord2(320, 200);
 	
     /**
      * Publicly read-only path to image

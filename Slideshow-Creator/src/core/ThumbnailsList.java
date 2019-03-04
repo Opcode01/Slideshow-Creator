@@ -26,7 +26,7 @@ public class ThumbnailsList
     public ThumbnailsList()
     {
         thumbnails = new ArrayList<Thumbnail>();
-    }
+    };
     
 
     /**
