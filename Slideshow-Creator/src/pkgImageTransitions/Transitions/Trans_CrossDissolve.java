@@ -7,16 +7,16 @@ import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
-import pkgImageTransitions.Transition;
+import pkgImageTransitions.ColemanTransition;
 
-public class Trans_CrossDissolve extends Transition
+public class Trans_CrossDissolve extends ColemanTransition
 {
 	//---------------------------------------------------
 	// Default constructor
 	//---------------------------------------------------
 	public Trans_CrossDissolve()
 	{
-		m_sType = "CROSS_DISSOLVE";
+		
 	}
 	
 	//---------------------------------------------------
@@ -69,12 +69,4 @@ public class Trans_CrossDissolve extends Transition
 		gPan.drawImage(ImageA, 0,0, imgPanel); 
 	}
 	
-	//---------------------------------------------------
-	/** Identifies what type of transition this is. */
-	// See defined types above
-	//---------------------------------------------------
-	public String getTransitionType()
-	{
-		return m_sType;
-	}
 }

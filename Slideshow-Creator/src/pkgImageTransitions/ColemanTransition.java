@@ -1,40 +1,29 @@
 package pkgImageTransitions;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JPanel;
 
 //==========================================================================================
-// class Transition
+// abstract class Transition
 // Define the parent class that all image transitions will extend.  This way new transitions
-//   can be easily added to the application later.  This class also contains two static
-//   images into which the previously scaled for screen display images are stored for the
+//   can be easily added to the application later. This class mostly provides an interface for
+//   other transitions to use and some default implementation. This class also contains two 
+//   static images into which the previously scaled for screen display images are stored for the
 //   current image and the one to be transitioned to.
 //
 // Author: Dr. Rick Coleman
 // Date: January 2016
+// Last Modified by Austin Vickers - March 2019
 //==========================================================================================
-public class Transition
-{
-	/** Name of this transition */
-	protected String m_sType;
-	
+public class ColemanTransition
+{	
 	//--------------------------------------------------------
-	/** Default constructor - Used only for sub-classes. */
+	/** Default constructor */
 	//--------------------------------------------------------
-	public Transition()
+	public ColemanTransition()
 	{
-		// Sub-classes must set their type
-	}
-	
-	//--------------------------------------------------------
-	/** Parameterized constructor for parent class. */
-	//--------------------------------------------------------
-	public Transition(JPanel imgPanel)
-	{
-		m_sType = "NO_TRANS";
+		
 	}
 	
 	//--------------------------------------------------------
@@ -56,15 +45,6 @@ public class Transition
 		// Default just copy ImageB into ImageA then copy to screen
 	    gA.drawImage(ImageB, 0, 0, null);
 	    gPan.drawImage(ImageA, 0, 0, imgPanel);
-	}
-	
-	//---------------------------------------------------
-	/** Identifies what type of transition this is. */
-	// See defined types above
-	//---------------------------------------------------
-	public String getTransitionType()
-	{
-		return m_sType;
 	}
 
 }
