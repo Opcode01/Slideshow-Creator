@@ -14,15 +14,19 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
 
 import core.*;
@@ -82,6 +86,12 @@ public class SelectScene extends Scene
 	
 	/** Create custom image_gray color */
 	private Color image_gray = new Color(30, 30, 30);
+	
+	/** Create custom blush color */
+	private Color blush = new Color(228, 199, 193);
+	
+	/** Create button counter */
+	private int buttonCounter;
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -267,13 +277,12 @@ public class SelectScene extends Scene
      */
 	public void ShowImages(JPanel panel, ThumbnailsList list)
 	{
-		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
 		JButton[] buttons = new JButton[list.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
-		for(i = 0; i < buttons.length; i++) {
+		for(buttonCounter = 0; buttonCounter < buttons.length; buttonCounter++) {
 			
 			if (gridxCounter > 2) {
 				gridxCounter = 0;
@@ -288,20 +297,49 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 	
-			buttons[i] = new JButton(new ImageIcon(list.getThumbnail(i).getImageThumb()));
-			buttons[i].setPreferredSize(new Dimension(320, 200));
-			//buttons[i].setRolloverIcon(new ImageIcon(list.getThumbnail(i).getImageThumb()));
-			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
-			buttons[i].setFocusable(false);
-			buttons[i].addActionListener(new ActionListener(){
+			buttons[buttonCounter] = new JButton(new ImageIcon(list.getThumbnail(buttonCounter).getImageThumb()));
+			buttons[buttonCounter].setPreferredSize(new Dimension(320, 200));
+			buttons[buttonCounter].setRolloverEnabled(true);
+			buttons[buttonCounter].setRolloverIcon(new ImageIcon(imageDarken(list.getThumbnail(buttonCounter).getImageThumb())));
+			buttons[buttonCounter].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			buttons[buttonCounter].setBorder(BorderFactory.createEmptyBorder());
+			buttons[buttonCounter].setContentAreaFilled(false);
+			buttons[buttonCounter].setFocusable(false);
+			buttons[buttonCounter].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
-					
+					//Highlight method implemenation sample that doesn't work, leaving for referece until complete
+					//System.out.println(buttonCounter - 1);
+					//buttons[buttonCounter - 1].setBorder(new LineBorder(blush, 5));
 				}
 				});
-			panel.add(buttons[i], c);
+			panel.add(buttons[buttonCounter], c);
 		}
 	}
+	
+    public Image imageDarken(Image icon) {
+        Image img = icon;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                    int red = (c.getRed() - 30) <= 0 ? 0 : c.getRed() - 30;
+                    int green = (c.getGreen() - 30) <= 0 ? 0
+                        : c.getGreen() - 30;
+                    int blue = (c.getBlue() - 30) <= 0 ? 0 : c.getBlue() - 30;
+                    c = new Color(red, green, blue);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        }
+        return buffered;
+    }
 
     /**
      * initialize() - opens the images and sets up the scene for use
