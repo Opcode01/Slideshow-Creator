@@ -186,13 +186,16 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		Thumbnail testThumb = new Thumbnail("src/creator/TransitionImages/crossFade.png");
+		Thumbnail testThumb = new Thumbnail("src/core/TransitionImages/crossFade.png");
 		JLabel testLabel = new JLabel() {
 			  @Override
 			  public void paintComponent(Graphics g) {
 				  testThumb.drawFill(g, this);
+				  //example 1 of drawing the image associated with a transition
+				  g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
 				  }
 			  };
+		
 		c.weightx = 0.01;
 		c.anchor = GridBagConstraints.NORTH;
 		imagePanel.add(testLabel, c);
@@ -204,6 +207,15 @@ public class ArrangeScene extends Scene{
 		c.gridx = 1;
 		c.gridy = 0;
 		this.add(imagePanel, c);
+		
+		///////////////////////
+		//example 2 of drawing the image associated with a transition
+		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
+		transitionButton.setPreferredSize(new Dimension(200, 175));
+		c.fill = GridBagConstraints.NONE;
+		timelinePanel.add(transitionButton, c);
+		
+		///////////////////////
 		
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
