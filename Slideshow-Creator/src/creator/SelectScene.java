@@ -414,7 +414,7 @@ public class SelectScene extends Scene
      * ImageHover() - darkens the image so that it adds a hovered effect
      * @param thumbnail - the thumbnail image that needs to be processed
 	 * 
-	 * @author Timothy Couch
+	 * @author Fernando Palacios
      */
     private Image ImageHover(Image thumbnail) {
         Image img = thumbnail;
