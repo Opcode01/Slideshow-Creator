@@ -69,7 +69,7 @@ public class Thumbnail
      * 
      * @return image if successfully loaded image, null otherwise
      */
-    private Image loadImage(String imagePath)
+    public static Image loadImage(String imagePath)
     {
         File imFile = new File(imagePath);
         Image image = null;
@@ -80,11 +80,11 @@ public class Thumbnail
             //load up the image if it exists - this hopefully prevents exceptions
             if (imFile != null && imFile.exists())
                 image = ImageIO.read(imFile);
-            else System.out.println("Raw image not loaded! " + imagePath + " does not exist");
+            else System.out.println("Image not loaded! " + imagePath + " does not exist");
         }
         catch (IOException e)
         {
-            System.out.println("Exception: Raw image not loaded! " + imagePath + "\n" + e);
+            System.out.println("Exception: Image not loaded! " + imagePath + "\n" + e);
         }
 
         return image;
