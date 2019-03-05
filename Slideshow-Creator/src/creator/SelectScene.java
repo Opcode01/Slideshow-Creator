@@ -14,9 +14,11 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -26,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
 
 import core.*;
@@ -94,7 +97,11 @@ public class SelectScene extends Scene
 	/** Create custom image_gray color */
 	private Color image_gray = new Color(30, 30, 30);
 	
+	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
+	
+	/** Create custom aqua color */
+	private Color aqua = new Color(132, 200, 202);
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -323,12 +330,16 @@ public class SelectScene extends Scene
 			gridxCounter++;
 			
 			Thumbnail buttonThumb = list.getThumbnail(i);
+			
 			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JButton keeper = buttons [i];
 			buttons[i].setPreferredSize(new Dimension(320, 200));
-			//buttons[i].setRolloverIcon(new ImageIcon(buttonThumb.getImageThumb()));
-			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
+			buttons[i].setRolloverEnabled(true);
+			buttons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			buttons[i].setBorder(BorderFactory.createEmptyBorder());
 			buttons[i].setFocusable(false);
+			buttons[i].setContentAreaFilled(false);
 			buttons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					//add button to or remove button from timeline
@@ -339,12 +350,14 @@ public class SelectScene extends Scene
 					if (slideIndex >= 0)
 					{
 						timeline.removeSlide(slideIndex);
-						//TODO: remove button highlight @Fernando
+						keeper.setBorder(BorderFactory.createEmptyBorder());
+						keeper.setIcon(new ImageIcon(buttonThumb.getImageThumb()));
 					}
 					else//thumbnail not on timeline, add it
 					{
 						timeline.addSlide(buttonThumb);
-						//TODO: highlight button @Fernando
+						keeper.setBorder(new LineBorder(aqua, 3));
+						keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 					}
 				}
 				});
@@ -396,4 +409,35 @@ public class SelectScene extends Scene
 				addImagesInDirectory(f);
     	}
 	}
+    
+    /**
+     * ImageHover() - darkens the image so that it adds a hovered effect
+     * @param thumbnail - the thumbnail image that needs to be processed
+	 * 
+	 * @author Fernando Palacios
+     */
+    private Image ImageHover(Image thumbnail) {
+        Image img = thumbnail;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                    int red = (c.getRed() - 30) <= 0 ? 0 : c.getRed() - 30;
+                    int green = (c.getGreen() - 30) <= 0 ? 0
+                        : c.getGreen() - 30;
+                    int blue = (c.getBlue() - 30) <= 0 ? 0 : c.getBlue() - 30;
+                    c = new Color(red, green, blue);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        }
+        return buffered;
+    }
 }

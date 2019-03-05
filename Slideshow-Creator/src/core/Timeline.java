@@ -49,7 +49,7 @@ public class Timeline
     public void addSlide(Thumbnail thumbnail)
     {
         thumbnailsList.addThumbnail(thumbnail);
-        transitionsList.addTransition(new Transition());
+        transitionsList.addTransition(new Transition(TransitionType.NONE, 1));
     }
 
     /**
