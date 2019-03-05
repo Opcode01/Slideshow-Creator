@@ -210,7 +210,11 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//example 2 of drawing the image associated with a transition
-		timelinePanel.add(new JButton(TransitionType.WIPE_DOWN.getImage()), c);
+		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
+		transitionButton.setPreferredSize(new Dimension(200, 175));
+		c.fill = GridBagConstraints.NONE;
+		timelinePanel.add(transitionButton, c);
+		
 		///////////////////////
 		
 		// Set constraints and add timeline panel
