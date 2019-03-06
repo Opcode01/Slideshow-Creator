@@ -63,6 +63,7 @@ public class ThumbnailsList
     {
         return thumbnails.get(thumbnailIndex);
     }
+    
 
     /**
      * addThumbnail will append given Thumbnail object to thumbnails arrayList
@@ -74,6 +75,19 @@ public class ThumbnailsList
     public void addThumbnail(Thumbnail thumbnail)
     {
         thumbnails.add(thumbnail);
+    }
+    
+    /**
+     * addThumbnail will append given Thumbnail object to thumbnails arrayList
+     * overloaded to allow adding at specified index
+     * 
+     * @param thumbnail thumbnail object to be added to end of thumbnails list
+     * @param index specific to be added to
+     * @author Joe Hoang
+     */
+    public void addThumbnail(Thumbnail thumbnail, int index)
+    {
+        thumbnails.add(index, thumbnail);;
     }
 
     /**

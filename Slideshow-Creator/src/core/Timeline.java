@@ -16,26 +16,32 @@ public class Timeline
 {
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
+    public Settings timelineSettings;
 
     /**
      * Timeline - initializes an empty timeline
      * 
      * @author Timothy Couch
+     * @author Joe Hoang
      */
     public Timeline()
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
+        timelineSettings = new Settings(false, false, false, 5);
     }
     
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
     	
+    	timelineSettings = s;
     	//Update all transition lengths
+    	/*
     	ArrayList<Transition> list = transitionsList.getTransitions();
     	for(Transition t : list) {
     		t.setTransitionLength(s.transitionLength);
     	}
+    	*/
     	
     	System.out.println("Timeline Settings updated!");
     }
