@@ -61,6 +61,9 @@ public class SelectScene extends Scene
 	/** Select all button */
 	private JButton selectAllButton;
 	
+	/** List of all thumbnail thumbButtons to be shown on the image panel */
+	private JButton[] thumbButtons;
+	
 	/** Deselect all button */
 	private JButton deselectAllButton;
 	
@@ -169,7 +172,7 @@ public class SelectScene extends Scene
 		selectAllButton.setRolloverIcon(highlightedSelectAll);
 		selectAllButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+				SelectAll(allThumbs);
 		    }
 		});
 		
@@ -183,7 +186,7 @@ public class SelectScene extends Scene
 		deselectAllButton.setRolloverIcon(highlightedDeselectAll);
 		deselectAllButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	DeselectAll(allThumbs);
 		    }
 		});
 		
@@ -219,10 +222,12 @@ public class SelectScene extends Scene
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
 		imagePanelContainer.setBackground(image_gray);
-		// set up image panel constraints
+		
+		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
 		imagePanelConstraints = (GridBagConstraints) c.clone();
-		//set up blank image panel
+		
+		// Set up blank image panel
 		setupImagePanel(false);
 		imagePanelContainer.add(imagePanel, c);
 		
@@ -311,10 +316,10 @@ public class SelectScene extends Scene
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		JButton[] buttons = new JButton[list.getSize()];
+		thumbButtons = new JButton[list.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
-		for(i = 0; i < buttons.length; i++) {
+		for(i = 0; i < thumbButtons.length; i++) {
 			
 			if (gridxCounter > 2) {
 				gridxCounter = 0;
@@ -331,16 +336,16 @@ public class SelectScene extends Scene
 			
 			Thumbnail buttonThumb = list.getThumbnail(i);
 			
-			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
-			JButton keeper = buttons [i];
-			buttons[i].setPreferredSize(new Dimension(320, 200));
-			buttons[i].setRolloverEnabled(true);
-			buttons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
-			buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			buttons[i].setBorder(BorderFactory.createEmptyBorder());
-			buttons[i].setFocusable(false);
-			buttons[i].setContentAreaFilled(false);
-			buttons[i].addActionListener(new ActionListener(){
+			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JButton keeper = thumbButtons [i];
+			thumbButtons[i].setPreferredSize(new Dimension(320, 200));
+			thumbButtons[i].setRolloverEnabled(true);
+			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+			thumbButtons[i].setFocusable(false);
+			thumbButtons[i].setContentAreaFilled(false);
+			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					//add button to or remove button from timeline
 					Timeline timeline = SceneHandler.singleton.getTimeline();
@@ -361,7 +366,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			panel.add(buttons[i], c);
+			panel.add(thumbButtons[i], c);
 		}
 	}
 
@@ -409,6 +414,56 @@ public class SelectScene extends Scene
 				addImagesInDirectory(f);
     	}
 	}
+    
+    /**
+     * SelectAll() - selects all images so they are in timeline
+     * @param list - the thumbnail list that holds all the image paths
+	 * 
+	 * @author Fernando Palacios
+     */
+    private void SelectAll(ThumbnailsList list) {
+    	
+    	Timeline timeline = SceneHandler.singleton.getTimeline();
+    	
+    	for(int i = 0; i < thumbButtons.length; i++) {
+    		
+    		Thumbnail buttonThumb = list.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			
+			if (slideIndex < 0)
+			{
+				timeline.addSlide(buttonThumb);
+				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			}
+		}
+    }
+    
+    /**
+     * DeselectAll() - deselects all images so they are not in timeline
+     * @param list - the thumbnail list that holds all the image paths
+	 * 
+	 * @author Fernando Palacios
+     */
+    private void DeselectAll(ThumbnailsList list) {
+    	
+    	Timeline timeline = SceneHandler.singleton.getTimeline();
+    	
+    	for(int i = 0; i < thumbButtons.length; i++) {
+    		
+    		Thumbnail buttonThumb = list.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			
+			if (slideIndex >= 0)
+			{
+				timeline.removeSlide(slideIndex);
+				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			}
+		}
+    }
     
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
