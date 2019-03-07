@@ -28,7 +28,7 @@ public class Timeline
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
-        timelineSettings = new Settings(false, false, false, 5);
+        timelineSettings = new Settings(false, false, false, 1, 5);
     }
     
     public void UpdateProjectSettings(Settings s) {
@@ -36,12 +36,12 @@ public class Timeline
     	
     	timelineSettings = s;
     	//Update all transition lengths
-    	/*
+    	
     	ArrayList<Transition> list = transitionsList.getTransitions();
-    	for(Transition t : list) {
+    	for(Transition t : list) 
+    	{
     		t.setTransitionLength(s.transitionLength);
     	}
-    	*/
     	
     	System.out.println("Timeline Settings updated!");
     }
