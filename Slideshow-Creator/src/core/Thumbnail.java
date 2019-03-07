@@ -96,8 +96,21 @@ public class Thumbnail
      */
     private Image resizeImageThumb(Image image)
     {
-        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
-        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
+		int containerWidth = thumbSize.x;
+		int containerHeight = thumbSize.y;
+		
+		double containerAR = (double) containerWidth / containerHeight;
+		
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
+		
+		double imageAR = (double) imageWidth / imageHeight;
+		
+    	//tall
+    	if (imageAR < containerAR)
+    		return image.getScaledInstance(-thumbSize.x, thumbSize.y, Image.SCALE_DEFAULT);
+        else//wide
+        	return image.getScaledInstance(thumbSize.x, -thumbSize.y, Image.SCALE_DEFAULT);
     }
     
     /**
