@@ -73,10 +73,10 @@ public class FileSelectExplorer extends Scene {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Create images
-		selectExisting = new ImageIcon(getClass().getResource("Images/selectExistingButton.png"));
-		highlightedSelectExisting = new ImageIcon(getClass().getResource("Images/highlightedSelectExistingButton.png"));
+		selectExisting = new ImageIcon(getClass().getResource("Images/selectSliderFileButton.png"));
+		highlightedSelectExisting = new ImageIcon(getClass().getResource("Images/highlightedSelectSliderFileButton.png"));
 		bg = new ImageIcon(getClass().getResource("Images/viewerBg.jpg"));
-		header = new ImageIcon(getClass().getResource("Images/header.png"));
+		header = new ImageIcon(getClass().getResource("Images/viewerHeader.png"));
 		
 		// Change look and feel
 		try {
@@ -133,6 +133,7 @@ public class FileSelectExplorer extends Scene {
 		// Set constraints and add existing button
 		c.gridx = 0;
 		c.gridy = 1;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.insets = new Insets(7, 80, 100, 80);
 		bgPanel.add(selectExistingButton, c);
 		

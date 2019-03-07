@@ -341,6 +341,7 @@ public class SelectScene extends Scene
 			thumbButtons[i].setPreferredSize(new Dimension(320, 200));
 			thumbButtons[i].setRolloverEnabled(true);
 			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setPressedIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			thumbButtons[i].setFocusable(false);
