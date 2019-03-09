@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
 import javax.swing.border.LineBorder;
 
 import core.*;
@@ -198,7 +199,6 @@ public class ArrangeScene extends Scene{
 		timelinePanelContainer.setBackground(light_gray);
 		
 		// Set up timeline panel constraints
-		c.insets = new Insets(44, 44, 44, 44);
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
 		
 		// Set up blank image panel
@@ -232,6 +232,7 @@ public class ArrangeScene extends Scene{
 			  };
 		
 		c.weightx = 0.01;
+		c.fill = GridBagConstraints.BOTH;
 		c.anchor = GridBagConstraints.NORTH;
 		imagePanel.add(testLabel, c);
 		///////////////////////
@@ -240,7 +241,7 @@ public class ArrangeScene extends Scene{
 		c.insets = new Insets(0, 0, 0, 0);
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
-		c.weighty = 1.0;
+		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(optionsPanel, c);
@@ -255,7 +256,7 @@ public class ArrangeScene extends Scene{
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
-		c.weighty = 0;
+		c.weighty = 0.8;
 		c.gridx = 0;
 		c.gridy = 1;
 		this.add(timelineScroller, c);
@@ -288,11 +289,11 @@ public class ArrangeScene extends Scene{
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		timelinePanelContainer.removeAll();
+		timelinePanelConstraints.gridheight = 1;
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 
 		if (revalidate) {
 			this.revalidate();
-			this.repaint();
 		}
 	}
 	
@@ -309,29 +310,40 @@ public class ArrangeScene extends Scene{
 		int gridyCounter = 0; // layout counter y
 		
 		Timeline timeline = SceneHandler.singleton.getTimeline();
-		JButton[] buttons = new JButton[timeline.thumbnailsList.getSize()];
+		JToggleButton[] thumbButtons = new JToggleButton[timeline.thumbnailsList.getSize()];
+		JButton[] transButtons = new JButton[timeline.transitionsList.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
-		for(i = 0; i < buttons.length; i++) {
+		for(i = 0; i < thumbButtons.length; i++) {
 			
 			//set constraints
 			c.gridx = gridxCounter++;
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.BOTH;
-			c.insets = new Insets(50, 50, 50, 50);
+			c.insets = new Insets(20, 20, 20, 20);
 			
 			Thumbnail buttonThumb = timeline.thumbnailsList.getThumbnail(i);
+			Transition buttonTrans = timeline.transitionsList.getTransition(i);
 			
-			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
-			JButton keeper = buttons [i];
-			buttons[i].setPreferredSize(new Dimension(320, 200));
-			buttons[i].setRolloverEnabled(true);
-			buttons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
-			buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			buttons[i].setBorder(BorderFactory.createEmptyBorder());
-			buttons[i].setFocusable(false);
-			buttons[i].setContentAreaFilled(false);
-			buttons[i].addActionListener(new ActionListener(){
+			transButtons[i] = new JButton(buttonTrans.getTransitionType().getImage());
+			transButtons[i].setPreferredSize(new Dimension(320, 200));
+			transButtons[i].setRolloverEnabled(true);
+			//transButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			transButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
+			transButtons[i].setFocusable(false);
+			transButtons[i].setContentAreaFilled(false);
+			
+			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JToggleButton keeper = thumbButtons [i];
+			thumbButtons[i].setPreferredSize(new Dimension(320, 200));
+			thumbButtons[i].setRolloverEnabled(true);
+			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+			thumbButtons[i].setFocusable(false);
+			thumbButtons[i].setContentAreaFilled(false);
+			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					//add button to or remove button from timeline
 					Timeline timeline = SceneHandler.singleton.getTimeline();
@@ -350,7 +362,15 @@ public class ArrangeScene extends Scene{
 					}
 				}
 				});
-			panel.add(buttons[i], c);
+			
+			panel.add(thumbButtons[i], c);
+			
+			// Set constraints
+			c.gridx = gridxCounter++;
+			c.gridy = gridyCounter;
+			c.fill = GridBagConstraints.NONE;
+			c.insets = new Insets(0, 0, 0, 0);
+			panel.add(transButtons[i], c);
 		}
 	}
 	
