@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import core.*;
 
@@ -71,6 +74,12 @@ public class ArrangeScene extends Scene{
 	/** Create custom dark_gray color */
 	private Color dark_gray = new Color(30, 30, 30);
 	
+	private Color image_gray = new Color(30, 30, 30);
+	
+	private GridBagLayout gridBag = new GridBagLayout();
+	private FlowLayout flow = new FlowLayout(FlowLayout.LEADING);
+	private GridBagConstraints imagePanelConstraints;
+	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
@@ -78,7 +87,7 @@ public class ArrangeScene extends Scene{
 	 */
 	public ArrangeScene () {
 		// Create GridBagLayout object and constraints
-		GridBagLayout gridBag = new GridBagLayout();
+		
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set panel configurations
@@ -186,16 +195,13 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		Thumbnail testThumb = new Thumbnail("src/core/TransitionImages/crossFade.png");
+		Thumbnail testThumb = new Thumbnail("src/creator/TransitionImages/crossFade.png");
 		JLabel testLabel = new JLabel() {
 			  @Override
 			  public void paintComponent(Graphics g) {
 				  testThumb.drawFill(g, this);
-				  //example 1 of drawing the image associated with a transition
-				  g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
 				  }
 			  };
-		
 		c.weightx = 0.01;
 		c.anchor = GridBagConstraints.NORTH;
 		imagePanel.add(testLabel, c);
@@ -208,15 +214,6 @@ public class ArrangeScene extends Scene{
 		c.gridy = 0;
 		this.add(imagePanel, c);
 		
-		///////////////////////
-		//example 2 of drawing the image associated with a transition
-		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
-		transitionButton.setPreferredSize(new Dimension(200, 175));
-		c.fill = GridBagConstraints.NONE;
-		timelinePanel.add(transitionButton, c);
-		
-		///////////////////////
-		
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
@@ -225,7 +222,97 @@ public class ArrangeScene extends Scene{
 		c.gridy = 1;
 		this.add(timelinePanel, c);
 		
+		
+		/*
+		JPanel base = new JPanel();
+		base.setLayout(flow);
+		base.setBackground(light_gray);
+		JScrollPane scrollPane = new JScrollPane(base);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		c.anchor = GridBagConstraints.CENTER;
+		c.weightx = 1;
+		c.weighty = .7;
+		c.gridx = 0;
+		c.gridy = 0;
+		timelinePanel.add(scrollPane, c);
+		
+		for(Thumbnail picture : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
+		{
+			JLabel thumbnail = new JLabel(new ImageIcon(picture.getImageThumb()));
+			JLabel transition = new JLabel();
+			base.add(thumbnail);
+			
+		}
+		
+		this.repaint();	
+		*/
 		this.revalidate();
+		
+		
+	}
+	
+	
+	/**
+     * ShowImages() - creates thumbnail icons to display in scrollpane
+     * 
+     * @author Fernando Palacios
+	 * @author Timothy Couch
+     */
+	private void ShowImages(JPanel panel, ThumbnailsList list)
+	{
+		int i = 0; //counter for buttons
+		int gridxCounter = 0; //layout counter x
+		int gridyCounter = 0; // layout counter y
+		JButton[] buttons = new JButton[list.getSize()];
+		GridBagConstraints c = new GridBagConstraints();
+
+		for(i = 0; i < buttons.length; i++) {
+			
+			if (gridxCounter > 2) {
+				gridxCounter = 0;
+				gridyCounter++;
+			}
+			
+			//set constraints
+			c.gridx = gridxCounter;
+			c.gridy = gridyCounter;
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(40, 40, 40, 40);
+			
+			gridxCounter++;
+			
+			Thumbnail buttonThumb = list.getThumbnail(i);
+			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			buttons[i].setPreferredSize(new Dimension(320, 200));
+			//buttons[i].setRolloverIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			//buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			//buttons[i].setBorder(BorderFactory.createEmptyBorder());
+			buttons[i].setFocusable(false);
+			
+			/*
+			buttons[i].addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					//add button to or remove button from timeline
+					Timeline timeline = SceneHandler.singleton.getTimeline();
+
+					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+					//if thumbnail is in the timeline, remove it
+					if (slideIndex >= 0)
+					{
+						timeline.removeSlide(slideIndex);
+						//TODO: remove button highlight @Fernando
+					}
+					else//thumbnail not on timeline, add it
+					{
+						timeline.addSlide(buttonThumb);
+						//TODO: highlight button @Fernando
+					}
+				}
+				});
+				*/
+			panel.add(buttons[i], c);
+		}
 	}
 	
 	/**
