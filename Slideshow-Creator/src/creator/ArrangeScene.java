@@ -32,6 +32,9 @@ public class ArrangeScene extends Scene{
 	/** Create Settings Pane */
 	private SettingsPane settingsPane;
 	
+	/** Create Tansition Pane */
+	private TransitionPane transitionPane;
+	
 	/** Back button */
 	private JButton backButton;
 	
@@ -66,10 +69,10 @@ public class ArrangeScene extends Scene{
 	private ImageIcon highlightedRemoveCurrent;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
+	private Color light_gray = new Color(41, 41, 41);
 	
 	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(30, 30, 30);
+	private Color dark_gray = new Color(0, 0, 0);
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -139,6 +142,15 @@ public class ArrangeScene extends Scene{
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	//TODO: Remove the currently selected thumbnail and transition from timeline
+		    	
+		    	//Open settings pane in the center of our workspace
+		    	JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	transitionPane = new TransitionPane(parent, "Transition Configuration", point, new Dimension(450, 350));
+		    	parent.setEnabled(false);
 		    }
 		});
 		

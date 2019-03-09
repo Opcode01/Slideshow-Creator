@@ -153,7 +153,7 @@ public class SettingsPane extends FloatingPane
 	private ImageIcon highlightedSelectedCheckbox;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(30, 30, 30);
+	private Color light_gray = new Color(31, 31, 31);
 	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
