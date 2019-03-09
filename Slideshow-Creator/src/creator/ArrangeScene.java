@@ -192,11 +192,6 @@ public class ArrangeScene extends Scene{
 		imagePanel.setLayout(gridBag);
 		imagePanel.setBackground(dark_gray);
 		
-		// Set timeline panel configurations
-		timelinePanel = new JPanel();
-		timelinePanel.setLayout(gridBag);
-		timelinePanel.setBackground(light_gray);
-		
 		// Create outerpanel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
@@ -215,13 +210,14 @@ public class ArrangeScene extends Scene{
 		timelineScroller.getVerticalScrollBar().setBackground(light_gray);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
 		
-		// Set constraints and add options panels
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0;
-		c.weighty = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		this.add(optionsPanel, c);
+		///////////////////////
+		//example 2 of drawing the image associated with a transition
+		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
+		transitionButton.setPreferredSize(new Dimension(75, 50));
+		c.fill = GridBagConstraints.NONE;
+		timelinePanel.add(transitionButton, c);
+		
+		///////////////////////
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
@@ -240,21 +236,21 @@ public class ArrangeScene extends Scene{
 		imagePanel.add(testLabel, c);
 		///////////////////////
 		
+		// Set constraints and add options panels
+		c.insets = new Insets(0, 0, 0, 0);
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0;
+		c.weighty = 1.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		this.add(optionsPanel, c);
+		
 		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
 		this.add(imagePanel, c);
-		
-		///////////////////////
-		//example 2 of drawing the image associated with a transition
-		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
-		transitionButton.setPreferredSize(new Dimension(75, 50));
-		c.fill = GridBagConstraints.NONE;
-		timelinePanel.add(transitionButton, c);
-		
-		///////////////////////
 		
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
@@ -291,6 +287,7 @@ public class ArrangeScene extends Scene{
 		ShowImages(timelinePanel);
 		
 		// add to outer panel that houses the image panel for layout and whitespace
+		timelinePanelContainer.removeAll();
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 
 		if (revalidate) {
