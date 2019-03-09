@@ -49,7 +49,7 @@ public class SelectScene extends Scene
 	/** container for image panel */
 	private JPanel imagePanelContainer;
 	
-	/** Create Settings Pane */
+	/** Create image scroller */
 	private JScrollPane imageScroller;
 	
 	/** Back button */

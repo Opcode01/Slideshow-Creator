@@ -6,8 +6,12 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 import core.*;
 
@@ -29,8 +35,17 @@ public class ArrangeScene extends Scene{
 	/** Create custom color */
 	private JPanel timelinePanel;
 	
+	/** container for timeline panel */
+	private JPanel timelinePanelContainer;
+	
 	/** Create Settings Pane */
 	private SettingsPane settingsPane;
+	
+	/** Create Timeline Pane */
+	private JScrollPane timelineScroller;
+	
+	/** Timeline panel constraints */
+	private GridBagConstraints timelinePanelConstraints;
 	
 	/** Back button */
 	private JButton backButton;
@@ -64,6 +79,12 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
+	
+	/** Create ThumbnailsList object to reference */
+	private Timeline list;
+	
+	/** Create custom aqua color */
+	private Color aqua = new Color(132, 200, 202);
 	
 	/** Create custom light gray color */
 	private Color light_gray = new Color(60, 60, 60);
@@ -176,6 +197,24 @@ public class ArrangeScene extends Scene{
 		timelinePanel.setLayout(gridBag);
 		timelinePanel.setBackground(light_gray);
 		
+		// Create outerpanel that houses the timeline panel for layout and whitespace
+		timelinePanelContainer = new JPanel();
+		timelinePanelContainer.setLayout(gridBag);
+		timelinePanelContainer.setBackground(light_gray);
+		
+		// Set up timeline panel constraints
+		c.insets = new Insets(44, 44, 44, 44);
+		timelinePanelConstraints = (GridBagConstraints) c.clone();
+		
+		// Set up blank image panel
+		setupTimelinePanel(false);
+		timelinePanelContainer.add(timelinePanel, c);
+		
+		// Set scroll pane configurations
+		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		timelineScroller.getVerticalScrollBar().setBackground(light_gray);
+		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
+		
 		// Set constraints and add options panels
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
@@ -211,7 +250,7 @@ public class ArrangeScene extends Scene{
 		///////////////////////
 		//example 2 of drawing the image associated with a transition
 		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
-		transitionButton.setPreferredSize(new Dimension(200, 175));
+		transitionButton.setPreferredSize(new Dimension(75, 50));
 		c.fill = GridBagConstraints.NONE;
 		timelinePanel.add(transitionButton, c);
 		
@@ -220,13 +259,134 @@ public class ArrangeScene extends Scene{
 		// Set constraints and add timeline panel
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
-		c.weighty = 0.7;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 1;
-		this.add(timelinePanel, c);
+		this.add(timelineScroller, c);
 		
 		this.revalidate();
 	}
+	
+    /**
+     * initialize() - opens the images and sets up the scene for use
+     * 
+     * @precondition must run after project directory has been determined
+	 * 
+	 * @author Timothy Couch
+     */
+    @Override
+    public void initialize()
+    {
+		super.initialize();
+
+		setupTimelinePanel(true);
+    }
+	
+	public void setupTimelinePanel(boolean revalidate)
+	{		
+		// Create image panel with new images
+		timelinePanel = new JPanel();
+		timelinePanel.setLayout(new GridBagLayout());
+		timelinePanel.setBackground(light_gray);
+		ShowImages(timelinePanel);
+		
+		// add to outer panel that houses the image panel for layout and whitespace
+		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
+
+		if (revalidate) {
+			this.revalidate();
+			this.repaint();
+		}
+	}
+	
+    /**
+     * ShowImages() - creates thumbnail icons to display in scrollpane
+     * 
+     * @author Fernando Palacios
+	 * @author Timothy Couch
+     */
+	private void ShowImages(JPanel panel)
+	{
+		int i = 0; //counter for buttons
+		int gridxCounter = 0; //layout counter x
+		int gridyCounter = 0; // layout counter y
+		
+		Timeline timeline = SceneHandler.singleton.getTimeline();
+		JButton[] buttons = new JButton[timeline.thumbnailsList.getSize()];
+		GridBagConstraints c = new GridBagConstraints();
+
+		for(i = 0; i < buttons.length; i++) {
+			
+			//set constraints
+			c.gridx = gridxCounter++;
+			c.gridy = gridyCounter;
+			c.fill = GridBagConstraints.BOTH;
+			c.insets = new Insets(50, 50, 50, 50);
+			
+			Thumbnail buttonThumb = timeline.thumbnailsList.getThumbnail(i);
+			
+			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JButton keeper = buttons [i];
+			buttons[i].setPreferredSize(new Dimension(320, 200));
+			buttons[i].setRolloverEnabled(true);
+			buttons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			buttons[i].setBorder(BorderFactory.createEmptyBorder());
+			buttons[i].setFocusable(false);
+			buttons[i].setContentAreaFilled(false);
+			buttons[i].addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					//add button to or remove button from timeline
+					Timeline timeline = SceneHandler.singleton.getTimeline();
+
+					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+					//if thumbnail is in the timeline, remove it
+					if (slideIndex >= 0)
+					{
+						keeper.setBorder(BorderFactory.createEmptyBorder());
+						keeper.setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+					}
+					else//thumbnail not on timeline, add it
+					{
+						keeper.setBorder(new LineBorder(aqua, 3));
+						keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+					}
+				}
+				});
+			panel.add(buttons[i], c);
+		}
+	}
+	
+    /**
+     * ImageHover() - darkens the image so that it adds a hovered effect
+     * @param thumbnail - the thumbnail image that needs to be processed
+	 * 
+	 * @author Fernando Palacios
+     */
+    private Image ImageHover(Image thumbnail) {
+        Image img = thumbnail;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                    int red = (c.getRed() - 30) <= 0 ? 0 : c.getRed() - 30;
+                    int green = (c.getGreen() - 30) <= 0 ? 0
+                        : c.getGreen() - 30;
+                    int blue = (c.getBlue() - 30) <= 0 ? 0 : c.getBlue() - 30;
+                    c = new Color(red, green, blue);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        }
+        return buffered;
+    }
 	
 	/**
 	 * GoToSelectScene() - changes scene to selection
