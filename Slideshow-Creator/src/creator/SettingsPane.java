@@ -540,7 +540,7 @@ public class SettingsPane extends FloatingPane
 			System.out.println("Slide duration not a valid integer - using default value of 1.");
 		}
 		
-		Settings s = new Settings(loopSlides, loopAudio, isManual, audioFilePath, transitionTime, slideTime);
+		Settings s = new Settings(loopSlides, loopAudio, isManual, transitionTime, slideTime);
 		t.UpdateProjectSettings(s);
 	}
 }
