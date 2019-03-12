@@ -133,7 +133,7 @@ public class TransitionPane extends FloatingPane {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		transitionHeader = new ImageIcon(getClass().getResource("Images/transitionHeader.png"));
+		transitionHeader = new ImageIcon(getClass().getResource("Images/transHeader.png"));
 		save = new ImageIcon(getClass().getResource("Images/saveButton.png"));
 		cancel = new ImageIcon(getClass().getResource("Images/cancelButton.png"));
 		highlightedSave = new ImageIcon(getClass().getResource("Images/highlightedSaveButton.png"));
