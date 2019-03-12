@@ -41,6 +41,7 @@ public class TimelineParser
 		out.put("isManual", output.timelineSettings.isManual);
 		out.put("transitionLength", output.timelineSettings.transitionLength);
 		out.put("slideDuration", output.timelineSettings.slideDuration);
+		out.put("parentDir", SceneHandler.singleton.getDirectory());
 		
 		JSONArray thumbnails = new JSONArray();
 		ThumbnailsList thumbsList = output.thumbnailsList;
@@ -90,13 +91,15 @@ public class TimelineParser
 	 */
 	public static Timeline ImportTimeline(String JSONpath) 
 	{
-		Timeline importedTimeline = new Timeline();
+		Timeline importedTimeline = null;
 		JSONParser parser = new JSONParser();
 		try 
 		{
 			Object input = parser.parse(new FileReader(JSONpath));
 			
 			JSONObject in = (JSONObject) input;
+			
+			importedTimeline = new Timeline((String) in.get("parentDir"));
 			
 			JSONArray thumbnails = (JSONArray) in.get("thumbnails");
 			for(int i = 0; i < thumbnails.size(); i++)
@@ -146,13 +149,17 @@ public class TimelineParser
 			e.printStackTrace();
 		}
 		
-		System.out.println("Timeline Imported:");
-		//test values
-		for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
+		if (importedTimeline != null)
 		{
-			System.out.println(t.getImagePath());
-			System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
+			System.out.println("Timeline Imported:");
+			//test values
+			for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
+			{
+				System.out.println(t.getImagePath());
+				System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
+			}
 		}
+		else System.out.println("Error: Timeline not imported!");
 		
 		return importedTimeline;
 		

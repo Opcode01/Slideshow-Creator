@@ -17,6 +17,13 @@ public class Timeline
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
     public Settings timelineSettings;
+    
+    private final String directory;
+    
+    public String getDirectory()
+    {
+    	return directory;
+    }
 
     /**
      * Timeline - initializes an empty timeline
@@ -29,6 +36,12 @@ public class Timeline
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
         timelineSettings = new Settings(false, false, false, 1, 5);
+        directory = SceneHandler.singleton.getDirectory();
+    }
+    
+    public Timeline(String dir)
+    {
+    	directory = dir;
     }
     
     public void UpdateProjectSettings(Settings s) {

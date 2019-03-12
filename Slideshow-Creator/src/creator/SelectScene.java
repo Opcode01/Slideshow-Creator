@@ -298,6 +298,8 @@ public class SelectScene extends Scene
 		for (Thumbnail t : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
 			System.out.println(t.getImagePath());
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
+		
+		TimelineParser.ExportTimeline("test");
 	}
 	
     /**

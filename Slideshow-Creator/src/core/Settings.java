@@ -35,5 +35,6 @@ public final class Settings {
 		//System.out.println("AudioPath: " + audioPath);
 		System.out.println("TransitionLength: " + transitionLength);
 		System.out.println("SlideDuration: " + slideDuration);
+		System.out.println("ParentDir: " + SceneHandler.singleton.getDirectory());
 	}
 }

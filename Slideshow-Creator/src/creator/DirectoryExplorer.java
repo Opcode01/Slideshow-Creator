@@ -207,9 +207,6 @@ public class DirectoryExplorer extends Scene {
 		int returnVal = chooser.showDialog(DirectoryExplorer.this, "Choose Slideshow File");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    File slFile = chooser.getSelectedFile();
-    	    Timeline newTimeline = TimelineParser.ImportTimeline(slFile.getPath());
-    	    SceneHandler.singleton.setTimeline(newTimeline);
-    	    newTimeline.timelineSettings.PrintAll();
     		GoToSelectScene(slFile);
     	}
 	}
@@ -235,6 +232,7 @@ public class DirectoryExplorer extends Scene {
 	public void GoToSelectScene(File slFile)
 	{
 		SceneHandler.singleton.setDirectory(slFile);
+	    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 	}
 	

@@ -43,11 +43,6 @@ public class SceneHandler {
 		return timeline;
 	}
 	
-	public void setTimeline(Timeline t)
-	{
-		timeline = t;
-	}
-	
 	/**
 	 * directory - directory where the slideshow is working and using images
 	 */
@@ -65,8 +60,8 @@ public class SceneHandler {
 	 */
 	public void setDirectory(File file)
 	{
-		directory = file.getParentFile().getAbsolutePath();
 		timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
+		directory = timeline.getDirectory();
 		
 		System.out.println("Dir: " + directory);
 		System.out.println("File: " + file.getAbsolutePath());
