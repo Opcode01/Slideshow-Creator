@@ -54,4 +54,13 @@ public abstract class Scene extends JPanel
 	{
 
 	}
+
+	/**
+	 * destroy - runs when destroying this scene
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void destroy() {
+		initialized = false;
+	}
 }
