@@ -211,7 +211,6 @@ public class ArrangeScene extends Scene{
 		// Create outerpanel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
-		timelinePanelContainer.setBackground(light_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
@@ -225,14 +224,10 @@ public class ArrangeScene extends Scene{
 		timelineScroller.getVerticalScrollBar().setBackground(light_gray);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
 		
-		///////////////////////
-		//example 2 of drawing the image associated with a transition
-		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
-		transitionButton.setPreferredSize(new Dimension(75, 50));
-		c.fill = GridBagConstraints.NONE;
-		timelinePanel.add(transitionButton, c);
-		
-		///////////////////////
+		JPanel temp = new JPanel();
+		temp.add(timelineScroller);
+		int height = this.getHeight();
+		temp.setPreferredSize(new Dimension(200, height));
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
@@ -248,15 +243,16 @@ public class ArrangeScene extends Scene{
 		
 		c.weightx = 0.01;
 		c.fill = GridBagConstraints.BOTH;
-		c.anchor = GridBagConstraints.NORTH;
+		//c.anchor = GridBagConstraints.CENTER;
 		imagePanel.add(testLabel, c);
 		///////////////////////
 		
 		// Set constraints and add options panels
 		c.insets = new Insets(0, 0, 0, 0);
-		c.fill = GridBagConstraints.BOTH;
+		c.fill = GridBagConstraints.VERTICAL;
 		c.weightx = 0;
 		c.weighty = 1;
+		c.gridheight = 2;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(optionsPanel, c);
@@ -264,15 +260,15 @@ public class ArrangeScene extends Scene{
 		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
+		c.weighty = 0.70;
 		c.gridx = 1;
 		c.gridy = 0;
+		c.gridheight = 1;
 		this.add(imagePanel, c);
 		
 		// Set constraints and add timeline panel
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 2;
-		c.weighty = 0.4;
-		c.gridx = 0;
+		c.weighty = 0.30;
+		c.gridx = 1;
 		c.gridy = 1;
 		this.add(timelineScroller, c);
 		
@@ -304,7 +300,9 @@ public class ArrangeScene extends Scene{
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		timelinePanelContainer.removeAll();
-		timelinePanelConstraints.gridheight = 1;
+		timelinePanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		timelinePanelConstraints.weighty = 0;
+		timelinePanelContainer.setBackground(aqua);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 
 		if (revalidate) {
@@ -335,15 +333,16 @@ public class ArrangeScene extends Scene{
 			c.gridx = gridxCounter++;
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.BOTH;
+			c.anchor = GridBagConstraints.CENTER;
 			c.insets = new Insets(20, 20, 20, 20);
 			
 			Thumbnail buttonThumb = timeline.thumbnailsList.getThumbnail(i);
 			Transition buttonTrans = timeline.transitionsList.getTransition(i);
 			
 			transButtons[i] = new JButton(buttonTrans.getTransitionType().getImage());
-			transButtons[i].setPreferredSize(new Dimension(320, 200));
+			transButtons[i].setPreferredSize(new Dimension(100, 75));
 			transButtons[i].setRolloverEnabled(true);
-			//transButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			transButtons[i].setRolloverIcon(new ImageIcon(TransHover(buttonTrans.getTransitionType().getImage().getImage())));
 			transButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			transButtons[i].setFocusable(false);
@@ -351,7 +350,7 @@ public class ArrangeScene extends Scene{
 			
 			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JToggleButton keeper = thumbButtons [i];
-			thumbButtons[i].setPreferredSize(new Dimension(320, 200));
+			thumbButtons[i].setPreferredSize(new Dimension(290, 170));
 			thumbButtons[i].setRolloverEnabled(true);
 			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -397,8 +396,10 @@ public class ArrangeScene extends Scene{
 						c.weightx = 0.01;
 						c.fill = GridBagConstraints.BOTH;
 						c.anchor = GridBagConstraints.CENTER;
+						imagePanel.removeAll();
 						imagePanel.add(testLabel, c);
 						imagePanel.revalidate();
+						imagePanel.repaint();
 						
 						///////////////////////
 						//keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
@@ -419,6 +420,34 @@ public class ArrangeScene extends Scene{
 			panel.add(transButtons[i], c);
 		}
 	}
+	
+    /**
+     * TransHover() - darkens the image so that it adds a hovered effect
+     * @param thumbnail - the thumbnail image that needs to be processed
+	 * 
+	 * @author Fernando Palacios
+     */
+    private Image TransHover(Image thumbnail) {
+        Image img = thumbnail;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                	c = new Color(228, 199, 193);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        } 
+        return buffered;
+    }
+        
 	
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
@@ -447,7 +476,7 @@ public class ArrangeScene extends Scene{
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
-        }
+        } 
         return buffered;
     }
 	
@@ -459,6 +488,8 @@ public class ArrangeScene extends Scene{
 	public void GoToSelectScene()
 	{
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+		SelectScene select = (SelectScene) SceneHandler.singleton.GetSceneInstanceByType(SceneType.SELECTION);
+		select.UpdateSelected();
 	}
 
 }

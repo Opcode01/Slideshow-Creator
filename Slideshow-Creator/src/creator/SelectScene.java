@@ -22,7 +22,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -99,6 +98,9 @@ public class SelectScene extends Scene
 	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
+	
+	/** Create toggle button array to reference */
+	private JButton[] imageButtons;
 	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
@@ -265,7 +267,7 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
 		imagePanel.setBackground(image_gray);
-		ShowImages(imagePanel, allThumbs);
+		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -301,20 +303,50 @@ public class SelectScene extends Scene
 	}
 	
     /**
+     * UpdateSelected() - updates the highlighted images to reflect changes in thumbnails list
+     * 
+     * @author Fernando Palacios
+     */
+	public void UpdateSelected()
+	{
+		for(int i = 0; i < imageButtons.length; i++)
+		{
+			//get instance of timeline to compare what is in it
+			Timeline timeline = SceneHandler.singleton.getTimeline();
+			
+			//grab individual thumbnail
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			//if thumbnail is in the timeline, keep it highlighted
+			if (slideIndex >= 0)
+			{
+				imageButtons[i].setBorder(new LineBorder(aqua, 3));
+				imageButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
+			}
+			else//thumbnail not on timeline, remove highlight
+			{
+				imageButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				imageButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			}
+		}
+	}
+	
+    /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		JButton[] buttons = new JButton[list.getSize()];
+		imageButtons = new JButton[allThumbs.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
-		for(i = 0; i < buttons.length; i++) {
+		for(i = 0; i < imageButtons.length; i++) {
 			
 			if (gridxCounter > 2) {
 				gridxCounter = 0;
@@ -329,18 +361,18 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = list.getThumbnail(i);
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
 			
-			buttons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
-			JButton keeper = buttons [i];
-			buttons[i].setPreferredSize(new Dimension(320, 200));
-			buttons[i].setRolloverEnabled(true);
-			buttons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
-			buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			buttons[i].setBorder(BorderFactory.createEmptyBorder());
-			buttons[i].setFocusable(false);
-			buttons[i].setContentAreaFilled(false);
-			buttons[i].addActionListener(new ActionListener(){
+			imageButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JButton keeper = imageButtons [i];
+			imageButtons[i].setPreferredSize(new Dimension(320, 200));
+			imageButtons[i].setRolloverEnabled(true);
+			imageButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			imageButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			imageButtons[i].setBorder(BorderFactory.createEmptyBorder());
+			imageButtons[i].setFocusable(false);
+			imageButtons[i].setContentAreaFilled(false);
+			imageButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					//add button to or remove button from timeline
 					Timeline timeline = SceneHandler.singleton.getTimeline();
@@ -361,7 +393,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			panel.add(buttons[i], c);
+			imagePanel.add(imageButtons[i], c);
 		}
 	}
 
