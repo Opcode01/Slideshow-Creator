@@ -102,6 +102,7 @@ public class TimelineParser
 			importedTimeline = new Timeline((String) in.get("parentDir"));
 			
 			JSONArray thumbnails = (JSONArray) in.get("thumbnails");
+			System.out.println(thumbnails.size());
 			for(int i = 0; i < thumbnails.size(); i++)
 			{
 				JSONObject tbl = (JSONObject) thumbnails.get(i);
@@ -109,6 +110,8 @@ public class TimelineParser
 				//grab as long then cast to int 
 				long index = (Long) tbl.get("index");
 				String path = (String) tbl.get("path");
+				System.out.println(index);
+				System.out.println(path);
 				Thumbnail newThumb = new Thumbnail(path);
 				importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index);
 			}
