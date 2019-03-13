@@ -18,7 +18,12 @@ public class Timeline
     public TransitionsList transitionsList;
     public Settings timelineSettings;
     
-    private final String directory;
+    private String directory;
+    
+    public void setDirectory(String dir)
+    {
+    	directory = dir;
+    }
     
     public String getDirectory()
     {
@@ -37,11 +42,6 @@ public class Timeline
         transitionsList = new TransitionsList();
         timelineSettings = new Settings(false, false, false, 1, 5);
         directory = SceneHandler.singleton.getDirectory();
-    }
-    
-    public Timeline(String dir)
-    {
-    	directory = dir;
     }
     
     public void UpdateProjectSettings(Settings s) {

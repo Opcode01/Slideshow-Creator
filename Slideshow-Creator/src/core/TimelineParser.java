@@ -91,15 +91,13 @@ public class TimelineParser
 	 */
 	public static Timeline ImportTimeline(String JSONpath) 
 	{
-		Timeline importedTimeline = null;
+		Timeline importedTimeline = new Timeline();
 		JSONParser parser = new JSONParser();
 		try 
 		{
 			Object input = parser.parse(new FileReader(JSONpath));
 			
 			JSONObject in = (JSONObject) input;
-			
-			importedTimeline = new Timeline((String) in.get("parentDir"));
 			
 			JSONArray thumbnails = (JSONArray) in.get("thumbnails");
 			System.out.println(thumbnails.size());
@@ -138,6 +136,8 @@ public class TimelineParser
 													isManual, 
 													(int)transitionLength, 
 													(int)slideDuration);
+			
+			importedTimeline.setDirectory((String) in.get("parentDir"));
 			
 			importedTimeline.timelineSettings = importedSettings;
 			
