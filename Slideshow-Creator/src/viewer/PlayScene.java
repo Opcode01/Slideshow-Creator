@@ -20,18 +20,19 @@ import core.*;
 
 public class PlayScene extends Scene {
 
-	public PlayScene()
+	@Override
+	public void initialize()
 	{
 		//needs to be some sort of layered layout thing for buttons to go in front :)
 		this.setLayout(new BorderLayout());
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		//Thumbnail testThumb = new Thumbnail("src/creator/TransitionImages/crossFade.png");
+		Thumbnail testThumb = SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnail(0);
 		JLabel testLabel = new JLabel() {
 			@Override
 			public void paintComponent(Graphics g) {
-				//testThumb.drawFill(g, this);
+				testThumb.drawFill(g, this);
 			}
 		};
 		this.add(testLabel, BorderLayout.CENTER);
