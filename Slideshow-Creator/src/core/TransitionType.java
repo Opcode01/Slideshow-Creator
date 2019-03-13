@@ -3,7 +3,7 @@ package core;
 import javax.swing.ImageIcon;
 
 public enum TransitionType {
-	NONE("None"),
+	NONE("None", "src/core/TransitionImages/none.png"),
 	CROSS_DISSOLVE("Cross dissolve", "src/core/TransitionImages/crossFade.png"),
 	PUSH_DOWN("Push down"),
 	PUSH_LEFT("Push left"),
