@@ -94,17 +94,8 @@ public class SelectScene extends Scene
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedDeselectAll;
 	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
-	
-	/** Create custom image_gray color */
-	private Color image_gray = new Color(30, 30, 30);
-	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
-	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -122,11 +113,11 @@ public class SelectScene extends Scene
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
+		back = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
 		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
 		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
 		deselectAll = new ImageIcon(getClass().getResource("Images/deselectAllButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
+		highlightedBack = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
 		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
 		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
 		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
@@ -193,7 +184,7 @@ public class SelectScene extends Scene
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(light_gray);
+		optionsPanel.setBackground(SliderColor.light_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -221,7 +212,7 @@ public class SelectScene extends Scene
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
-		imagePanelContainer.setBackground(image_gray);
+		imagePanelContainer.setBackground(SliderColor.image_gray);
 		
 		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
@@ -233,7 +224,7 @@ public class SelectScene extends Scene
 		
 		// Set scroll pane configurations
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		imageScroller.getVerticalScrollBar().setBackground(light_gray);
+		imageScroller.getVerticalScrollBar().setBackground(SliderColor.light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Set constraints and add options panel
@@ -269,7 +260,7 @@ public class SelectScene extends Scene
 		// Create image panel with new images
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
-		imagePanel.setBackground(image_gray);
+		imagePanel.setBackground(SliderColor.image_gray);
 		ShowImages(imagePanel, allThumbs);
 		
 		// add to outer panel that houses the image panel for layout and whitespace
@@ -364,7 +355,7 @@ public class SelectScene extends Scene
 					else//thumbnail not on timeline, add it
 					{
 						timeline.addSlide(buttonThumb);
-						keeper.setBorder(new LineBorder(aqua, 3));
+						keeper.setBorder(new LineBorder(SliderColor.aqua, 3));
 						keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 					}
 				}
@@ -437,7 +428,7 @@ public class SelectScene extends Scene
 			if (slideIndex < 0)
 			{
 				timeline.addSlide(buttonThumb);
-				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setBorder(new LineBorder(SliderColor.aqua, 3));
 				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 			}
 		}

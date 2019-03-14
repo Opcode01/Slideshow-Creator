@@ -65,12 +65,6 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
-	
-	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(30, 30, 30);
-	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
@@ -84,14 +78,14 @@ public class ArrangeScene extends Scene{
 		// Set panel configurations
 		this.setLayout(gridBag);
 		
-		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
+		back = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
 		directory = new ImageIcon(getClass().getResource("Images/directoryButton.png"));
 		settings = new ImageIcon(getClass().getResource("Images/settingsButton.png"));
-		removeCurrent = new ImageIcon(getClass().getResource("Images/removeCurrentButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
+		removeCurrent = new ImageIcon(SceneHandler.class.getResource("Images/removeCurrentButton.png"));
+		highlightedBack = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
 		highlightedDirectory = new ImageIcon(getClass().getResource("Images/highlightedDirectoryButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("Images/highlightedSettingsButton.png"));
-		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("Images/highlightedRemoveCurrentButton.png"));
+		highlightedRemoveCurrent = new ImageIcon(SceneHandler.class.getResource("Images/highlightedRemoveCurrentButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -145,7 +139,7 @@ public class ArrangeScene extends Scene{
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(light_gray);
+		optionsPanel.setBackground(SliderColor.light_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -169,12 +163,12 @@ public class ArrangeScene extends Scene{
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(dark_gray);
+		imagePanel.setBackground(SliderColor.dark_gray);
 		
 		// Set timeline panel configurations
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(gridBag);
-		timelinePanel.setBackground(light_gray);
+		timelinePanel.setBackground(SliderColor.light_gray);
 		
 		// Set constraints and add options panels
 		c.fill = GridBagConstraints.BOTH;
