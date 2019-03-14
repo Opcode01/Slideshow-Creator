@@ -84,14 +84,14 @@ public class ArrangeScene extends Scene{
 		// Set panel configurations
 		this.setLayout(gridBag);
 		
-		back = new ImageIcon("res/creator/Images/backButton.png");
-		directory = new ImageIcon("res/creator/Images/directoryButton.png");
-		settings = new ImageIcon("res/creator/Images/settingsButton.png");
-		removeCurrent = new ImageIcon("res/creator/Images/removeCurrentButton.png");
-		highlightedBack = new ImageIcon("res/creator/Images/highlightedBackButton.png");
-		highlightedDirectory = new ImageIcon("res/creator/Images/highlightedDirectoryButton.png");
-		highlightedSettings = new ImageIcon("res/creator/Images/highlightedSettingsButton.png");
-		highlightedRemoveCurrent = new ImageIcon("res/creator/Images/highlightedRemoveCurrentButton.png");
+		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
+		directory = new ImageIcon(getClass().getResource("Images/directoryButton.png"));
+		settings = new ImageIcon(getClass().getResource("Images/settingsButton.png"));
+		removeCurrent = new ImageIcon(getClass().getResource("Images/removeCurrentButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
+		highlightedDirectory = new ImageIcon(getClass().getResource("Images/highlightedDirectoryButton.png"));
+		highlightedSettings = new ImageIcon(getClass().getResource("Images/highlightedSettingsButton.png"));
+		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("Images/highlightedRemoveCurrentButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -186,7 +186,7 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		Thumbnail testThumb = new Thumbnail("res/core/TransitionImages/crossFade.png");
+		Thumbnail testThumb = new Thumbnail("src/core/TransitionImages/crossFade.png");
 		JLabel testLabel = new JLabel() {
 			  @Override
 			  public void paintComponent(Graphics g) {

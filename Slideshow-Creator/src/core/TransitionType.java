@@ -4,15 +4,15 @@ import javax.swing.ImageIcon;
 
 public enum TransitionType {
 	NONE("None"),
-	CROSS_DISSOLVE("Cross dissolve", "res/core/TransitionImages/crossFade.png"),
+	CROSS_DISSOLVE("Cross dissolve", "src/core/TransitionImages/crossFade.png"),
 	PUSH_DOWN("Push down"),
 	PUSH_LEFT("Push left"),
 	PUSH_RIGHT("Push right"),
 	PUSH_UP("Push up"),
-	WIPE_DOWN("Wipe down", "res/core/TransitionImages/wipeDown.png"),
-	WIPE_LEFT("Wipe left", "res/core/TransitionImages/wipeLeft.png"),
-	WIPE_RIGHT("Wipe right", "res/core/TransitionImages/wipeRight.png"),
-	WIPE_UP("Wipe up", "res/core/TransitionImages/wipeUp.png");
+	WIPE_DOWN("Wipe down", "src/core/TransitionImages/wipeDown.png"),
+	WIPE_LEFT("Wipe left", "src/core/TransitionImages/wipeLeft.png"),
+	WIPE_RIGHT("Wipe right", "src/core/TransitionImages/wipeRight.png"),
+	WIPE_UP("Wipe up", "src/core/TransitionImages/wipeUp.png");
 	
 	/**
 	 * title - name of scene 

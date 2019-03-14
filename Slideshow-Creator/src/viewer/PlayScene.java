@@ -27,7 +27,7 @@ public class PlayScene extends Scene {
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		//Thumbnail testThumb = new Thumbnail("res/creator/TransitionImages/crossFade.png");
+		//Thumbnail testThumb = new Thumbnail("src/creator/TransitionImages/crossFade.png");
 		JLabel testLabel = new JLabel() {
 			@Override
 			public void paintComponent(Graphics g) {
