@@ -28,12 +28,24 @@ import core.*;
 
 public class PlayScene extends Scene {
 
+	//gui icons
 	private ImageIcon backIcon;
 	private ImageIcon backIconHigh;
 	private ImageIcon forwardIcon;
 	private ImageIcon forwardIconHigh;
 	private ImageIcon removeCurrentIcon;
 	private ImageIcon removeCurrentIconHigh;
+	
+	/**	Thumbnail that displays on the player */
+	private Thumbnail slideThumb;
+	
+	public Thumbnail getSlideThumb() {
+		return slideThumb;
+	}
+	
+	public void setSlideThumb(Thumbnail t) {
+		slideThumb = t;
+	}
 	
 	public PlayScene()
 	{
@@ -56,10 +68,29 @@ public class PlayScene extends Scene {
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
+		this.setLayout(gridBag);
 		
 		// Set slide panel configurations
-		JPanel slidePanel = new JPanel();
+		slideThumb = SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnail(0);
+		JPanel slidePanel = new JPanel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				slideThumb.drawFill(g, this);
+			}
+		};
 		slidePanel.setLayout(gridBag);
+		slidePanel.setBackground(SliderColor.dark_gray);
+		
+		// Set constraints and add slide panel
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		this.add(slidePanel, c);
+		
+		// Set options panel configurations
+		JPanel optionsPanel = new JPanel();
+		slidePanel.setLayout(new BorderLayout());
 		slidePanel.setBackground(SliderColor.light_gray);
 		
 		/*
@@ -86,20 +117,13 @@ public class PlayScene extends Scene {
 		optionsPanel.add(backButton, c);
 		*/
 		
-		// Set panel configurations
-		this.setLayout(gridBag);
-
-		///////////////////////
-		//Add example image - this is approximately what you should do to set up the display image! :)
-		Thumbnail testThumb = SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnail(0);
-		JLabel testLabel = new JLabel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				testThumb.drawFill(g, this);
-			}
-		};
-		this.add(testLabel, c);
-		///////////////////////
+		// Set constraints and add options panel
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 1;
+		this.add(optionsPanel, c);
 		
 		this.revalidate();
 	}
