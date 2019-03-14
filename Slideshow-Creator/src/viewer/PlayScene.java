@@ -29,16 +29,20 @@ import core.*;
 public class PlayScene extends Scene {
 
 	private ImageIcon backIcon;
-	private ImageIcon highlightedBackIcon;
+	private ImageIcon backIconHigh;
+	private ImageIcon forwardIcon;
+	private ImageIcon forwardIconHigh;
 	private ImageIcon removeCurrentIcon;
-	private ImageIcon highlightedRemoveCurrentIcon;
+	private ImageIcon removeCurrentIconHigh;
 	
 	public PlayScene()
 	{
 		backIcon = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
-		highlightedBackIcon = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
+		backIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
+		forwardIcon = new ImageIcon(SceneHandler.class.getResource("Images/forwardButton.png"));
+		forwardIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedForwardButton.png"));
 		removeCurrentIcon = new ImageIcon(SceneHandler.class.getResource("Images/removeCurrentButton.png"));
-		highlightedRemoveCurrentIcon = new ImageIcon(SceneHandler.class.getResource("Images/highlightedRemoveCurrentButton.png"));
+		removeCurrentIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedRemoveCurrentButton.png"));
 	}
 	
 	/**
@@ -66,7 +70,7 @@ public class PlayScene extends Scene {
 		backButton.setBorder(BorderFactory.createEmptyBorder());
 		backButton.setContentAreaFilled(false);
 		backButton.setFocusable(false);
-		backButton.setRolloverIcon(highlightedBackIcon);
+		backButton.setRolloverIcon(backIconHigh);
 		backButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	slideLeft();
