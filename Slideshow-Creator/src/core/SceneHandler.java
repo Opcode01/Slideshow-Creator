@@ -114,7 +114,7 @@ public class SceneHandler {
 	 */
 	public boolean launch()
 	{
-		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
+		ImageIcon slideshowIcon = new ImageIcon("res/core/Images/slideshowIcon.png");
 		
 		if(appType == AppType.CREATOR) {
 			timeline = new Timeline();
