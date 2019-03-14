@@ -25,5 +25,8 @@ public final class SliderColor {
 	
 	/** Create custom aqua color */
 	public static final Color aqua = new Color(132, 200, 202);
+	
+	/** Create custom white color */
+	public static final Color white = new Color(255, 255, 255);
 
 }
