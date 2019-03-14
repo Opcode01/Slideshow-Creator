@@ -87,6 +87,8 @@ public class SceneHandler {
 	/* The currently selected scene type */
 	private SceneType currentScene;
 	
+	public final Map<TransitionType, ImageIcon> transitionImages;
+	
 	/**
 	 * SceneHandler - creates program with specified app type
 	 * @param aT AppType to open
@@ -102,6 +104,15 @@ public class SceneHandler {
 		appType = aT;
 		scenes = new HashMap<SceneType, Scene>();
 		currentScene = SceneType.NONE;
+		
+		//set up transition images
+		transitionImages = new HashMap<TransitionType, ImageIcon>();
+		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon("res/core/TransitionImages/crossFade.png"));
+		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon("res/core/TransitionImages/wipeDown.png"));
+		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon("res/core/TransitionImages/wipeLeft.png"));
+		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon("res/core/TransitionImages/wipeRight.png"));
+		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon("res/core/TransitionImages/wipeUp.png"));
+		
 		launch();
 	}
 	
