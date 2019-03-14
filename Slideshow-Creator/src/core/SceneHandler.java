@@ -107,11 +107,11 @@ public class SceneHandler {
 		
 		//set up transition images
 		transitionImages = new HashMap<TransitionType, ImageIcon>();
-		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon(getClass().getResource("TransitionImages/crossFade.png")));
-		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon(getClass().getResource("TransitionImages/wipeDown.png")));
-		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon(getClass().getResource("TransitionImages/wipeLeft.png")));
-		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon(getClass().getResource("TransitionImages/wipeRight.png")));
-		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon(getClass().getResource("TransitionImages/wipeUp.png")));
+		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon(Thumbnail.loadImage(getClass().getResource("TransitionImages/crossFade.png").toString())));
+		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon(Thumbnail.loadImage(getClass().getResource("TransitionImages/wipeDown.png").toString())));
+		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon(Thumbnail.loadImage(getClass().getResource("TransitionImages/wipeLeft.png").toString())));
+		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon(Thumbnail.loadImage(getClass().getResource("TransitionImages/wipeRight.png").toString())));
+		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon(Thumbnail.loadImage(getClass().getResource("TransitionImages/wipeUp.png").toString())));
 		
 		launch();
 	}
