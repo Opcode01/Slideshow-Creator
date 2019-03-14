@@ -192,7 +192,7 @@ public class ArrangeScene extends Scene{
 			  public void paintComponent(Graphics g) {
 				  testThumb.drawFill(g, this);
 				  //example 1 of drawing the image associated with a transition
-				  g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
+				  g.drawImage(SceneHandler.singleton.transitionImages.get(TransitionType.WIPE_RIGHT).getImage(), 0, 200, this);
 				  }
 			  };
 		
@@ -210,7 +210,7 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//example 2 of drawing the image associated with a transition
-		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
+		JButton transitionButton = new JButton(SceneHandler.singleton.transitionImages.get(TransitionType.WIPE_DOWN));
 		transitionButton.setPreferredSize(new Dimension(200, 175));
 		c.fill = GridBagConstraints.NONE;
 		timelinePanel.add(transitionButton, c);
