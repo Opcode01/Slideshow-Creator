@@ -73,10 +73,10 @@ public class FileSelectExplorer extends Scene {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Create images
-		selectExisting = new ImageIcon("res/viewer/Images/selectSliderFileButton.png");
-		highlightedSelectExisting = new ImageIcon("res/viewer/Images/highlightedSelectSliderFileButton.png");
-		bg = new ImageIcon("res/viewer/Images/viewerBg.jpg");
-		header = new ImageIcon("res/viewer/Images/viewerHeader.png");
+		selectExisting = new ImageIcon(getClass().getResource("/viewer/Images/selectSliderFileButton.png"));
+		highlightedSelectExisting = new ImageIcon(getClass().getResource("/viewer/Images/highlightedSelectSliderFileButton.png"));
+		bg = new ImageIcon(getClass().getResource("/viewer/Images/viewerBg.jpg"));
+		header = new ImageIcon(getClass().getResource("/viewer/Images/viewerHeader.png"));
 		
 		// Change look and feel
 		try {

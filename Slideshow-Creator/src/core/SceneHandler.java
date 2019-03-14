@@ -107,11 +107,11 @@ public class SceneHandler {
 		
 		//set up transition images
 		transitionImages = new HashMap<TransitionType, ImageIcon>();
-		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon("res/core/TransitionImages/crossFade.png"));
-		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon("res/core/TransitionImages/wipeDown.png"));
-		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon("res/core/TransitionImages/wipeLeft.png"));
-		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon("res/core/TransitionImages/wipeRight.png"));
-		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon("res/core/TransitionImages/wipeUp.png"));
+		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon(getClass().getResource("/core/TransitionImages/crossFade.png")));
+		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeDown.png")));
+		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeLeft.png")));
+		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeRight.png")));
+		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeUp.png")));
 		
 		launch();
 	}
@@ -125,7 +125,7 @@ public class SceneHandler {
 	 */
 	public boolean launch()
 	{
-		ImageIcon slideshowIcon = new ImageIcon("res/core/Images/slideshowIcon.png");
+		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("/core/Images/slideshowIcon.png"));
 		
 		if(appType == AppType.CREATOR) {
 			timeline = new Timeline();
