@@ -275,6 +275,7 @@ public class SelectScene extends Scene
 	 * GoToDirectoryScene() - changes scene to directory
 	 *
 	 * @author Fernando Palacios
+	 * @author Timothy Couch
      */
 	public void GoToDirectoryScene()
 	{
