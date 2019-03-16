@@ -53,6 +53,9 @@ public class PlayScene extends Scene {
 	/** Index of thumbnail currently showing */
 	private int currentSlideIndex;
 	
+	/** reference to SceneHandler's timeline */
+	private Timeline timeline;
+	
 	public PlayScene()
 	{
 		backIcon = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
@@ -73,6 +76,8 @@ public class PlayScene extends Scene {
 	{
 		//clear out if it had stuff previously
 		this.removeAll();
+		
+		timeline = SceneHandler.singleton.getTimeline();
 		
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
@@ -126,66 +131,70 @@ public class PlayScene extends Scene {
 		c.gridx = 0;
 		c.gridy = 0;
 		optionsPanel.add(exitButton, c);
-		
+
 		//Manual controls panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(gridBag);
 		controlPanel.setBackground(SliderColor.light_gray);
 		
-		//left button
-		JButton leftButton = new JButton(backIcon);
-		leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		leftButton.setToolTipText("Previous Image");
-		leftButton.setBorder(BorderFactory.createEmptyBorder());
-		leftButton.setContentAreaFilled(false);
-		leftButton.setFocusable(false);
-		leftButton.setRolloverIcon(backIconHigh);
-		leftButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	slideLeft();
-		    }
-		});
-		
-		// Set constraints and add left button
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.CENTER;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 0;
-		controlPanel.add(leftButton, c);
-		
-		//right button
-		JButton rightButton = new JButton(forwardIcon);
-		rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		rightButton.setToolTipText("Previous Image");
-		rightButton.setBorder(BorderFactory.createEmptyBorder());
-		rightButton.setContentAreaFilled(false);
-		rightButton.setFocusable(false);
-		rightButton.setRolloverIcon(forwardIconHigh);
-		rightButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	slideRight();
-		    }
-		});
-		
-		// Set constraints and add right button
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.CENTER;
-		c.weightx = 0;
-		c.weighty = 0;
-		c.gridx = 1;
-		c.gridy = 0;
-		controlPanel.add(rightButton, c);
-		
-		// Set constraints and add control panel to options panel
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.CENTER;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.gridx = 1;
-		c.gridy = 0;
-		optionsPanel.add(controlPanel, c);
+		//enable buttons if the timeline advances manually
+		if (timeline.timelineSettings.isManual)
+		{
+			//left button
+			JButton leftButton = new JButton(backIcon);
+			leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			leftButton.setToolTipText("Previous Image");
+			leftButton.setBorder(BorderFactory.createEmptyBorder());
+			leftButton.setContentAreaFilled(false);
+			leftButton.setFocusable(false);
+			leftButton.setRolloverIcon(backIconHigh);
+			leftButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			    	slideLeft();
+			    }
+			});
+			
+			// Set constraints and add left button
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.CENTER;
+			c.weightx = 0;
+			c.weighty = 0;
+			c.gridx = 0;
+			c.gridy = 0;
+			controlPanel.add(leftButton, c);
+			
+			//right button
+			JButton rightButton = new JButton(forwardIcon);
+			rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			rightButton.setToolTipText("Previous Image");
+			rightButton.setBorder(BorderFactory.createEmptyBorder());
+			rightButton.setContentAreaFilled(false);
+			rightButton.setFocusable(false);
+			rightButton.setRolloverIcon(forwardIconHigh);
+			rightButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			    	slideRight();
+			    }
+			});
+			
+			// Set constraints and add right button
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.CENTER;
+			c.weightx = 0;
+			c.weighty = 0;
+			c.gridx = 1;
+			c.gridy = 0;
+			controlPanel.add(rightButton, c);
+		}
+			
+			// Set constraints and add control panel to options panel
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.CENTER;
+			c.weightx = 1;
+			c.weighty = 0;
+			c.gridx = 1;
+			c.gridy = 0;
+			optionsPanel.add(controlPanel, c);
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -230,7 +239,7 @@ public class PlayScene extends Scene {
 	 * @return thumbnail at index i
 	 */
 	private Thumbnail getSlide(int i) {
-		return SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnail(i);
+		return timeline.thumbnailsList.getThumbnail(i);
 	}
 	
 	/**
