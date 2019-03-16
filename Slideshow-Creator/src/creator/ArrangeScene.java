@@ -69,11 +69,14 @@ public class ArrangeScene extends Scene{
 	private ImageIcon highlightedRemoveCurrent;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(41, 41, 41);
+	private Color light_gray = new Color(31, 31, 31);
 	
 	/** Create custom dark_gray color */
 	private Color dark_gray = new Color(0, 0, 0);
 	
+	/** Create custom medium_gray color */
+	private Color medium_gray = new Color(41, 41, 41);
+
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
@@ -186,12 +189,13 @@ public class ArrangeScene extends Scene{
 		// Set timeline panel configurations
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(gridBag);
-		timelinePanel.setBackground(light_gray);
+		timelinePanel.setBackground(medium_gray);
 		
 		// Set constraints and add options panels
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
 		c.weighty = 1.0;
+		c.gridheight = 2;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(optionsPanel, c);
@@ -215,6 +219,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
+		c.gridheight = 1;
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
@@ -233,7 +238,7 @@ public class ArrangeScene extends Scene{
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
 		c.weighty = 0.7;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 1;
 		this.add(timelinePanel, c);
 		

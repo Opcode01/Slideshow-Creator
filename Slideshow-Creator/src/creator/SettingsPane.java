@@ -155,9 +155,6 @@ public class SettingsPane extends FloatingPane
 	/** Create custom light gray color */
 	private Color light_gray = new Color(31, 31, 31);
 	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
-	
 	/** Create custom white color */
 	private Color white = new Color(255, 255, 255);
 	
@@ -231,11 +228,6 @@ public class SettingsPane extends FloatingPane
 		autoButton.setRolloverIcon(highlightedAuto);
 		autoButton.setSelectedIcon(highlightedAuto);
 		autoButton.setEnabled(true);
-		autoButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create manual button
 		manualButton = new JToggleButton(manual);
@@ -245,11 +237,6 @@ public class SettingsPane extends FloatingPane
 		manualButton.setFocusable(false);
 		manualButton.setRolloverIcon(highlightedManual);
 		manualButton.setSelectedIcon(highlightedManual);
-		manualButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create audio button
 		audioButton = new JButton(audio);

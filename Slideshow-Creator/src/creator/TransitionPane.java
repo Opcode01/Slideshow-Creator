@@ -107,9 +107,6 @@ public class TransitionPane extends FloatingPane {
 	/** Create custom light gray color */
 	private Color light_gray = new Color(31, 31, 31);
 	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
-	
 	/** Create custom white color */
 	private Color white = new Color(255, 255, 255);
 	
@@ -158,7 +155,7 @@ public class TransitionPane extends FloatingPane {
 		saveButton.setRolloverIcon(highlightedSave);
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	//();
+		    	UpdateTransitionSettings();
 		    	ClosePane();
 		    }
 		});
@@ -246,7 +243,7 @@ public class TransitionPane extends FloatingPane {
 		    }
 		});
 		
-		// Add auto and manual buttons to type group
+		// Add transition type buttons to type group
 		ButtonGroup typeGroup = new ButtonGroup();
 		typeGroup.add(crossButton);
 		typeGroup.add(leftButton);
@@ -409,5 +406,31 @@ public class TransitionPane extends FloatingPane {
         }
         return buffered;
     }
+    
+	public void UpdateTransitionSettings() {
+		
+		if(crossButton.isSelected()) {
+			transition.setTransitionType(TransitionType.CROSS_DISSOLVE);
+		}else if(leftButton.isSelected()) {
+			transition.setTransitionType(TransitionType.WIPE_LEFT);
+		}else if(rightButton.isSelected()) {
+			transition.setTransitionType(TransitionType.WIPE_RIGHT);
+		}else if(upButton.isSelected()) {
+			transition.setTransitionType(TransitionType.WIPE_UP);
+		}else if(downButton.isSelected()) {
+			transition.setTransitionType(TransitionType.WIPE_DOWN);
+		}
+		
+		String transitionText = (String)lengthDropDown.getSelectedItem();
+		if(transitionText == "Slow") {
+			transition.setTransitionLength(5);
+		}else if(transitionText == "Medium") {
+			transition.setTransitionLength(3);
+		}else if(transitionText == "Fast") {
+			transition.setTransitionLength(1);
+		}else {
+			System.out.println("Transition time is invalid!");
+		}
+	}
 
 }
