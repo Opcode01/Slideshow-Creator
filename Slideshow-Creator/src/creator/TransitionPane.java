@@ -47,14 +47,20 @@ public class TransitionPane extends FloatingPane {
 	/** Create transitions length label */
 	private JLabel lengthLabel;
 	
-	/** Create length dropdown */
-	private JComboBox<String> lengthDropDown;
-	
-	/** Create auto button */
+	/** Create cross button */
 	private JToggleButton crossButton;
 	
-	/** Create manual button */
+	/** Create left button */
 	private JToggleButton leftButton;
+	
+	/** Create right button */
+	private JToggleButton slowButton;
+	
+	/** Create up button */
+	private JToggleButton mediumButton;
+	
+	/** Create down button */
+	private JToggleButton fastButton;
 	
 	/** Create auto button */
 	private JToggleButton rightButton;
@@ -74,19 +80,22 @@ public class TransitionPane extends FloatingPane {
 	/** Create button group for manual and auto */
 	private ButtonGroup typeGroup;
 	
+	/** Create button group for manual and auto */
+	private ButtonGroup lengthGroup;
+	
 	/** Transition custom header image */
 	private ImageIcon transitionHeader;
 	
-	/** Auto custom button image */
+	/** Save custom button image */
 	private ImageIcon save;
 	
-	/** Highlighted auto custom button image */
+	/** Highlighted save custom button image */
 	private ImageIcon highlightedSave;
 	
-	/** Manual custom button image */
+	/** Cancel custom button image */
 	private ImageIcon cancel;
 	
-	/** Highlighted manual custom button image */
+	/** Highlighted cancel custom button image */
 	private ImageIcon highlightedCancel;
 	
 	/** Cross dissolve custom button image */
@@ -103,6 +112,24 @@ public class TransitionPane extends FloatingPane {
 	
 	/** Right transition custom button image */
 	private ImageIcon right;
+	
+	/** Slow custom button image */
+	private ImageIcon slow;
+	
+	/** Highlighted slow custom button image */
+	private ImageIcon highlightedSlow;
+	
+	/** Medium custom button image */
+	private ImageIcon medium;
+	
+	/** Highlighted medium custom button image */
+	private ImageIcon highlightedMedium;
+	
+	/** Fast custom button image */
+	private ImageIcon fast;
+	
+	/** Highlighted fast custom button image */
+	private ImageIcon highlightedFast;
 	
 	/** Create custom light gray color */
 	private Color light_gray = new Color(31, 31, 31);
@@ -130,16 +157,22 @@ public class TransitionPane extends FloatingPane {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		transitionHeader = new ImageIcon(getClass().getResource("Images/transHeader.png"));
-		save = new ImageIcon(getClass().getResource("Images/saveButton.png"));
-		cancel = new ImageIcon(getClass().getResource("Images/cancelButton.png"));
-		highlightedSave = new ImageIcon(getClass().getResource("Images/highlightedSaveButton.png"));
-		highlightedCancel = new ImageIcon(getClass().getResource("Images/highlightedCancelButton.png"));
-		cross = new ImageIcon("src/core/TransitionImages/resizedCrossFade.png");
-		right = new ImageIcon("src/core/TransitionImages/resizedWipeRight.png");
-		left = new ImageIcon("src/core/TransitionImages/resizedWipeLeft.png");
-		up = new ImageIcon("src/core/TransitionImages/resizedWipeUp.png");
-		down = new ImageIcon("src/core/TransitionImages/resizedWipeDown.png");
+		transitionHeader = new ImageIcon(getClass().getResource("/creator/Images/transHeader.png"));
+		save = new ImageIcon(getClass().getResource("/creator/Images/saveButton.png"));
+		cancel = new ImageIcon(getClass().getResource("/creator/Images/cancelButton.png"));
+		highlightedSave = new ImageIcon(getClass().getResource("/creator/Images/highlightedSaveButton.png"));
+		highlightedCancel = new ImageIcon(getClass().getResource("/creator/Images/highlightedCancelButton.png"));
+		cross = new ImageIcon(getClass().getResource("/core/TransitionImages/resizedCrossFade.png"));
+		right = new ImageIcon(getClass().getResource("/core/TransitionImages/resizedWipeRight.png"));
+		left = new ImageIcon(getClass().getResource("/core/TransitionImages/resizedWipeLeft.png"));
+		up = new ImageIcon(getClass().getResource("/core/TransitionImages/resizedWipeUp.png"));
+		down = new ImageIcon(getClass().getResource("/core/TransitionImages/resizedWipeDown.png"));
+		slow = new ImageIcon(getClass().getResource("/creator/Images/slowButton.png"));
+		medium = new ImageIcon(getClass().getResource("/creator/Images/mediumButton.png"));
+		fast = new ImageIcon(getClass().getResource("/creator/Images/fastButton.png"));
+		highlightedSlow = new ImageIcon(getClass().getResource("/creator/Images/highlightedSlowButton.png"));
+		highlightedMedium = new ImageIcon(getClass().getResource("/creator/Images/highlightedMediumButton.png"));
+		highlightedFast = new ImageIcon(getClass().getResource("/creator/Images/highlightedFastButton.png"));
 		
 		//Construct original panel container and configurations
 		JPanel transitionGui = new JPanel();
@@ -218,13 +251,46 @@ public class TransitionPane extends FloatingPane {
 		downButton.setRolloverIcon(new ImageIcon(ImageHover(down.getImage())));
 		downButton.setSelectedIcon(new ImageIcon(ImageHover(down.getImage())));
 		
+		// Create slow button
+		slowButton = new JToggleButton(slow);
+		slowButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		slowButton.setBorder(BorderFactory.createEmptyBorder());
+		slowButton.setContentAreaFilled(false);
+		slowButton.setFocusable(false);
+		slowButton.setRolloverIcon(highlightedSlow);
+		slowButton.setSelectedIcon(highlightedSlow);
+		
+		// Create medium button
+		mediumButton = new JToggleButton(medium);
+		mediumButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		mediumButton.setBorder(BorderFactory.createEmptyBorder());
+		mediumButton.setContentAreaFilled(false);
+		mediumButton.setFocusable(false);
+		mediumButton.setRolloverIcon(highlightedMedium);
+		mediumButton.setSelectedIcon(highlightedMedium);
+		
+		// Create fast button
+		fastButton = new JToggleButton(fast);
+		fastButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		fastButton.setBorder(BorderFactory.createEmptyBorder());
+		fastButton.setContentAreaFilled(false);
+		fastButton.setFocusable(false);
+		fastButton.setRolloverIcon(highlightedFast);
+		fastButton.setSelectedIcon(highlightedFast);
+		
 		// Add transition type buttons to type group
-		ButtonGroup typeGroup = new ButtonGroup();
+		typeGroup = new ButtonGroup();
 		typeGroup.add(crossButton);
 		typeGroup.add(leftButton);
 		typeGroup.add(rightButton);
 		typeGroup.add(upButton);
 		typeGroup.add(downButton);
+		
+		// Add transition length buttons to type group
+		lengthGroup = new ButtonGroup();
+		typeGroup.add(slowButton);
+		typeGroup.add(mediumButton);
+		typeGroup.add(fastButton);
 		
 		// Configure type label
 		transitionLabel = new JLabel(transitionHeader);
@@ -238,10 +304,6 @@ public class TransitionPane extends FloatingPane {
 		lengthLabel = new JLabel("Length");
 		lengthLabel.setFont(commonFont);
 		lengthLabel.setForeground(white);
-        
-        // Create length drop down
-        String[] lengths = { "Slow", "Medium", "Fast" };
-        lengthDropDown = new JComboBox<String>(lengths);
         
 		// Set settings panel configurations
 		transitonPanel = new JPanel();
@@ -260,25 +322,24 @@ public class TransitionPane extends FloatingPane {
 		c.gridy = 2;
 		c.anchor = GridBagConstraints.WEST;
 		c.gridwidth = 1;
-		c.insets = new Insets(30, 0, 10, 15);
+		c.insets = new Insets(35, 0, 15, 15);
 		transitonPanel.add(typeLabel, c);
 		
 		// Set constraints and add audio label
 		c.gridx = 0;
 		c.gridy = 3;
-		c.insets = new Insets(10, 0, 30, 15);
+		c.insets = new Insets(20, 0, 30, 15);
 		transitonPanel.add(lengthLabel, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
 		c.gridy = 2;
-		c.insets = new Insets(30, 12, 10, 0);
+		c.insets = new Insets(30, 12, 5, 0);
 		transitonPanel.add(crossButton, c);
 		
 		// Set constraints and add manual button
 		c.gridx = 2;
 		c.gridy = 2;
-		c.insets = new Insets(30, 7, 10, 9);
 		transitonPanel.add(leftButton, c);
 		
 		c.gridx = 3;
@@ -296,8 +357,18 @@ public class TransitionPane extends FloatingPane {
 		// Set constraints and add length drop down
 		c.gridx = 1;
 		c.gridy = 3;
-		c.insets = new Insets(10, 12, 30, 0);
-		transitonPanel.add(lengthDropDown, c);
+		c.insets = new Insets(5, 12, 10, 0);
+		transitonPanel.add(slowButton, c);
+		
+		// Set constraints and add length drop down
+		c.gridx = 2;
+		c.gridy = 3;
+		transitonPanel.add(mediumButton, c);
+		
+		// Set constraints and add length drop down
+		c.gridx = 3;
+		c.gridy = 3;
+		transitonPanel.add(fastButton, c);
 		
 		// Set constraints and separator
 		c.gridx = 0;
@@ -396,15 +467,12 @@ public class TransitionPane extends FloatingPane {
 			transition.setTransitionType(TransitionType.WIPE_DOWN);
 		}
 		
-		String transitionText = (String)lengthDropDown.getSelectedItem();
-		if(transitionText == "Slow") {
+		if(slowButton.isSelected()) {
 			transition.setTransitionLength(5);
-		}else if(transitionText == "Medium") {
+		}else if(mediumButton.isSelected()) {
 			transition.setTransitionLength(3);
-		}else if(transitionText == "Fast") {
+		}else if(fastButton.isSelected()) {
 			transition.setTransitionLength(1);
-		}else {
-			System.out.println("Transition time is invalid!");
 		}
 	}
 
