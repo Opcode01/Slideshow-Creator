@@ -20,6 +20,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -55,6 +57,12 @@ public class PlayScene extends Scene {
 	
 	/** reference to SceneHandler's timeline */
 	private Timeline timeline;
+	
+	/** slide advancement timer */
+	private Timer slideTimer;
+	
+	/** slide transition timer */
+	private Timer transitionTimer;
 	
 	public PlayScene()
 	{
@@ -186,15 +194,43 @@ public class PlayScene extends Scene {
 			c.gridy = 0;
 			controlPanel.add(rightButton, c);
 		}
+		else//automatic timer when not manual
+		{
+			int slideDuration = timeline.timelineSettings.slideDuration * 1000;
+			int transitionDuration = (int) (timeline.transitionsList.getTransition(currentSlideIndex).getTransitionLength() * 1000);
+			//figure out how long to make the slide duration in case transition duration is longer than slide duration
+			int transitionStartTime = timeline.timelineSettings.slideDuration * 1000 - transitionDuration;
 			
-			// Set constraints and add control panel to options panel
-			c.fill = GridBagConstraints.NONE;
-			c.anchor = GridBagConstraints.CENTER;
-			c.weightx = 1;
-			c.weighty = 0;
-			c.gridx = 1;
-			c.gridy = 0;
-			optionsPanel.add(controlPanel, c);
+			slideTimer = new Timer();
+			slideTimer.schedule(
+					new TimerTask() {
+						@Override
+						public void run() {
+							// go to next slide
+							}
+						}, 
+					slideDuration
+					);
+			transitionTimer = new Timer();
+			transitionTimer.schedule(
+					new TimerTask() {
+						@Override
+						public void run() {
+							// start transition
+							}
+						}, 
+					transitionStartTime
+					);
+		}
+			
+		// Set constraints and add control panel to options panel
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.CENTER;
+		c.weightx = 1;
+		c.weighty = 0;
+		c.gridx = 1;
+		c.gridy = 0;
+		optionsPanel.add(controlPanel, c);
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
