@@ -181,11 +181,6 @@ public class TransitionPane extends FloatingPane {
 		crossButton.setFocusable(false);
 		crossButton.setRolloverIcon(new ImageIcon(ImageHover(cross.getImage())));
 		crossButton.setSelectedIcon(new ImageIcon(ImageHover(cross.getImage())));
-		crossButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create right button
 		rightButton = new JToggleButton(right);
@@ -195,11 +190,6 @@ public class TransitionPane extends FloatingPane {
 		rightButton.setFocusable(false);
 		rightButton.setRolloverIcon(new ImageIcon(ImageHover(right.getImage())));
 		rightButton.setSelectedIcon(new ImageIcon(ImageHover(right.getImage())));
-		rightButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create left button
 		leftButton = new JToggleButton(left);
@@ -209,11 +199,6 @@ public class TransitionPane extends FloatingPane {
 		leftButton.setFocusable(false);
 		leftButton.setRolloverIcon(new ImageIcon(ImageHover(left.getImage())));
 		leftButton.setSelectedIcon(new ImageIcon(ImageHover(left.getImage())));
-		leftButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create up button
 		upButton = new JToggleButton(up);
@@ -223,11 +208,6 @@ public class TransitionPane extends FloatingPane {
 		upButton.setFocusable(false);
 		upButton.setRolloverIcon(new ImageIcon(ImageHover(up.getImage())));
 		upButton.setSelectedIcon(new ImageIcon(ImageHover(up.getImage())));
-		upButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create down button
 		downButton = new JToggleButton(down);
@@ -237,11 +217,6 @@ public class TransitionPane extends FloatingPane {
 		downButton.setFocusable(false);
 		downButton.setRolloverIcon(new ImageIcon(ImageHover(down.getImage())));
 		downButton.setSelectedIcon(new ImageIcon(ImageHover(down.getImage())));
-		downButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Add transition type buttons to type group
 		ButtonGroup typeGroup = new ButtonGroup();
