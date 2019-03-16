@@ -84,9 +84,6 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
-	/** Create ThumbnailsList object to reference */
-	private Timeline list;
-	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
 	
@@ -347,6 +344,26 @@ public class ArrangeScene extends Scene{
 			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			transButtons[i].setFocusable(false);
 			transButtons[i].setContentAreaFilled(false);
+			transButtons[i].addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Timeline t = SceneHandler.singleton.getTimeline();
+					int index = t.transitionsList.indexOf(buttonTrans);
+					JFrame parent = SceneHandler.singleton.getMainFrame();
+			    	Coord2 point = new Coord2(
+			    			parent.getX() + parent.getSize().width/2,
+			    			parent.getY() + parent.getSize().height/2
+			    			);
+					TransitionPane p = new TransitionPane(
+							parent, 
+							"Transition Settings", 
+							point, 
+							new Dimension(400, 470),
+							t,
+							index
+							);
+					parent.setEnabled(false);
+				}
+			});
 			
 			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JToggleButton keeper = thumbButtons [i];
