@@ -122,14 +122,14 @@ public class SelectScene extends Scene
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
-		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
-		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
-		deselectAll = new ImageIcon(getClass().getResource("Images/deselectAllButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
-		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
-		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
-		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
+		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
+		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
+		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
+		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
+		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
+		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
+		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);

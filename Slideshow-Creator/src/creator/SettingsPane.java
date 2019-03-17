@@ -171,21 +171,21 @@ public class SettingsPane extends FloatingPane
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		settingsHeader = new ImageIcon(getClass().getResource("Images/settingsHeader.png"));
-		save = new ImageIcon(getClass().getResource("Images/saveButton.png"));
-		cancel = new ImageIcon(getClass().getResource("Images/cancelButton.png"));
-		auto = new ImageIcon(getClass().getResource("Images/autoButton.png"));
-		manual = new ImageIcon(getClass().getResource("Images/manualButton.png"));
-		audio = new ImageIcon(getClass().getResource("Images/audioButton.png"));
-		highlightedSave = new ImageIcon(getClass().getResource("Images/highlightedSaveButton.png"));
-		highlightedCancel = new ImageIcon(getClass().getResource("Images/highlightedCancelButton.png"));
-		highlightedAuto = new ImageIcon(getClass().getResource("Images/highlightedAutoButton.png"));
-		highlightedManual = new ImageIcon(getClass().getResource("Images/highlightedManualButton.png"));
-		highlightedAudio = new ImageIcon(getClass().getResource("Images/highlightedAudioButton.png"));
-		checkbox = new ImageIcon(getClass().getResource("Images/checkbox.png"));
-		selectedCheckbox = new ImageIcon(getClass().getResource("Images/selectedCheckbox.png"));
-		highlightedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedCheckbox.png"));
-		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedSelectedCheckbox.png"));
+		settingsHeader = new ImageIcon(getClass().getResource("/creator/Images/settingsHeader.png"));
+		save = new ImageIcon(getClass().getResource("/creator/Images/saveButton.png"));
+		cancel = new ImageIcon(getClass().getResource("/creator/Images/cancelButton.png"));
+		auto = new ImageIcon(getClass().getResource("/creator/Images/autoButton.png"));
+		manual = new ImageIcon(getClass().getResource("/creator/Images/manualButton.png"));
+		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
+		highlightedSave = new ImageIcon(getClass().getResource("/creator/Images/highlightedSaveButton.png"));
+		highlightedCancel = new ImageIcon(getClass().getResource("/creator/Images/highlightedCancelButton.png"));
+		highlightedAuto = new ImageIcon(getClass().getResource("/creator/Images/highlightedAutoButton.png"));
+		highlightedManual = new ImageIcon(getClass().getResource("/creator/Images/highlightedManualButton.png"));
+		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		checkbox = new ImageIcon(getClass().getResource("/creator/Images/checkbox.png"));
+		selectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/selectedCheckbox.png"));
+		highlightedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedCheckbox.png"));
+		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectedCheckbox.png"));
 		
 		//Construct original panel container and configurations
 		JPanel settingsGui = new JPanel();

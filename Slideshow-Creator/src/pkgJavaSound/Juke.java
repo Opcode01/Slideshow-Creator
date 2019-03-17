@@ -1,3 +1,4 @@
+package pkgJavaSound;
 /*
  * @(#)Juke.java	1.19	00/01/31
  *

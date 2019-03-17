@@ -85,12 +85,12 @@ public class DirectoryExplorer extends Scene {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Create images
-		selectDirectory = new ImageIcon(getClass().getResource("Images/selectDirectoryButton.png"));
-		highlightedSelectDirectory = new ImageIcon(getClass().getResource("Images/highlightedSelectDirectoryButton.png"));
-		selectExisting = new ImageIcon(getClass().getResource("Images/selectExistingButton.png"));
-		highlightedSelectExisting = new ImageIcon(getClass().getResource("Images/highlightedSelectExistingButton.png"));
-		bg = new ImageIcon(getClass().getResource("Images/bg.jpg"));
-		header = new ImageIcon(getClass().getResource("Images/header.png"));
+		selectDirectory = new ImageIcon(getClass().getResource("/creator/Images/selectDirectoryButton.png"));
+		highlightedSelectDirectory = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectDirectoryButton.png"));
+		selectExisting = new ImageIcon(getClass().getResource("/creator/Images/selectExistingButton.png"));
+		highlightedSelectExisting = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectExistingButton.png"));
+		bg = new ImageIcon(getClass().getResource("/creator/Images/bg.jpg"));
+		header = new ImageIcon(getClass().getResource("/creator/Images/header.png"));
 		
 		// Change look and feel
 		try {
