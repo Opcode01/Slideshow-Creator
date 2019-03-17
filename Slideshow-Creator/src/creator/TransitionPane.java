@@ -143,14 +143,17 @@ public class TransitionPane extends FloatingPane {
 	//The transition this pane is associated with
 	private Transition transition;
 	
-	// add the folowing variables after connecting backend: Timeline t, int index, 
+	// add the following variables after connecting backend: Timeline t, int index, 
 	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size){
 		
 		//Call the parent constructor
 		super(parent, title, position, size);
 		
+		//**TO DO: Pass in the selected transition index to change and create transition type w/that transition in list
 		//transition = t.transitionsList.getTransition(index);
 		
+		//**TO DO: Place this in appropriate spot so that the initial settings of the transition are displayed in button highlights
+		//LoadTransitionSettings();
 		
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
@@ -420,12 +423,6 @@ public class TransitionPane extends FloatingPane {
 		getContentPane().add(transitionGui, BorderLayout.CENTER);
 	}
 	
-	/** TODO: Use these methods on the action listeners when doing frontend implementation
-	 * 
-	 * 	transition.setTransitionLength(timeInSeconds);
-	 *  transition.setTransitionType(TransitionType);
-	 */
-	
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
      * @param thumbnail - the thumbnail image that needs to be processed
@@ -453,6 +450,11 @@ public class TransitionPane extends FloatingPane {
         return buffered;
     }
     
+    /**
+     * UpdateTransitionSettings() - Updates the transition type AND/OR length when user saves changes
+	 * 
+	 * @author Fernando Palacios
+     */
 	public void UpdateTransitionSettings() {
 		
 		if(crossButton.isSelected()) {
@@ -473,6 +475,34 @@ public class TransitionPane extends FloatingPane {
 			transition.setTransitionLength(3);
 		}else if(fastButton.isSelected()) {
 			transition.setTransitionLength(1);
+		}
+	}
+	
+    /**
+     * LoadTransitionSettings() - Loads in the transition type AND length from the selected transition in timeline
+	 * 
+	 * @author Fernando Palacios
+     */
+	public void LoadTransitionSettings() {
+		
+		if(transition.getTransitionType() == TransitionType.CROSS_DISSOLVE) {
+			crossButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
+			rightButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
+			leftButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_UP) {
+			upButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_DOWN) {
+			downButton.setSelected(true);
+		}
+		
+		if(transition.getTransitionLength() == 5) {
+			slowButton.setSelected(true);
+		}else if(transition.getTransitionLength() == 3) {
+			mediumButton.setSelected(true);
+		}else if(transition.getTransitionLength() == 1) {
+			fastButton.setSelected(true);
 		}
 	}
 
