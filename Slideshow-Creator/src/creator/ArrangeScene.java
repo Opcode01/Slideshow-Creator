@@ -129,7 +129,7 @@ public class ArrangeScene extends Scene{
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 470));
+		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 440));
 		    	parent.setEnabled(false);
 		    }
 		});
@@ -152,7 +152,7 @@ public class ArrangeScene extends Scene{
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	transitionPane = new TransitionPane(parent, "Transition Configuration", point, new Dimension(450, 350));
+		    	transitionPane = new TransitionPane(parent, "Transition Configuration", point, new Dimension(450, 390));
 		    	parent.setEnabled(false);
 		    }
 		});
