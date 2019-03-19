@@ -146,6 +146,7 @@ public class ArrangeScene extends Scene{
 		    public void actionPerformed(ActionEvent e) {
 		    	//TODO: Remove the currently selected thumbnail and transition from timeline
 		    	
+		    	/*
 		    	//Open settings pane in the center of our workspace
 		    	JFrame parent = SceneHandler.singleton.getMainFrame();
 		    	Coord2 point = new Coord2(
@@ -154,6 +155,7 @@ public class ArrangeScene extends Scene{
 		    			);
 		    	transitionPane = new TransitionPane(parent, "Transition Configuration", point, new Dimension(450, 390));
 		    	parent.setEnabled(false);
+		    	*/
 		    }
 		});
 		
