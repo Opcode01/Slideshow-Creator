@@ -107,6 +107,7 @@ public class SceneHandler {
 		
 		//set up transition images
 		transitionImages = new HashMap<TransitionType, ImageIcon>();
+		transitionImages.put(TransitionType.NONE, new ImageIcon(getClass().getResource("/core/TransitionImages/none.png")));
 		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon(getClass().getResource("/core/TransitionImages/crossFade.png")));
 		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeDown.png")));
 		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeLeft.png")));
