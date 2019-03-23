@@ -1,3 +1,4 @@
+package pkgJavaSound;
 /*
  * @(#)CapturePlayback.java	1.11	99/12/03
  *

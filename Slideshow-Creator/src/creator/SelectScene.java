@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -59,6 +60,9 @@ public class SelectScene extends Scene
 	
 	/** Select all button */
 	private JButton selectAllButton;
+	
+	/** List of all thumbnail thumbButtons to be shown on the image panel */
+	private JButton[] thumbButtons;
 	
 	/** Deselect all button */
 	private JButton deselectAllButton;
@@ -99,9 +103,6 @@ public class SelectScene extends Scene
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
 	
-	/** Create toggle button array to reference */
-	private JButton[] imageButtons;
-	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
 
@@ -121,14 +122,14 @@ public class SelectScene extends Scene
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
-		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
-		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
-		deselectAll = new ImageIcon(getClass().getResource("Images/deselectAllButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
-		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
-		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
-		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
+		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
+		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
+		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
+		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
+		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
+		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
+		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);
@@ -171,7 +172,7 @@ public class SelectScene extends Scene
 		selectAllButton.setRolloverIcon(highlightedSelectAll);
 		selectAllButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+				SelectAll(allThumbs);
 		    }
 		});
 		
@@ -185,7 +186,7 @@ public class SelectScene extends Scene
 		deselectAllButton.setRolloverIcon(highlightedDeselectAll);
 		deselectAllButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
+		    	DeselectAll(allThumbs);
 		    }
 		});
 		
@@ -221,10 +222,12 @@ public class SelectScene extends Scene
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
 		imagePanelContainer.setBackground(image_gray);
-		// set up image panel constraints
+		
+		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
 		imagePanelConstraints = (GridBagConstraints) c.clone();
-		//set up blank image panel
+		
+		// Set up blank image panel
 		setupImagePanel(false);
 		imagePanelContainer.add(imagePanel, c);
 		
@@ -267,7 +270,7 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
 		imagePanel.setBackground(image_gray);
-		ShowImages();
+		ShowImages(imagePanel, allThumbs);
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -338,15 +341,15 @@ public class SelectScene extends Scene
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages()
+	private void ShowImages(JPanel panel, ThumbnailsList list)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		imageButtons = new JButton[allThumbs.getSize()];
+		thumbButtons = new JButton[list.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
-		for(i = 0; i < imageButtons.length; i++) {
+		for(i = 0; i < thumbButtons.length; i++) {
 			
 			if (gridxCounter > 2) {
 				gridxCounter = 0;
@@ -361,18 +364,19 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
+			Thumbnail buttonThumb = list.getThumbnail(i);
 			
-			imageButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
-			JButton keeper = imageButtons [i];
-			imageButtons[i].setPreferredSize(new Dimension(320, 200));
-			imageButtons[i].setRolloverEnabled(true);
-			imageButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
-			imageButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			imageButtons[i].setBorder(BorderFactory.createEmptyBorder());
-			imageButtons[i].setFocusable(false);
-			imageButtons[i].setContentAreaFilled(false);
-			imageButtons[i].addActionListener(new ActionListener(){
+			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
+			JButton keeper = thumbButtons [i];
+			thumbButtons[i].setPreferredSize(new Dimension(320, 200));
+			thumbButtons[i].setRolloverEnabled(true);
+			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setPressedIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+			thumbButtons[i].setFocusable(false);
+			thumbButtons[i].setContentAreaFilled(false);
+			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					//add button to or remove button from timeline
 					Timeline timeline = SceneHandler.singleton.getTimeline();
@@ -393,7 +397,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			imagePanel.add(imageButtons[i], c);
+			panel.add(thumbButtons[i], c);
 		}
 	}
 
@@ -441,6 +445,56 @@ public class SelectScene extends Scene
 				addImagesInDirectory(f);
     	}
 	}
+    
+    /**
+     * SelectAll() - selects all images so they are in timeline
+     * @param list - the thumbnail list that holds all the image paths
+	 * 
+	 * @author Fernando Palacios
+     */
+    private void SelectAll(ThumbnailsList list) {
+    	
+    	Timeline timeline = SceneHandler.singleton.getTimeline();
+    	
+    	for(int i = 0; i < thumbButtons.length; i++) {
+    		
+    		Thumbnail buttonThumb = list.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			
+			if (slideIndex < 0)
+			{
+				timeline.addSlide(buttonThumb);
+				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			}
+		}
+    }
+    
+    /**
+     * DeselectAll() - deselects all images so they are not in timeline
+     * @param list - the thumbnail list that holds all the image paths
+	 * 
+	 * @author Fernando Palacios
+     */
+    private void DeselectAll(ThumbnailsList list) {
+    	
+    	Timeline timeline = SceneHandler.singleton.getTimeline();
+    	
+    	for(int i = 0; i < thumbButtons.length; i++) {
+    		
+    		Thumbnail buttonThumb = list.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			
+			if (slideIndex >= 0)
+			{
+				timeline.removeSlide(slideIndex);
+				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			}
+		}
+    }
     
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
