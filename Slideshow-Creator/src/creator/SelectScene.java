@@ -270,7 +270,7 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
 		imagePanel.setBackground(image_gray);
-		ShowImages(imagePanel, allThumbs);
+		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -312,7 +312,7 @@ public class SelectScene extends Scene
      */
 	public void UpdateSelected()
 	{
-		for(int i = 0; i < imageButtons.length; i++)
+		for(int i = 0; i < thumbButtons.length; i++)
 		{
 			//get instance of timeline to compare what is in it
 			Timeline timeline = SceneHandler.singleton.getTimeline();
@@ -324,13 +324,13 @@ public class SelectScene extends Scene
 			//if thumbnail is in the timeline, keep it highlighted
 			if (slideIndex >= 0)
 			{
-				imageButtons[i].setBorder(new LineBorder(aqua, 3));
-				imageButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
+				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
 			}
 			else//thumbnail not on timeline, remove highlight
 			{
-				imageButtons[i].setBorder(BorderFactory.createEmptyBorder());
-				imageButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
 			}
 		}
 	}
@@ -341,12 +341,12 @@ public class SelectScene extends Scene
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		thumbButtons = new JButton[list.getSize()];
+		thumbButtons = new JButton[allThumbs.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
 		for(i = 0; i < thumbButtons.length; i++) {
@@ -364,7 +364,7 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = list.getThumbnail(i);
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
 			
 			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JButton keeper = thumbButtons [i];
@@ -397,7 +397,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			panel.add(thumbButtons[i], c);
+			imagePanel.add(thumbButtons[i], c);
 		}
 	}
 

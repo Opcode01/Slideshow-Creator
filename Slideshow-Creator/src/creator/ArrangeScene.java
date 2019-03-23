@@ -16,6 +16,7 @@ import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -336,10 +337,10 @@ public class ArrangeScene extends Scene{
 			Thumbnail buttonThumb = timeline.thumbnailsList.getThumbnail(i);
 			Transition buttonTrans = timeline.transitionsList.getTransition(i);
 			
-			transButtons[i] = new JButton(buttonTrans.getTransitionType().getImage());
+			transButtons[i] = new JButton(new ImageIcon(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage()));
 			transButtons[i].setPreferredSize(new Dimension(100, 75));
 			transButtons[i].setRolloverEnabled(true);
-			transButtons[i].setRolloverIcon(new ImageIcon(TransHover(buttonTrans.getTransitionType().getImage().getImage())));
+			transButtons[i].setRolloverIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
 			transButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			transButtons[i].setFocusable(false);
