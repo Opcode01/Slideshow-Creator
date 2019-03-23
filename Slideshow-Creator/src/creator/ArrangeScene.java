@@ -348,11 +348,11 @@ public class ArrangeScene extends Scene{
 			transButtons[i].setFocusable(false);
 			transButtons[i].setContentAreaFilled(false);
 			
-			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageThumb()));
+			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageTimeline()));
 			JToggleButton keeper = thumbButtons [i];
 			thumbButtons[i].setPreferredSize(new Dimension(290, 170));
 			thumbButtons[i].setRolloverEnabled(true);
-			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
+			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
 			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			thumbButtons[i].setFocusable(false);

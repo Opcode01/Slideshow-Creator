@@ -21,7 +21,8 @@ import javax.imageio.ImageIO;
 
 public class Thumbnail
 {
-	private static Coord2 thumbSize = new Coord2(320, 200);
+	private static Coord2 thumbSize = new Coord2(290, 170);
+	private static Coord2 timelineSize = new Coord2(260, 140);
 	
     /**
      * Publicly read-only path to image
@@ -44,6 +45,15 @@ public class Thumbnail
     /**
      * Publicly read-only image resized to thumbnail size
      */
+    private Image imageTimeline;
+    
+    public Image getImageTimeline() {
+    	return imageTimeline;
+    }
+    
+    /**
+     * Publicly read-only image resized to thumbnail size
+     */
     private Image imageThumb;
     
     public Image getImageThumb() {
@@ -61,6 +71,7 @@ public class Thumbnail
         this.imagePath = imagePath;
         imageRaw = loadImage(imagePath);
         imageThumb = resizeImageThumb(imageRaw);
+        imageTimeline = resizeImageTimeline(imageRaw);
     }
 
     /**
@@ -88,6 +99,16 @@ public class Thumbnail
         }
 
         return image;
+    }
+    
+    /**
+     * resizeImageTimeline - resizes the raw image to the proper size for timeline
+     * @return resized image
+     */
+    private Image resizeImageTimeline(Image image)
+    {
+        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), timelineSize.x, timelineSize.y);
+        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
     }
     
     /**
