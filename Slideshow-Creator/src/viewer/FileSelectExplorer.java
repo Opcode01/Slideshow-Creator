@@ -57,7 +57,7 @@ public class FileSelectExplorer extends Scene {
 	private ImageIcon highlightedSelectExisting;
 	
 	/** Create custom color */
-	private Color dark_gray = new Color(30, 30, 30);
+	private Color dark_gray = new Color(71, 70, 70);
 
 	/**
 	 * DirectoryExplorer() - sets up directory explorer with GUI stuff
