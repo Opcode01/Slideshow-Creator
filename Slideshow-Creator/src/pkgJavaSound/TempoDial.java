@@ -1,3 +1,4 @@
+package pkgJavaSound;
 /*
  * @(#)TempoDial.java	1.8	99/11/03
  *

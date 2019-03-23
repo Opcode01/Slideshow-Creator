@@ -16,8 +16,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Thumbnail
 {
@@ -54,6 +56,9 @@ public class Thumbnail
      * Thumbnail - creates an image from given path
      * @param imagePath string file path to image (can be from current directory or full directory)
      * 
+     * IMPORTANT: THIS METHOD IS ONLY FOR EXTERNAL FILES OF ABSOLUTE PATHS, NOT FOR PROJECT RESOURCES
+     * Example: new Thumbnail(file.getAbsolutePath())
+     * 
      * @author Timothy Couch
      */
     public Thumbnail(String imagePath)
@@ -64,10 +69,30 @@ public class Thumbnail
     }
 
     /**
-     * loadImage - loads up an image from the path
-     * @param imagePath the path from which to load the image
+     * Thumbnail - creates an image from given path
+     * @param imagePath string file path to image (can be from current directory or full directory)
      * 
+     * @author Timothy Couch
+     * 
+     * IMPORTANT: THIS METHOD IS ONLY FOR PROJECT RESOURCES IN THE res FOLDER, NOT EXTERNAL FILES
+     * Example: new Thumbnail(getClass().getResource("/core/TransitionImages/crossFade.png")
+     */
+    public Thumbnail(URL imagePath)
+    {
+        this.imagePath = imagePath.getPath();
+        imageRaw = loadImage(imagePath);
+        imageThumb = resizeImageThumb(imageRaw);
+    }
+
+    /**
+     * loadImage - loads up an image from the absolute path specified.
+     * @param imagePath the absolute path from which to load the image
      * @return image if successfully loaded image, null otherwise
+     * 
+     * @author Timothy Couch
+     * 
+     * IMPORTANT: THIS METHOD IS ONLY FOR EXTERNAL FILES OF ABSOLUTE PATHS, NOT FOR PROJECT RESOURCES
+     * Example: loadImage(file.getAbsolutePath())
      */
     public static Image loadImage(String imagePath)
     {
@@ -84,8 +109,28 @@ public class Thumbnail
         }
         catch (IOException e)
         {
-            System.out.println("Exception: Image not loaded! " + imagePath + "\n" + e);
+            System.out.println("Exception: String Image not loaded! " + imagePath + "\n" + e);
         }
+
+        return image;
+    }
+
+    /**
+     * loadImage - loads up an image from the resource path
+     * @param imagePath the resource path from which to load the image
+     * @return image if successfully loaded image, null otherwise
+     * 
+     * @author Timothy Couch
+     * 
+     * IMPORTANT: THIS METHOD IS ONLY FOR PROJECT RESOURCES IN THE res FOLDER, NOT EXTERNAL FILES
+     * Example: loadImage(getClass().getResource("/core/TransitionImages/crossFade.png")
+     */
+    public static Image loadImage(URL imagePath)
+    {
+        Image image = new ImageIcon(imagePath).getImage();
+
+        if (image == null)
+            System.out.println("URL Image not loaded! " + imagePath);
 
         return image;
     }
@@ -93,6 +138,8 @@ public class Thumbnail
     /**
      * resizeImageThumb - resizes the raw image to the proper size for thumbnails
      * @return resized image
+     * 
+     * @author Timothy Couch
      */
     private Image resizeImageThumb(Image image)
     {

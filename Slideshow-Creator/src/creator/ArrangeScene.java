@@ -84,14 +84,14 @@ public class ArrangeScene extends Scene{
 		// Set panel configurations
 		this.setLayout(gridBag);
 		
-		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
-		directory = new ImageIcon(getClass().getResource("Images/directoryButton.png"));
-		settings = new ImageIcon(getClass().getResource("Images/settingsButton.png"));
-		removeCurrent = new ImageIcon(getClass().getResource("Images/removeCurrentButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
-		highlightedDirectory = new ImageIcon(getClass().getResource("Images/highlightedDirectoryButton.png"));
-		highlightedSettings = new ImageIcon(getClass().getResource("Images/highlightedSettingsButton.png"));
-		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("Images/highlightedRemoveCurrentButton.png"));
+		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
+		directory = new ImageIcon(getClass().getResource("/creator/Images/directoryButton.png"));
+		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
+		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
+		highlightedDirectory = new ImageIcon(getClass().getResource("/creator/Images/highlightedDirectoryButton.png"));
+		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
+		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -186,13 +186,13 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
-		Thumbnail testThumb = new Thumbnail("src/core/TransitionImages/crossFade.png");
+		Thumbnail testThumb = new Thumbnail(getClass().getResource("/core/TransitionImages/crossFade.png"));
 		JLabel testLabel = new JLabel() {
 			  @Override
 			  public void paintComponent(Graphics g) {
 				  testThumb.drawFill(g, this);
 				  //example 1 of drawing the image associated with a transition
-				  g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
+				  g.drawImage(SceneHandler.singleton.transitionImages.get(TransitionType.WIPE_RIGHT).getImage(), 0, 200, this);
 				  }
 			  };
 		
@@ -210,7 +210,7 @@ public class ArrangeScene extends Scene{
 		
 		///////////////////////
 		//example 2 of drawing the image associated with a transition
-		JButton transitionButton = new JButton(TransitionType.WIPE_DOWN.getImage());
+		JButton transitionButton = new JButton(SceneHandler.singleton.transitionImages.get(TransitionType.WIPE_DOWN));
 		transitionButton.setPreferredSize(new Dimension(200, 175));
 		c.fill = GridBagConstraints.NONE;
 		timelinePanel.add(transitionButton, c);

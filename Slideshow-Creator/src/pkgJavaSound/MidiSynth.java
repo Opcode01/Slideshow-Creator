@@ -1,3 +1,4 @@
+package pkgJavaSound;
 /*
  * @(#)MidiSynth.java	1.15	99/12/03
  *
