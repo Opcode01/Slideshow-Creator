@@ -137,7 +137,7 @@ public class SceneHandler {
 		mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		mainFrame.setIconImage(slideshowIcon.getImage());
-		mainFrame.setMinimumSize(new Dimension(600, 490));
+		mainFrame.setMinimumSize(new Dimension(700, 590));
 		
 		//set up quit confirmation dialog
 		//Thanks to https://stackoverflow.com/questions/21330682/confirmation-before-press-yes-to-exit-program-in-java

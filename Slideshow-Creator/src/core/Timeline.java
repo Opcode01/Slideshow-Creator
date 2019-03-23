@@ -28,16 +28,30 @@ public class Timeline
         transitionsList = new TransitionsList();
     }
     
+    /**
+     * UpdateProjectSettings - updates the settings
+     * 
+     * @author Austin Vickers
+     */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
     	
-    	//Update all transition lengths
+    	System.out.println("Timeline Settings updated!");
+    }
+    
+    /**
+     * UpdateTransitionSettings - updates all transition settings
+     * 
+     * @author Fernando Palacios
+     */
+    public void UpdateTransitionSettings(double speed, TransitionType type)
+    {
+    	//Update all transition lengths and types
     	ArrayList<Transition> list = transitionsList.getTransitions();
     	for(Transition t : list) {
-    		t.setTransitionLength(s.transitionLength);
+    		t.setTransitionLength(speed);
+    		t.setTransitionType(type);
     	}
-    	
-    	System.out.println("Timeline Settings updated!");
     }
 
     /**

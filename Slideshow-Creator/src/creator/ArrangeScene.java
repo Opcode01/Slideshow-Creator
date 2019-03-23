@@ -32,6 +32,9 @@ public class ArrangeScene extends Scene{
 	/** Create Settings Pane */
 	private SettingsPane settingsPane;
 	
+	/** Create Tansition Pane */
+	private TransitionPane transitionPane;
+	
 	/** Back button */
 	private JButton backButton;
 	
@@ -66,11 +69,14 @@ public class ArrangeScene extends Scene{
 	private ImageIcon highlightedRemoveCurrent;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
+	private Color light_gray = new Color(31, 31, 31);
 	
 	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(30, 30, 30);
+	private Color dark_gray = new Color(0, 0, 0);
 	
+	/** Create custom medium_gray color */
+	private Color medium_gray = new Color(41, 41, 41);
+
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
@@ -123,7 +129,7 @@ public class ArrangeScene extends Scene{
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 470));
+		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 440));
 		    	parent.setEnabled(false);
 		    }
 		});
@@ -139,6 +145,17 @@ public class ArrangeScene extends Scene{
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	//TODO: Remove the currently selected thumbnail and transition from timeline
+		    	
+		    	/*
+		    	//Open settings pane in the center of our workspace
+		    	JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	transitionPane = new TransitionPane(parent, "Transition Configuration", point, new Dimension(450, 390));
+		    	parent.setEnabled(false);
+		    	*/
 		    }
 		});
 		
@@ -174,12 +191,13 @@ public class ArrangeScene extends Scene{
 		// Set timeline panel configurations
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(gridBag);
-		timelinePanel.setBackground(light_gray);
+		timelinePanel.setBackground(medium_gray);
 		
 		// Set constraints and add options panels
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0;
 		c.weighty = 1.0;
+		c.gridheight = 2;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(optionsPanel, c);
@@ -203,6 +221,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set constraints and add image panel
 		c.fill = GridBagConstraints.BOTH;
+		c.gridheight = 1;
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
@@ -221,7 +240,7 @@ public class ArrangeScene extends Scene{
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2;
 		c.weighty = 0.7;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 1;
 		this.add(timelinePanel, c);
 		
