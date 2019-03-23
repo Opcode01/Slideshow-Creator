@@ -48,6 +48,9 @@ public class PlayScene extends Scene {
 	/**	Thumbnail that displays on the player */
 	private Thumbnail slideThumb;
 	
+	//slide direction constants
+	private enum SlideDir {LEFT, RIGHT};
+	
 	public Thumbnail getSlideThumb() {
 		return slideThumb;
 	}
@@ -158,7 +161,7 @@ public class PlayScene extends Scene {
 			leftButton.setRolloverIcon(backIconHigh);
 			leftButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	slideLeft();
+			    	changeSlide(SlideDir.LEFT);
 			    }
 			});
 			
@@ -181,7 +184,7 @@ public class PlayScene extends Scene {
 			rightButton.setRolloverIcon(forwardIconHigh);
 			rightButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	slideRight();
+			    	changeSlide(SlideDir.RIGHT);
 			    }
 			});
 			
@@ -279,26 +282,30 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
-	 * moves the slideshow one slide to the left
+	 * moves the slideshow one slide to the right or left depending on the direction
+	 * @param dir left or right to move slide
+	 * 
+	 * @author Timothy Couch
 	 */
-	private void slideLeft()
-	{
-		if (currentSlideIndex > 0)
-			currentSlideIndex -= 1;
-		else currentSlideIndex = SceneHandler.singleton.getTimeline().thumbnailsList.getSize() - 1;
+	private void changeSlide(SlideDir dir) {
+		//get the numeric value of left and right
+		int deltaIndex = dir == SlideDir.RIGHT ? 1 : -1;
+		
+		int showLength = SceneHandler.singleton.getTimeline().thumbnailsList.getSize();
+
+		//update slide index
+		if (timeline.timelineSettings.isLoopingSlides)
+			//thanks to Fabian for the idea to add length to the number to loop left https://stackoverflow.com/questions/14785443/is-there-an-expression-using-modulo-to-do-backwards-wrap-around-reverse-overfl
+			currentSlideIndex = (currentSlideIndex + deltaIndex + showLength) % showLength;
+		else
+		{
+			//change slide if not first or last slide
+			if ((deltaIndex < 0 && currentSlideIndex > 0) || (deltaIndex > 0 && currentSlideIndex < showLength - 1))
+				currentSlideIndex = currentSlideIndex + deltaIndex;
+		}
 		slideThumb = getSlide(currentSlideIndex);
-		slidePanel.removeAll();
-		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
-		revalidate();
-	}
-	
-	/**
-	 * moves the slideshow one slide to the right
-	 */
-	private void slideRight()
-	{
-		currentSlideIndex = (currentSlideIndex + 1) % SceneHandler.singleton.getTimeline().thumbnailsList.getSize();
-		slideThumb = getSlide(currentSlideIndex);
+		
+		//update the view
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
