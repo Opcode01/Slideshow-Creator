@@ -20,6 +20,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -161,7 +162,7 @@ public class PlayScene extends Scene {
 			leftButton.setRolloverIcon(backIconHigh);
 			leftButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	changeSlide(SlideDir.LEFT);
+			    	advanceSlide(SlideDir.LEFT);
 			    }
 			});
 			
@@ -184,7 +185,7 @@ public class PlayScene extends Scene {
 			rightButton.setRolloverIcon(forwardIconHigh);
 			rightButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	changeSlide(SlideDir.RIGHT);
+			    	advanceSlide(SlideDir.RIGHT);
 			    }
 			});
 			
@@ -199,31 +200,7 @@ public class PlayScene extends Scene {
 		}
 		else//automatic timer when not manual
 		{
-			int slideDuration = timeline.timelineSettings.slideDuration * 1000;
-			int transitionDuration = (int) (timeline.transitionsList.getTransition(currentSlideIndex).getTransitionLength() * 1000);
-			//figure out how long to make the slide duration in case transition duration is longer than slide duration
-			int transitionStartTime = timeline.timelineSettings.slideDuration * 1000 - transitionDuration;
-			
-			slideTimer = new Timer();
-			slideTimer.schedule(
-					new TimerTask() {
-						@Override
-						public void run() {
-							// go to next slide
-							}
-						}, 
-					slideDuration
-					);
-			transitionTimer = new Timer();
-			transitionTimer.schedule(
-					new TimerTask() {
-						@Override
-						public void run() {
-							// start transition
-							}
-						}, 
-					transitionStartTime
-					);
+			startAutoSlideshow();
 		}
 			
 		// Set constraints and add control panel to options panel
@@ -287,7 +264,7 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void changeSlide(SlideDir dir) {
+	private void advanceSlide(SlideDir dir) {
 		//get the numeric value of left and right
 		int deltaIndex = dir == SlideDir.RIGHT ? 1 : -1;
 		
@@ -309,5 +286,74 @@ public class PlayScene extends Scene {
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
+	}
+	
+	/**
+	 * starts the timer to start the transition to the next slide
+	 * 
+	 * @author Timothy Couch
+	 */
+	private void scheduleStartTransition() {
+		
+		slideTimer = new Timer();
+		slideTimer.schedule(
+				new TimerTask() {
+
+					//start transition to next slide
+					@Override
+					public void run() {
+						System.out.println("Starting transition to next slide! Index: " + currentSlideIndex);
+						
+						//TODO: start transitioning
+						
+						
+						scheduleStartSlide();
+						}
+					},
+				slideTimes[currentSlideIndex].showSlideDuration
+				);
+	}
+	
+	/**
+	 * starts the timer to finish the current transition and start a new slide timer
+	 * 
+	 * @author Timothy Couch
+	 */
+	private void scheduleStartSlide() {
+		transitionTimer = new Timer();
+		transitionTimer.schedule(
+				new TimerTask() {
+
+					//finalize transition and start a new slide timer
+					@Override
+					public void run() {
+						System.out.println("Finishing transition! Index: " + currentSlideIndex);
+						
+						//TODO: finish transition if there are any loose ends to wrap up
+						
+						scheduleStartTransition();
+						}
+					},
+				slideTimes[currentSlideIndex].transitionDuration
+				);
+	}
+	
+	/**
+	 * list of times for each slide
+	 */
+	private SlideShowTime[] slideTimes;
+	
+	/**
+	 * calculates times and starts the timers for the automatic slideshow
+	 * 
+	 * @author Timothy Couch
+	 */
+	private void startAutoSlideshow() {
+		slideTimes = new SlideShowTime[timeline.transitionsList.getSize()];
+		for (int i = 0; i < slideTimes.length; i++)
+			slideTimes[i] = new SlideShowTime(timeline, i);
+		
+		//begin running the slideshow
+		scheduleStartTransition();
 	}
 }
