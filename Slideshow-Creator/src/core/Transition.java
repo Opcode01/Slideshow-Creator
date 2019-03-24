@@ -62,6 +62,9 @@ public class Transition {
 	//The actual transition implementation provided by Dr.Coleman
 	private ColemanTransition transition;
 	
+	//thread to run the transition on
+	private Thread transitionThread;
+	
 	/**
 	 * Transition() - default constructor for Transition class
 	 * 
@@ -83,9 +86,46 @@ public class Transition {
 	 * @param nextImg - the image transitioning to
 	 * 
 	 * @author austinvickers
+	 * @author Timothy Couch
 	 */
 	public void PlayTransition(JPanel display, Image prevImg, Image nextImg ) {
-		transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+		transitionThread = new Thread() {
+			@Override
+			public void run()
+			{
+				transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+			};
+		};
+		transitionThread.start();
+	}
+	
+	/**
+	 * whether this transition is currently playing a transition
+	 * 
+	 * @author Timothy Couch
+	 */
+	public boolean isRunning()
+	{
+		return transitionThread.isAlive();
+	}
+	
+	/**
+	 * Stop the transition
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void StopTransition() throws Exception
+	{
+		//TODO: Implement https://stackoverflow.com/questions/10961714/how-to-properly-stop-the-thread-in-java
+		if (transitionThread != null && transitionThread.isAlive())
+		{
+			try {
+				transitionThread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		throw new Exception("NOT IMPLEMENTED");
 	}
 
 }

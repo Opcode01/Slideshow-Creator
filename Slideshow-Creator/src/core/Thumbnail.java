@@ -14,6 +14,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -99,6 +100,46 @@ public class Thumbnail
         int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
         return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
     }
+    
+    /**
+     * resizes image to fit the size of the specified container in letterbox style
+     * @param container container to fit into
+     * @param image image to resize
+     * @return resized image in size of container
+     */
+    public static Image resizeImageContainer(Container container, Image image) {
+        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), container.getWidth(), container.getHeight());
+        return toBufferedImage(image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT));
+    }
+    
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     * 
+     * @author Sri Harsha Chilakapati https://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+     * All credits to Sri Harsha Chilakapati and editors
+     */
+    public static BufferedImage toBufferedImage(Image img)
+    {
+        if (img instanceof BufferedImage)
+        {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
+
     
     /**
      * drawFill - draws the thumbnail image into the specified graphics in the container

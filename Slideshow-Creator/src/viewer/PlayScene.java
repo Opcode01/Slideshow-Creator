@@ -328,8 +328,8 @@ public class PlayScene extends Scene {
 			slidePanel.removeAll();
 			JPanel transitionPanel = new JPanel();
 			slidePanel.add(transitionPanel, BorderLayout.CENTER);
-			transition.PlayTransition(transitionPanel, slideThumb.getImageRaw(), getSlide(getNextSlideIndex(SlideDir.RIGHT)).getImageRaw());
 			revalidate();
+			transition.PlayTransition(transitionPanel, Thumbnail.resizeImageContainer(transitionPanel, slideThumb.getImageRaw()), Thumbnail.resizeImageContainer(transitionPanel, getSlide(getNextSlideIndex(SlideDir.RIGHT)).getImageRaw()));
 		}
 	}
 	
