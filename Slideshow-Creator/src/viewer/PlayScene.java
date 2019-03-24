@@ -62,11 +62,13 @@ public class PlayScene extends Scene {
 	/** reference to SceneHandler's timeline */
 	private Timeline timeline;
 	
-	/** slide advancement timer */
+	/** slide advancement and transition timer */
 	private Timer slideTimer;
 	
-	/** slide transition timer */
-	private Timer transitionTimer;
+	/**
+	 * list of times for each slide
+	 */
+	private SlideShowTime[] slideTimes;
 	
 	public PlayScene()
 	{
@@ -237,6 +239,10 @@ public class PlayScene extends Scene {
 		SceneHandler.singleton.SwitchToScene(SceneType.FILESELECT);
 	}
 	
+	/**
+	 * creates a JLabel with the current slide thumbnail on it
+	 * @return JLabel of the current slide
+	 */
 	private JLabel createSlideLabel()
 	{
 		JLabel label = new JLabel() {
@@ -259,12 +265,13 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
-	 * moves the slideshow one slide to the right or left depending on the direction
-	 * @param dir left or right to move slide
+	 * gets the index of the next slide to the right or left. Accounts for looping or not
+	 * @param dir left or right to get index
+	 * @return index of next slide
 	 * 
-	 * @author Timothy Couch
+	 * @Timothy Couch
 	 */
-	private void advanceSlide(SlideDir dir) {
+	private int getNextSlideIndex(SlideDir dir) {
 		//get the numeric value of left and right
 		int deltaIndex = dir == SlideDir.RIGHT ? 1 : -1;
 		
@@ -273,19 +280,40 @@ public class PlayScene extends Scene {
 		//update slide index
 		if (timeline.timelineSettings.isLoopingSlides)
 			//thanks to Fabian for the idea to add length to the number to loop left https://stackoverflow.com/questions/14785443/is-there-an-expression-using-modulo-to-do-backwards-wrap-around-reverse-overfl
-			currentSlideIndex = (currentSlideIndex + deltaIndex + showLength) % showLength;
+			return (currentSlideIndex + deltaIndex + showLength) % showLength;
 		else
 		{
 			//change slide if not first or last slide
 			if ((deltaIndex < 0 && currentSlideIndex > 0) || (deltaIndex > 0 && currentSlideIndex < showLength - 1))
-				currentSlideIndex = currentSlideIndex + deltaIndex;
+				return currentSlideIndex + deltaIndex;
 		}
+		
+		return currentSlideIndex;
+	}
+	
+	/**
+	 * moves the slideshow one slide to the right or left depending on the direction
+	 * @param dir left or right to move slide
+	 * @return true if advanced slide, false otherwise
+	 * 
+	 * @author Timothy Couch
+	 */
+	private boolean advanceSlide(SlideDir dir) {
+		int prevSlideIndex = currentSlideIndex;
+		currentSlideIndex = getNextSlideIndex(dir);
+		
+		//didn't advance slide
+		if (currentSlideIndex == prevSlideIndex)
+			return false;
+		
 		slideThumb = getSlide(currentSlideIndex);
 		
 		//update the view
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
+		
+		return true;
 	}
 	
 	/**
@@ -294,7 +322,7 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private void scheduleStartTransition() {
-		
+		stopAutoSlideshow();
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
@@ -303,9 +331,7 @@ public class PlayScene extends Scene {
 					@Override
 					public void run() {
 						System.out.println("Starting transition to next slide! Index: " + currentSlideIndex);
-						
-						//TODO: start transitioning
-						
+						advanceSlide(SlideDir.RIGHT);
 						
 						scheduleStartSlide();
 						}
@@ -320,8 +346,14 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private void scheduleStartSlide() {
-		transitionTimer = new Timer();
-		transitionTimer.schedule(
+		//if the slideshow is playing, get the previous transition index just because that's how the timers work. Otherwise get the current one
+		boolean wasPlaying = stopAutoSlideshow();
+		int transitionIndex = currentSlideIndex;
+		if (wasPlaying)
+			transitionIndex = getNextSlideIndex(SlideDir.LEFT);
+		
+		slideTimer = new Timer();
+		slideTimer.schedule(
 				new TimerTask() {
 
 					//finalize transition and start a new slide timer
@@ -331,17 +363,13 @@ public class PlayScene extends Scene {
 						
 						//TODO: finish transition if there are any loose ends to wrap up
 						
-						scheduleStartTransition();
+						if (getNextSlideIndex(SlideDir.RIGHT) != currentSlideIndex)
+							scheduleStartTransition();
 						}
 					},
-				slideTimes[currentSlideIndex].transitionDuration
+				slideTimes[transitionIndex].transitionDuration
 				);
 	}
-	
-	/**
-	 * list of times for each slide
-	 */
-	private SlideShowTime[] slideTimes;
 	
 	/**
 	 * calculates times and starts the timers for the automatic slideshow
@@ -355,5 +383,33 @@ public class PlayScene extends Scene {
 		
 		//begin running the slideshow
 		scheduleStartTransition();
+	}
+	
+	/**
+	 * cancels the timer for the slideshow
+	 * @return whether the timer existed before
+	 * 
+	 * @author Timothy Couch
+	 */
+	private boolean stopAutoSlideshow() {
+		if (slideTimer != null)
+		{
+			slideTimer.cancel();
+			slideTimer = null;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * removes the timer when the scene is destroyed
+	 * 
+	 * @author Timothy Couch
+	 */
+	@Override
+	public void destroy()
+	{
+		stopAutoSlideshow();
 	}
 }

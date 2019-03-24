@@ -137,6 +137,7 @@ public class SceneHandler {
 			        JOptionPane.YES_NO_OPTION);
 
 			    if (confirmed == JOptionPane.YES_OPTION) {
+			    	restartProgram();
 			      mainFrame.dispose();
 			    }
 			  }
