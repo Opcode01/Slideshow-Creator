@@ -317,6 +317,23 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
+	 * starts the current slide's transition
+	 * 
+	 * @author Timothy Couch
+	 */
+	private void startTransition() {
+		Transition transition = timeline.transitionsList.getTransition(currentSlideIndex);
+		if (transition.getTransitionType() != TransitionType.NONE)
+		{
+			slidePanel.removeAll();
+			JPanel transitionPanel = new JPanel();
+			slidePanel.add(transitionPanel, BorderLayout.CENTER);
+			transition.PlayTransition(transitionPanel, slideThumb.getImageRaw(), getSlide(getNextSlideIndex(SlideDir.RIGHT)).getImageRaw());
+			revalidate();
+		}
+	}
+	
+	/**
 	 * starts the timer to start the transition to the next slide
 	 * 
 	 * @author Timothy Couch
@@ -331,11 +348,11 @@ public class PlayScene extends Scene {
 					@Override
 					public void run() {
 						System.out.println("Starting transition to next slide! Index: " + currentSlideIndex);
-						advanceSlide(SlideDir.RIGHT);
+						startTransition();
 						
 						scheduleStartSlide();
-						}
-					},
+					}
+				},
 				slideTimes[currentSlideIndex].showSlideDuration
 				);
 	}
@@ -346,28 +363,26 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private void scheduleStartSlide() {
-		//if the slideshow is playing, get the previous transition index just because that's how the timers work. Otherwise get the current one
-		boolean wasPlaying = stopAutoSlideshow();
-		int transitionIndex = currentSlideIndex;
-		if (wasPlaying)
-			transitionIndex = getNextSlideIndex(SlideDir.LEFT);
-		
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
 
 					//finalize transition and start a new slide timer
 					@Override
-					public void run() {
+					public void run() 
+					{
 						System.out.println("Finishing transition! Index: " + currentSlideIndex);
 						
 						//TODO: finish transition if there are any loose ends to wrap up
 						
 						if (getNextSlideIndex(SlideDir.RIGHT) != currentSlideIndex)
+						{
+							advanceSlide(SlideDir.RIGHT);
 							scheduleStartTransition();
 						}
-					},
-				slideTimes[transitionIndex].transitionDuration
+					}
+				},
+				slideTimes[currentSlideIndex].transitionDuration
 				);
 	}
 	
