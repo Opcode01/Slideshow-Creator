@@ -159,6 +159,42 @@ public class Thumbnail
 	  //draw image
 	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
     }
+
+    
+    /**
+     * drawImageFill - draws the specified image into the specified graphics in the container
+     * @param displayImage image to draw
+     * @param g graphics to draw into (JLabel paintComponent method argument)
+     * @param container the container in which to draw the image
+     * @return the result of g.drawImage (false if still in process of drawing, true otherwise)
+     * 
+     * @author Timothy Couch
+     */
+    public static boolean drawImageFill(Image displayImage, Graphics g, Container container)
+    {	  
+	  //calculate position and size to draw image with proper aspect ratio
+	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
+	  
+	  //draw image
+	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+    }
+    
+    /**
+     * clone aka duplicate the given image
+     * @param image the image to clone
+     * @return new image
+     * 
+     * @author Timothy Couch
+     * Most credits to Levster at https://stackoverflow.com/questions/8864275/how-to-clone-image
+     */
+    public static Image cloneImage(Image image) {
+		BufferedImage imageCopy = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = imageCopy.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		
+		return imageCopy;
+    }
     
     /**
      * getLetterBoxCoords - returns the x, y, width, and height of the proper display position for the image in the container at a letterbox aspect ratio

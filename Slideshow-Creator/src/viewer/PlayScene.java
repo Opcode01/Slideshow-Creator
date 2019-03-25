@@ -164,7 +164,8 @@ public class PlayScene extends Scene {
 			leftButton.setRolloverIcon(backIconHigh);
 			leftButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	advanceSlide(SlideDir.LEFT);
+			    	scheduleStartTransition(SlideDir.LEFT);
+			    	//advanceSlide(SlideDir.LEFT);
 			    }
 			});
 			
@@ -187,7 +188,8 @@ public class PlayScene extends Scene {
 			rightButton.setRolloverIcon(forwardIconHigh);
 			rightButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	advanceSlide(SlideDir.RIGHT);
+			    	scheduleStartTransition(SlideDir.RIGHT);
+			    	//advanceSlide(SlideDir.RIGHT);
 			    }
 			});
 			
@@ -200,10 +202,9 @@ public class PlayScene extends Scene {
 			c.gridy = 0;
 			controlPanel.add(rightButton, c);
 		}
-		else//automatic timer when not manual
-		{
-			startAutoSlideshow();
-		}
+		
+		//calculate timers and set up automatic slideshow when not manual
+		startSlideshow();
 			
 		// Set constraints and add control panel to options panel
 		c.fill = GridBagConstraints.NONE;
@@ -318,28 +319,34 @@ public class PlayScene extends Scene {
 	
 	/**
 	 * starts the current slide's transition
+	 * @param dir left or right to move slide
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void startTransition() {
-		Transition transition = timeline.transitionsList.getTransition(currentSlideIndex);
-		if (transition.getTransitionType() != TransitionType.NONE)
+	private void startTransition(SlideDir dir) {
+		//if transitioning right, use current transition. If left, use previous transition
+		Transition transition = dir == SlideDir.RIGHT ? timeline.transitionsList.getTransition(currentSlideIndex) : timeline.transitionsList.getTransition(getNextSlideIndex(dir));
+		//if (transition.getTransitionType() != TransitionType.NONE)
 		{
 			slidePanel.removeAll();
 			JPanel transitionPanel = new JPanel();
 			slidePanel.add(transitionPanel, BorderLayout.CENTER);
+			transitionPanel.setBorder(BorderFactory.createEmptyBorder());
+			transitionPanel.setBackground(SliderColor.dark_gray);
 			revalidate();
-			transition.PlayTransition(transitionPanel, Thumbnail.resizeImageContainer(transitionPanel, slideThumb.getImageRaw()), Thumbnail.resizeImageContainer(transitionPanel, getSlide(getNextSlideIndex(SlideDir.RIGHT)).getImageRaw()));
+			
+			transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
 		}
 	}
 	
 	/**
 	 * starts the timer to start the transition to the next slide
+	 * @param dir left or right to move the slide
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void scheduleStartTransition() {
-		stopAutoSlideshow();
+	private void scheduleStartTransition(SlideDir dir) {
+		stopSlideshow();
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
@@ -347,22 +354,30 @@ public class PlayScene extends Scene {
 					//start transition to next slide
 					@Override
 					public void run() {
-						System.out.println("Starting transition to next slide! Index: " + currentSlideIndex);
-						startTransition();
+						System.out.println("Starting transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
 						
-						scheduleStartSlide();
+						//if there's another slide in that direction, go
+						if (getNextSlideIndex(dir) != currentSlideIndex)
+						{
+							startTransition(dir);
+							
+							scheduleStartSlide(dir);
+						}
+						else System.out.println("StartTransition: No more slides available in that direction!");
 					}
 				},
-				slideTimes[currentSlideIndex].showSlideDuration
+				//run after slide duration if automatic, run immediately if manual
+				!timeline.timelineSettings.isManual ? slideTimes[currentSlideIndex].showSlideDuration : 0
 				);
 	}
 	
 	/**
 	 * starts the timer to finish the current transition and start a new slide timer
+	 * @param dir left or right to move the slide
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void scheduleStartSlide() {
+	private void scheduleStartSlide(SlideDir dir) {
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
@@ -371,15 +386,19 @@ public class PlayScene extends Scene {
 					@Override
 					public void run() 
 					{
-						System.out.println("Finishing transition! Index: " + currentSlideIndex);
+						System.out.println("Finishing transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
 						
 						//TODO: finish transition if there are any loose ends to wrap up
 						
-						if (getNextSlideIndex(SlideDir.RIGHT) != currentSlideIndex)
+						if (getNextSlideIndex(dir) != currentSlideIndex)
 						{
-							advanceSlide(SlideDir.RIGHT);
-							scheduleStartTransition();
+							advanceSlide(dir);
+							
+							//start the next slide if auto
+							if (!timeline.timelineSettings.isManual)
+								scheduleStartTransition(dir);
 						}
+						else System.out.println("StartSlide: No more slides available in that direction!");
 					}
 				},
 				slideTimes[currentSlideIndex].transitionDuration
@@ -391,13 +410,14 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void startAutoSlideshow() {
+	private void startSlideshow() {
 		slideTimes = new SlideShowTime[timeline.transitionsList.getSize()];
 		for (int i = 0; i < slideTimes.length; i++)
 			slideTimes[i] = new SlideShowTime(timeline, i);
 		
-		//begin running the slideshow
-		scheduleStartTransition();
+		//begin running the auto slideshow
+		if (!timeline.timelineSettings.isManual)
+			scheduleStartTransition(SlideDir.RIGHT);
 	}
 	
 	/**
@@ -406,7 +426,7 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private boolean stopAutoSlideshow() {
+	private boolean stopSlideshow() {
 		if (slideTimer != null)
 		{
 			slideTimer.cancel();
@@ -425,6 +445,6 @@ public class PlayScene extends Scene {
 	@Override
 	public void destroy()
 	{
-		stopAutoSlideshow();
+		stopSlideshow();
 	}
 }

@@ -89,14 +89,18 @@ public class Transition {
 	 * @author Timothy Couch
 	 */
 	public void PlayTransition(JPanel display, Image prevImg, Image nextImg ) {
-		transitionThread = new Thread() {
-			@Override
-			public void run()
-			{
-				transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+		if (!isRunning())
+		{
+			transitionThread = new Thread() {
+				@Override
+				public void run()
+				{
+					transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+				};
 			};
-		};
-		transitionThread.start();
+			transitionThread.start();
+		}
+		else System.out.println("Transition already running! Not playing transition!");
 	}
 	
 	/**
@@ -106,7 +110,7 @@ public class Transition {
 	 */
 	public boolean isRunning()
 	{
-		return transitionThread.isAlive();
+		return transitionThread != null && transitionThread.isAlive();
 	}
 	
 	/**
@@ -117,7 +121,7 @@ public class Transition {
 	public void StopTransition() throws Exception
 	{
 		//TODO: Implement https://stackoverflow.com/questions/10961714/how-to-properly-stop-the-thread-in-java
-		if (transitionThread != null && transitionThread.isAlive())
+		if (isRunning())
 		{
 			try {
 				transitionThread.join();
