@@ -152,5 +152,17 @@ public class TransitionsList
             return -1; 
         }
     }
+    
+    /**
+     * gets index of supplied Transition or -1 if not found
+     * @param Transition transition to search for
+     * 
+     * @return index of supplied transition or -1 if not found
+     */
+    public int indexOf(Transition t)
+    {
+        return transitions.indexOf(t);
+    }
+
 
 }

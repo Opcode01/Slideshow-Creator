@@ -162,13 +162,12 @@ public class TransitionPane extends FloatingPane {
 	private Transition transition;
 	
 	// add the following variables after connecting backend: Timeline t, int index, 
-	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size){
+	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size, Timeline t, int index){
 		
 		//Call the parent constructor
 		super(parent, title, position, size);
 		
-		//**TO DO: Pass in the selected transition index to change and create transition type w/that transition in list
-		//transition = t.transitionsList.getTransition(index);
+		transition = t.transitionsList.getTransition(index);
 		
 		//**TO DO: Place this in appropriate spot so that the initial settings of the transition are displayed in button highlights
 		//LoadTransitionSettings();

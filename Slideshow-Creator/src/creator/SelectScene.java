@@ -272,7 +272,7 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
 		imagePanel.setBackground(dark_gray);
-		ShowImages(imagePanel, allThumbs);
+		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -308,17 +308,47 @@ public class SelectScene extends Scene
 	}
 	
     /**
+     * UpdateSelected() - updates the highlighted images to reflect changes in thumbnails list
+     * 
+     * @author Fernando Palacios
+     */
+	public void UpdateSelected()
+	{
+		for(int i = 0; i < thumbButtons.length; i++)
+		{
+			//get instance of timeline to compare what is in it
+			Timeline timeline = SceneHandler.singleton.getTimeline();
+			
+			//grab individual thumbnail
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			//if thumbnail is in the timeline, keep it highlighted
+			if (slideIndex >= 0)
+			{
+				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
+			}
+			else//thumbnail not on timeline, remove highlight
+			{
+				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			}
+		}
+	}
+	
+    /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		thumbButtons = new JButton[list.getSize()];
+		thumbButtons = new JButton[allThumbs.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
 		for(i = 0; i < thumbButtons.length; i++) {
@@ -336,7 +366,7 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = list.getThumbnail(i);
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
 			
 			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JButton keeper = thumbButtons [i];
@@ -369,7 +399,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			panel.add(thumbButtons[i], c);
+			imagePanel.add(thumbButtons[i], c);
 		}
 	}
 
