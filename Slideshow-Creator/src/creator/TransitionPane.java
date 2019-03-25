@@ -12,23 +12,28 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.Border;
 
 import core.*;
 
 public class TransitionPane extends FloatingPane {
 	
 	/** Create settings panel */
-	private JPanel transitonPanel;
+	private JPanel transitionPanel;
 	
 	/** Create confirmation panel */
 	private JPanel confirmationPanel;
@@ -41,6 +46,12 @@ public class TransitionPane extends FloatingPane {
 
 	/** Create transitions length label */
 	private JLabel lengthLabel;
+	
+	/** Create transitions change all label */
+	private JLabel changeAllLabel;
+	
+	/** Create duration dropdown */
+	private JCheckBox changeAllCheck;
 	
 	/** Create cross button */
 	private JToggleButton crossButton;
@@ -126,6 +137,18 @@ public class TransitionPane extends FloatingPane {
 	/** Highlighted fast custom button image */
 	private ImageIcon highlightedFast;
 	
+	/** Checkbox custom button image */
+	private ImageIcon checkbox;
+	
+	/** Selected checkbox custom button image */
+	private ImageIcon selectedCheckbox;
+	
+	/** Highlighted checkbox custom button image */
+	private ImageIcon highlightedCheckbox;
+	
+	/** Highlighted selected checkbox custom button image */
+	private ImageIcon highlightedSelectedCheckbox;
+	
 	/** Create custom light gray color */
 	private Color light_gray = new Color(31, 31, 31);
 	
@@ -135,14 +158,19 @@ public class TransitionPane extends FloatingPane {
 	/** Create common font for application usage */
 	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 12);
 
-	/**The transition this pane is associated with */
+	//The transition this pane is associated with
 	private Transition transition;
 	
+	// add the following variables after connecting backend: Timeline t, int index, 
 	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size, Timeline t, int index){
+		
 		//Call the parent constructor
 		super(parent, title, position, size);
-	
+		
 		transition = t.transitionsList.getTransition(index);
+		
+		//**TO DO: Place this in appropriate spot so that the initial settings of the transition are displayed in button highlights
+		//LoadTransitionSettings();
 		
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
@@ -165,6 +193,10 @@ public class TransitionPane extends FloatingPane {
 		highlightedSlow = new ImageIcon(getClass().getResource("/creator/Images/highlightedSlowButton.png"));
 		highlightedMedium = new ImageIcon(getClass().getResource("/creator/Images/highlightedMediumButton.png"));
 		highlightedFast = new ImageIcon(getClass().getResource("/creator/Images/highlightedFastButton.png"));
+		checkbox = new ImageIcon(getClass().getResource("/creator/Images/checkbox.png"));
+		selectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/selectedCheckbox.png"));
+		highlightedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedCheckbox.png"));
+		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectedCheckbox.png"));
 		
 		//Construct original panel container and configurations
 		JPanel transitionGui = new JPanel();
@@ -280,9 +312,9 @@ public class TransitionPane extends FloatingPane {
 		
 		// Add transition length buttons to type group
 		lengthGroup = new ButtonGroup();
-		typeGroup.add(slowButton);
-		typeGroup.add(mediumButton);
-		typeGroup.add(fastButton);
+		lengthGroup.add(slowButton);
+		lengthGroup.add(mediumButton);
+		lengthGroup.add(fastButton);
 		
 		// Configure type label
 		transitionLabel = new JLabel(transitionHeader);
@@ -293,21 +325,34 @@ public class TransitionPane extends FloatingPane {
 		typeLabel.setForeground(white);
 		
 		// Configure length label
-		lengthLabel = new JLabel("Length");
+		lengthLabel = new JLabel("Speed");
 		lengthLabel.setFont(commonFont);
 		lengthLabel.setForeground(white);
+		
+		// Configure change all label
+		changeAllLabel = new JLabel("Apply to All");
+		changeAllLabel.setFont(commonFont);
+		changeAllLabel.setForeground(white);
+		
+        // Create slideshow loop checkbox
+        changeAllCheck = new JCheckBox(checkbox);
+        changeAllCheck.setSelectedIcon(selectedCheckbox);
+        changeAllCheck.setRolloverIcon(highlightedCheckbox);
+        changeAllCheck.setPressedIcon(highlightedCheckbox);
+        changeAllCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
+        changeAllCheck.setBackground(light_gray);
         
 		// Set settings panel configurations
-		transitonPanel = new JPanel();
-		transitonPanel.setLayout(gridBag);
-		transitonPanel.setBackground(light_gray);
+		transitionPanel = new JPanel();
+		transitionPanel.setLayout(gridBag);
+		transitionPanel.setBackground(light_gray);
 		
 		// Set constraints and add header label
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 6;
 		c.insets = new Insets(0, 0, 10, 0);
-		transitonPanel.add(transitionLabel, c);
+		transitionPanel.add(transitionLabel, c);
 		
 		// Set constraints and add type label
 		c.gridx = 0;
@@ -315,52 +360,65 @@ public class TransitionPane extends FloatingPane {
 		c.anchor = GridBagConstraints.WEST;
 		c.gridwidth = 1;
 		c.insets = new Insets(35, 0, 15, 15);
-		transitonPanel.add(typeLabel, c);
+		transitionPanel.add(typeLabel, c);
 		
 		// Set constraints and add audio label
 		c.gridx = 0;
 		c.gridy = 3;
 		c.insets = new Insets(20, 0, 30, 15);
-		transitonPanel.add(lengthLabel, c);
+		transitionPanel.add(lengthLabel, c);
+		
+		// Set constraints and add duration label
+		c.gridx = 0;
+		c.gridy = 5;
+		c.insets = new Insets(20, 0, 5, 0);
+		transitionPanel.add(changeAllLabel, c);
 		
 		// Set constraints and add auto button
 		c.gridx = 1;
 		c.gridy = 2;
 		c.insets = new Insets(30, 12, 5, 0);
-		transitonPanel.add(crossButton, c);
+		transitionPanel.add(crossButton, c);
 		
 		// Set constraints and add manual button
 		c.gridx = 2;
 		c.gridy = 2;
-		transitonPanel.add(leftButton, c);
+		transitionPanel.add(leftButton, c);
 		
 		c.gridx = 3;
 		c.gridy = 2;
-		transitonPanel.add(rightButton, c);
+		transitionPanel.add(rightButton, c);
 		
 		c.gridx = 4;
 		c.gridy = 2;
-		transitonPanel.add(upButton, c);
+		transitionPanel.add(upButton, c);
 		
 		c.gridx = 5;
 		c.gridy = 2;
-		transitonPanel.add(downButton, c);
+		transitionPanel.add(downButton, c);
 		
 		// Set constraints and add length drop down
 		c.gridx = 1;
 		c.gridy = 3;
-		c.insets = new Insets(5, 12, 10, 0);
-		transitonPanel.add(slowButton, c);
+		c.insets = new Insets(5, 12, 15, 0);
+		transitionPanel.add(slowButton, c);
 		
 		// Set constraints and add length drop down
 		c.gridx = 2;
 		c.gridy = 3;
-		transitonPanel.add(mediumButton, c);
+		transitionPanel.add(mediumButton, c);
 		
 		// Set constraints and add length drop down
 		c.gridx = 3;
 		c.gridy = 3;
-		transitonPanel.add(fastButton, c);
+		transitionPanel.add(fastButton, c);
+		
+		// Set constraints and add apply all changes checkbox
+		c.gridx = 5;
+		c.gridy = 5;
+		c.anchor = GridBagConstraints.EAST;
+		c.insets = new Insets(20, 0, 5, 0);
+		transitionPanel.add(changeAllCheck, c);
 		
 		// Set constraints and separator
 		c.gridx = 0;
@@ -369,12 +427,12 @@ public class TransitionPane extends FloatingPane {
 		c.anchor = GridBagConstraints.WEST;
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0, 0, 0, 0);
-		transitonPanel.add(new JSeparator(), c);
+		transitionPanel.add(new JSeparator(), c);
 		
 		// Set constraints and add separator
 		c.gridx = 0;
 		c.gridy = 4;
-		transitonPanel.add(new JSeparator(), c);
+		transitionPanel.add(new JSeparator(), c);
 		
 		// Set options panel configurations
 		confirmationPanel = new JPanel();
@@ -385,7 +443,7 @@ public class TransitionPane extends FloatingPane {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.insets = new Insets(10, 10, 10, 10);
+		c.insets = new Insets(0, 10, 10, 10);
 		confirmationPanel.add(saveButton, c);
 		
 		// Set constraints and add ok button
@@ -399,13 +457,13 @@ public class TransitionPane extends FloatingPane {
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.weighty = 1;
-		transitionGui.add(transitonPanel);
+		transitionGui.add(transitionPanel);
 		
 		// Set constraints and add confirmation panel
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weighty = 0;
-		c.insets = new Insets(20,0,0,0);
+		c.insets = new Insets(20,0,10,0);
 		transitionGui.add(confirmationPanel, c);
 		
 		// Set settings into floating pane
@@ -439,18 +497,27 @@ public class TransitionPane extends FloatingPane {
         return buffered;
     }
     
+    /**
+     * UpdateTransitionSettings() - Updates the transition type AND/OR length when user saves changes
+	 * 
+	 * @author Fernando Palacios
+     */
 	public void UpdateTransitionSettings() {
 		
+		double speed = transition.getTransitionLength();
+		TransitionType type = transition.getTransitionType();
+		Timeline t = SceneHandler.singleton.getTimeline();
+		
 		if(crossButton.isSelected()) {
-			transition.setTransitionType(TransitionType.CROSS_DISSOLVE);
+			type = TransitionType.CROSS_DISSOLVE;
 		}else if(leftButton.isSelected()) {
-			transition.setTransitionType(TransitionType.WIPE_LEFT);
+			type = TransitionType.CROSS_DISSOLVE;
 		}else if(rightButton.isSelected()) {
-			transition.setTransitionType(TransitionType.WIPE_RIGHT);
+			type = TransitionType.CROSS_DISSOLVE;
 		}else if(upButton.isSelected()) {
-			transition.setTransitionType(TransitionType.WIPE_UP);
+			type = TransitionType.CROSS_DISSOLVE;
 		}else if(downButton.isSelected()) {
-			transition.setTransitionType(TransitionType.WIPE_DOWN);
+			type = TransitionType.CROSS_DISSOLVE;
 		}
 		
 		if(slowButton.isSelected()) {
@@ -459,6 +526,42 @@ public class TransitionPane extends FloatingPane {
 			transition.setTransitionLength(3);
 		}else if(fastButton.isSelected()) {
 			transition.setTransitionLength(1);
+		}
+		
+		if(changeAllCheck.isSelected())
+		{
+			t.UpdateTransitionSettings(speed, type);
+		} else {
+			transition.setTransitionType(type);
+			transition.setTransitionLength(speed);
+		}
+	}
+	
+    /**
+     * LoadTransitionSettings() - Loads in the transition type AND length from the selected transition in timeline
+	 * 
+	 * @author Fernando Palacios
+     */
+	public void LoadTransitionSettings() {
+		
+		if(transition.getTransitionType() == TransitionType.CROSS_DISSOLVE) {
+			crossButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
+			rightButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
+			leftButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_UP) {
+			upButton.setSelected(true);
+		}else if(transition.getTransitionType() == TransitionType.WIPE_DOWN) {
+			downButton.setSelected(true);
+		}
+		
+		if(transition.getTransitionLength() == 5) {
+			slowButton.setSelected(true);
+		}else if(transition.getTransitionLength() == 3) {
+			mediumButton.setSelected(true);
+		}else if(transition.getTransitionLength() == 1) {
+			fastButton.setSelected(true);
 		}
 	}
 

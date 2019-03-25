@@ -95,10 +95,10 @@ public class SelectScene extends Scene
 	private ImageIcon highlightedDeselectAll;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
+	private Color light_gray = new Color(41, 41, 41);
 	
-	/** Create custom image_gray color */
-	private Color image_gray = new Color(30, 30, 30);
+	/** Create custom dark_gray color */
+	private Color dark_gray = new Color(0, 0, 0);
 	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
@@ -221,7 +221,7 @@ public class SelectScene extends Scene
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
-		imagePanelContainer.setBackground(image_gray);
+		imagePanelContainer.setBackground(dark_gray);
 		
 		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
@@ -235,6 +235,8 @@ public class SelectScene extends Scene
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
+		imageScroller.getVerticalScrollBar().setUnitIncrement(20);
+
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -269,7 +271,7 @@ public class SelectScene extends Scene
 		// Create image panel with new images
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
-		imagePanel.setBackground(image_gray);
+		imagePanel.setBackground(dark_gray);
 		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace

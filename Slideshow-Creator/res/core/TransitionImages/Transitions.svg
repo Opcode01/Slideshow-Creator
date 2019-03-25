@@ -2,6 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -21,6 +22,14 @@
    inkscape:export-ydpi="300">
   <defs
      id="defs2">
+    <linearGradient
+       id="linearGradient4614"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4612" />
+    </linearGradient>
     <inkscape:path-effect
        effect="mirror_symmetry"
        start_point="120.41607,51.344734"
@@ -62,14 +71,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="303.45538"
-     inkscape:cy="523.79396"
+     inkscape:zoom="1.4"
+     inkscape:cx="419.08482"
+     inkscape:cy="809.56226"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1057"
+     inkscape:window-width="1304"
+     inkscape:window-height="745"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -83,7 +92,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -199,8 +208,9 @@
     </g>
     <g
        id="g906"
-       style="display:none"
-       inkscape:label="crossfade_blueprint">
+       style="display:inline"
+       inkscape:label="crossfade_blueprint"
+       transform="translate(2.4568452,-16.158482)">
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
@@ -226,5 +236,13 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccccccccccc" />
     </g>
+    <path
+       id="rect4596-6"
+       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:1.4903934;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.96157276, 1.49039319;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 111.41385,63.788689 v -3.054192 h 21.80644 v -7.584744 l 12.65532,10.638936 m -34.46176,0 v 3.054192 h 21.80644 v 7.584744 l 12.65532,-10.638936"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\catsu\rect4596.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50" />
   </g>
 </svg>

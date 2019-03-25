@@ -89,10 +89,13 @@ public class ArrangeScene extends Scene{
 	private Color aqua = new Color(132, 200, 202);
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(60, 60, 60);
+	private Color light_gray = new Color(31, 31, 31);
 	
 	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(30, 30, 30);
+	private Color dark_gray = new Color(0, 0, 0);
+	
+	/** Create custom medium_gray color */
+	private Color medium_gray = new Color(41, 41, 41);
 	
 	/**selected thumbnail on the timeline */
 	private Thumbnail selectedThumbnail;
@@ -293,7 +296,7 @@ public class ArrangeScene extends Scene{
 		// Create image panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
-		timelinePanel.setBackground(light_gray);
+		timelinePanel.setBackground(medium_gray);
 		ShowImages(timelinePanel);
 		
 		// add to outer panel that houses the image panel for layout and whitespace
@@ -358,7 +361,7 @@ public class ArrangeScene extends Scene{
 							parent, 
 							"Transition Settings", 
 							point, 
-							new Dimension(400, 470),
+							new Dimension(450, 390),
 							t,
 							index
 							);
