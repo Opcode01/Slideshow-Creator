@@ -283,7 +283,7 @@ public class ArrangeScene extends Scene{
 		// Create image panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
-		timelinePanel.setBackground(SliderColor.medium_gray);
+		timelinePanel.setBackground(SliderColor.light_gray);
 		ShowImages(timelinePanel);
 		
 		// add to outer panel that houses the image panel for layout and whitespace

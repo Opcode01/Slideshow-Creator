@@ -149,7 +149,7 @@ public class PlayScene extends Scene {
 		//Manual controls panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(gridBag);
-		controlPanel.setBackground(SliderColor.light_gray);
+		controlPanel.setBackground(SliderColor.medium_gray);
 		
 		//enable buttons if the timeline advances manually
 		if (timeline.timelineSettings.isManual)
