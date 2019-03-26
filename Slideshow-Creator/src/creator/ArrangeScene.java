@@ -209,8 +209,7 @@ public class ArrangeScene extends Scene{
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		int height = this.getHeight() + 20;
-		timelineScroller.setPreferredSize(new Dimension(200, height));
+		timelineScroller.setPreferredSize(new Dimension(200, 235));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
 		///////////////////////
@@ -251,7 +250,7 @@ public class ArrangeScene extends Scene{
 		this.add(imagePanel, c);
 		
 		// Set constraints and add timeline panel
-		c.weighty = 0.30;
+		c.weighty = 0;
 		c.gridx = 1;
 		c.gridy = 1;
 		this.add(timelineScroller, c);
