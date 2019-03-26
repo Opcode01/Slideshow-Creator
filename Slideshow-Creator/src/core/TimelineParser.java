@@ -129,7 +129,6 @@ public class TimelineParser
 			boolean isManual = (boolean) in.get("isManual");
 			boolean isLoopingAudio = (boolean) in.get("isLoopingAudio");
 			long slideDuration = (Long) in.get("slideDuration");
-			long transitionLength = (Long) in.get("transitionLength");
 			Settings importedSettings = new Settings(loopingSlides, 
 													isLoopingAudio, 
 													isManual, 
