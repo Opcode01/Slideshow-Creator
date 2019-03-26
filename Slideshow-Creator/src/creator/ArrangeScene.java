@@ -212,23 +212,21 @@ public class ArrangeScene extends Scene{
 		// Create outerpanel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
+		timelinePanelContainer.setBackground(medium_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
 		
 		// Set up blank image panel
 		setupTimelinePanel(false);
-		timelinePanelContainer.add(timelinePanel, c);
+		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
 		// Set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		timelineScroller.getVerticalScrollBar().setBackground(light_gray);
+		timelineScroller.getVerticalScrollBar().setBackground(medium_gray);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		
-		JPanel temp = new JPanel();
-		temp.add(timelineScroller);
-		int height = this.getHeight();
-		temp.setPreferredSize(new Dimension(200, height));
+		int height = this.getHeight() + 20;
+		timelineScroller.setPreferredSize(new Dimension(200, height));
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
@@ -301,9 +299,10 @@ public class ArrangeScene extends Scene{
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		timelinePanelContainer.removeAll();
-		timelinePanelConstraints.fill = GridBagConstraints.HORIZONTAL;
-		timelinePanelConstraints.weighty = 0;
-		timelinePanelContainer.setBackground(aqua);
+		timelinePanelConstraints.weighty = 1;
+		timelinePanelConstraints.weightx = 1;
+		timelinePanelConstraints.gridx = 0;
+		timelinePanelConstraints.gridy = 0;
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 
 		if (revalidate) {
