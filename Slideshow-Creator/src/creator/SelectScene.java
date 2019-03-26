@@ -235,8 +235,7 @@ public class SelectScene extends Scene
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
-		imageScroller.getVerticalScrollBar().setUnitIncrement(20);
-
+		imageScroller.getVerticalScrollBar().setUnitIncrement(25);
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
