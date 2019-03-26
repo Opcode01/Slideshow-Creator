@@ -11,12 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,27 +20,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
 import core.*;
 
 public class ArrangeScene extends Scene{
 	
-	/** Create custom color */
+	/** Create options panel */
 	private JPanel optionsPanel;
 	
-	/** Create custom color */
+	/** Create image panel */
 	private JPanel imagePanel;
 	
-	/** Create custom color */
+	/** Create timeline panel */
 	private JPanel timelinePanel;
 	
-	/** container for timeline panel */
+	/** Create container for timeline panel */
 	private JPanel timelinePanelContainer;
-	
-	/** Create Settings Pane */
-	private SettingsPane settingsPane;
 	
 	/** Create Timeline Pane */
 	private JScrollPane timelineScroller;
@@ -64,9 +56,6 @@ public class ArrangeScene extends Scene{
 	/** Back custom button image */
 	private ImageIcon back;
 	
-	/** Directory custom button image */
-	private ImageIcon directory;
-	
 	/** Settings custom button image */
 	private ImageIcon settings;
 	
@@ -75,9 +64,6 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
-	
-	/** Highlighted arrange custom button image */
-	private ImageIcon highlightedDirectory;
 	
 	/** Highlighted select all custom button image */
 	private ImageIcon highlightedSettings;
@@ -113,12 +99,11 @@ public class ArrangeScene extends Scene{
 		// Set panel configurations
 		this.setLayout(gridBag);
 		
+		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
-		directory = new ImageIcon(getClass().getResource("/creator/Images/directoryButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
-		highlightedDirectory = new ImageIcon(getClass().getResource("/creator/Images/highlightedDirectoryButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
 		
@@ -146,13 +131,13 @@ public class ArrangeScene extends Scene{
 		settingsButton.setRolloverIcon(highlightedSettings);
 		settingsButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	//Open settings pane in the center of our workspace
+		    	// Open settings pane in the center of our workspace
 		    	JFrame parent = SceneHandler.singleton.getMainFrame();
 		    	Coord2 point = new Coord2(
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    			);
-		    	settingsPane = new SettingsPane(parent, "Project Settings", point, new Dimension(400, 470));
+		    	SettingsPane p = new SettingsPane(parent, "Project Settings", point, new Dimension(370, 410));
 		    	parent.setEnabled(false);
 		    }
 		});
@@ -167,16 +152,16 @@ public class ArrangeScene extends Scene{
 		removeCurrentButton.setRolloverIcon(highlightedRemoveCurrent);
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	//TODO: Remove the currently selected thumbnail and transition from timeline
+		    	// Remove selected thumb from timeline
 		    	Timeline timeline = SceneHandler.singleton.getTimeline();
 		    	System.out.println(selectedThumbnail.getImagePath() + "remove");
 		    	int removeIndex = timeline.thumbnailsList.indexOf(selectedThumbnail);
 		    	timeline.removeSlide(removeIndex);
-		    	//remove components and repaint 
-		    	timelinePanel.removeAll();
-		    	ShowImages(timelinePanel);
-		    	revalidate();
 		    	
+		    	// Remove components and repaint 
+		    	timelinePanel.removeAll();
+		    	ShowImages();
+		    	revalidate();
 		    }
 		});
 		
@@ -209,26 +194,23 @@ public class ArrangeScene extends Scene{
 		imagePanel.setLayout(gridBag);
 		imagePanel.setBackground(dark_gray);
 		
-		// Create outerpanel that houses the timeline panel for layout and whitespace
+		// Create outer panel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
+		timelinePanelContainer.setBackground(medium_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
 		
-		// Set up blank image panel
+		// Set up blank timeline panel
 		setupTimelinePanel(false);
-		timelinePanelContainer.add(timelinePanel, c);
+		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
-		// Set scroll pane configurations
+		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		timelineScroller.getVerticalScrollBar().setBackground(light_gray);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		
-		JPanel temp = new JPanel();
-		temp.add(timelineScroller);
-		int height = this.getHeight();
-		temp.setPreferredSize(new Dimension(200, height));
+		timelineScroller.setPreferredSize(new Dimension(200, 235));
+		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
@@ -268,7 +250,7 @@ public class ArrangeScene extends Scene{
 		this.add(imagePanel, c);
 		
 		// Set constraints and add timeline panel
-		c.weighty = 0.30;
+		c.weighty = 0;
 		c.gridx = 1;
 		c.gridy = 1;
 		this.add(timelineScroller, c);
@@ -279,7 +261,7 @@ public class ArrangeScene extends Scene{
     /**
      * initialize() - opens the images and sets up the scene for use
      * 
-     * @precondition must run after project directory has been determined
+     * @precondition - must run after project directory has been determined
 	 * 
 	 * @author Timothy Couch
      */
@@ -291,19 +273,29 @@ public class ArrangeScene extends Scene{
 		setupTimelinePanel(true);
     }
 	
+    /**
+     * setupTimelinePanel() - opens the images and sets up the scene for use
+     * 
+     * @param revalidate - calls revalidate if boolean is set to true otherwise not
+	 * 
+	 * @author Timothy Couch
+	 * @author Joseph Hoang
+	 * @author Fernando Palacios
+     */
 	public void setupTimelinePanel(boolean revalidate)
 	{		
 		// Create image panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
 		timelinePanel.setBackground(medium_gray);
-		ShowImages(timelinePanel);
+		ShowImages();
 		
-		// add to outer panel that houses the image panel for layout and whitespace
+		// Add to outer panel that houses the timeline panel with formatting
 		timelinePanelContainer.removeAll();
-		timelinePanelConstraints.fill = GridBagConstraints.HORIZONTAL;
-		timelinePanelConstraints.weighty = 0;
-		timelinePanelContainer.setBackground(aqua);
+		timelinePanelConstraints.weighty = 1;
+		timelinePanelConstraints.weightx = 1;
+		timelinePanelConstraints.gridx = 0;
+		timelinePanelConstraints.gridy = 0;
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 
 		if (revalidate) {
@@ -316,30 +308,36 @@ public class ArrangeScene extends Scene{
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
+	 * @author Joseph Hoang
      */
-	private void ShowImages(JPanel panel)
+	private void ShowImages()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
-		int gridyCounter = 0; // layout counter y
+		int gridyCounter = 0; //layout counter y
 		
+		// Get instance of timeline and create button lists for thumb and transitions
 		Timeline timeline = SceneHandler.singleton.getTimeline();
 		JToggleButton[] thumbButtons = new JToggleButton[timeline.thumbnailsList.getSize()];
 		JButton[] transButtons = new JButton[timeline.transitionsList.getSize()];
+		
 		GridBagConstraints c = new GridBagConstraints();
 		
+		// Populate thumbnail and transition buttons lists with thumbnails and transitions from timeline
 		for(i = 0; i < thumbButtons.length; i++) {
 			
-			//set constraints
+			// Set constraints
 			c.gridx = gridxCounter++;
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.BOTH;
 			c.anchor = GridBagConstraints.CENTER;
 			c.insets = new Insets(20, 20, 20, 20);
 			
+			// Create references to thumbnail and transition
 			Thumbnail buttonThumb = timeline.thumbnailsList.getThumbnail(i);
 			Transition buttonTrans = timeline.transitionsList.getTransition(i);
 			
+			// Create transition button and configurations
 			transButtons[i] = new JButton(new ImageIcon(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage()));
 			transButtons[i].setPreferredSize(new Dimension(100, 75));
 			transButtons[i].setRolloverEnabled(true);
@@ -350,25 +348,26 @@ public class ArrangeScene extends Scene{
 			transButtons[i].setContentAreaFilled(false);
 			transButtons[i].addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Timeline t = SceneHandler.singleton.getTimeline();
-					int index = t.transitionsList.indexOf(buttonTrans);
+					int index = timeline.transitionsList.indexOf(buttonTrans);
 					JFrame parent = SceneHandler.singleton.getMainFrame();
 			    	Coord2 point = new Coord2(
 			    			parent.getX() + parent.getSize().width/2,
 			    			parent.getY() + parent.getSize().height/2
 			    			);
+			    	
 					TransitionPane p = new TransitionPane(
 							parent, 
 							"Transition Settings", 
 							point, 
-							new Dimension(450, 390),
-							t,
+							new Dimension(450, 395),
+							timeline,
 							index
 							);
 					parent.setEnabled(false);
 				}
 			});
 			
+			// Create thumb button with configurations
 			thumbButtons[i] = new JToggleButton(new ImageIcon(buttonThumb.getImageTimeline()));
 			JToggleButton keeper = thumbButtons [i];
 			thumbButtons[i].setPreferredSize(new Dimension(290, 170));
@@ -380,24 +379,19 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].setContentAreaFilled(false);
 			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
-					//add button to or remove button from timeline
-					Timeline timeline = SceneHandler.singleton.getTimeline();
-
 					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
-					
 					selectedThumbnail = buttonThumb;
-					
 					
 					if(keeper.isSelected())
 					{
-						//clear borders
+						// Clear borders
 						for(JToggleButton button : thumbButtons)
 						{
 							button.setBorder(BorderFactory.createEmptyBorder());
-							//button.setIcon(new ImageIcon(buttonThumb.getImageThumb()));
 							button.setSelected(false);
 						}
 						
+						// Set border for newly selected button
 						keeper.setSelected(true);
 						keeper.setBorder(new LineBorder(aqua, 3));
 						System.out.println(buttonThumb.getImagePath() + "selected");
@@ -421,29 +415,25 @@ public class ArrangeScene extends Scene{
 						imagePanel.add(testLabel, c);
 						imagePanel.revalidate();
 						imagePanel.repaint();
-						
-						///////////////////////
-						//keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 					}
-					
-					
-					
 				}
 				});
 			
-			panel.add(thumbButtons[i], c);
+			// Add thumbnail button to timeline Panel
+			timelinePanel.add(thumbButtons[i], c);
 			
-			// Set constraints
+			// Set constraints and add transition buttons toe timeline panel
 			c.gridx = gridxCounter++;
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(0, 0, 0, 0);
-			panel.add(transButtons[i], c);
+			timelinePanel.add(transButtons[i], c);
 		}
 	}
 	
     /**
      * TransHover() - darkens the image so that it adds a hovered effect
+     * 
      * @param thumbnail - the thumbnail image that needs to be processed
 	 * 
 	 * @author Fernando Palacios
@@ -461,7 +451,7 @@ public class ArrangeScene extends Scene{
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                	c = new Color(228, 199, 193);
+                	c = new Color(254, 250, 238);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
@@ -472,6 +462,7 @@ public class ArrangeScene extends Scene{
 	
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
+     * 
      * @param thumbnail - the thumbnail image that needs to be processed
 	 * 
 	 * @author Fernando Palacios
