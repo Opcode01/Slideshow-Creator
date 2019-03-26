@@ -1,3 +1,4 @@
+package pkgJavaSound;
 /*
  * @(#)JavaSound.java	1.15	00/01/31
  *

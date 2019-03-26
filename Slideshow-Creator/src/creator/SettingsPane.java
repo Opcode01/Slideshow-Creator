@@ -62,14 +62,11 @@ public class SettingsPane extends FloatingPane
 	/** Create audio label */
 	private JLabel audioLabel;
 	
-	/** Create transitions length label */
+	/** Create audio loop label */
 	private JLabel audioLoopLabel;
 	
-	/** Create audio label */
+	/** Create slideshow loop label */
 	private JLabel slideshowLoopLabel;
-	
-	/** Create transitions length label */
-	private JLabel lengthLabel;
 	
 	/** Create slideshow duration label */
 	private JLabel durationLabel;
@@ -79,9 +76,6 @@ public class SettingsPane extends FloatingPane
 	
 	/** Create duration text field */
 	private JTextField durationText;
-	
-	/** Create length dropdown */
-	private JComboBox<String> lengthDropDown;
 	
 	/** Create duration dropdown */
 	private JCheckBox audioLoopCheck;
@@ -165,21 +159,21 @@ public class SettingsPane extends FloatingPane
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		settingsHeader = new ImageIcon(getClass().getResource("Images/settingsHeader.png"));
-		save = new ImageIcon(getClass().getResource("Images/saveButton.png"));
-		cancel = new ImageIcon(getClass().getResource("Images/cancelButton.png"));
-		auto = new ImageIcon(getClass().getResource("Images/autoButton.png"));
-		manual = new ImageIcon(getClass().getResource("Images/manualButton.png"));
-		audio = new ImageIcon(getClass().getResource("Images/audioButton.png"));
-		highlightedSave = new ImageIcon(getClass().getResource("Images/highlightedSaveButton.png"));
-		highlightedCancel = new ImageIcon(getClass().getResource("Images/highlightedCancelButton.png"));
-		highlightedAuto = new ImageIcon(getClass().getResource("Images/highlightedAutoButton.png"));
-		highlightedManual = new ImageIcon(getClass().getResource("Images/highlightedManualButton.png"));
-		highlightedAudio = new ImageIcon(getClass().getResource("Images/highlightedAudioButton.png"));
-		checkbox = new ImageIcon(getClass().getResource("Images/checkbox.png"));
-		selectedCheckbox = new ImageIcon(getClass().getResource("Images/selectedCheckbox.png"));
-		highlightedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedCheckbox.png"));
-		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("Images/highlightedSelectedCheckbox.png"));
+		settingsHeader = new ImageIcon(getClass().getResource("/creator/Images/settingsHeader.png"));
+		save = new ImageIcon(getClass().getResource("/creator/Images/saveButton.png"));
+		cancel = new ImageIcon(getClass().getResource("/creator/Images/cancelButton.png"));
+		auto = new ImageIcon(getClass().getResource("/creator/Images/autoButton.png"));
+		manual = new ImageIcon(getClass().getResource("/creator/Images/manualButton.png"));
+		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
+		highlightedSave = new ImageIcon(getClass().getResource("/creator/Images/highlightedSaveButton.png"));
+		highlightedCancel = new ImageIcon(getClass().getResource("/creator/Images/highlightedCancelButton.png"));
+		highlightedAuto = new ImageIcon(getClass().getResource("/creator/Images/highlightedAutoButton.png"));
+		highlightedManual = new ImageIcon(getClass().getResource("/creator/Images/highlightedManualButton.png"));
+		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		checkbox = new ImageIcon(getClass().getResource("/creator/Images/checkbox.png"));
+		selectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/selectedCheckbox.png"));
+		highlightedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedCheckbox.png"));
+		highlightedSelectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectedCheckbox.png"));
 		
 		//Construct original panel container and configurations
 		JPanel settingsGui = new JPanel();
@@ -222,11 +216,6 @@ public class SettingsPane extends FloatingPane
 		autoButton.setRolloverIcon(highlightedAuto);
 		autoButton.setSelectedIcon(highlightedAuto);
 		autoButton.setEnabled(true);
-		autoButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create manual button
 		manualButton = new JToggleButton(manual);
@@ -236,11 +225,6 @@ public class SettingsPane extends FloatingPane
 		manualButton.setFocusable(false);
 		manualButton.setRolloverIcon(highlightedManual);
 		manualButton.setSelectedIcon(highlightedManual);
-		manualButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	
-		    }
-		});
 		
 		// Create audio button
 		audioButton = new JButton(audio);
@@ -272,12 +256,6 @@ public class SettingsPane extends FloatingPane
 		audioLabel = new JLabel("Audio");
 		audioLabel.setFont(commonFont);
 		audioLabel.setForeground(SliderColor.white);
-		
-		// Configure length label
-		lengthLabel = new JLabel("Transitions Length");
-		lengthLabel.setFont(commonFont);
-		lengthLabel.setForeground(SliderColor.white);
-		
 		// Configure duration label
 		durationLabel = new JLabel("Slide Duration");
 		durationLabel.setFont(commonFont);
@@ -307,10 +285,6 @@ public class SettingsPane extends FloatingPane
 		Border durationBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
 		durationText.setBorder(durationBorder);
 		durationText.setForeground(SliderColor.white);
-        
-        // Create length drop down
-        String[] lengths = { "Slow", "Medium", "Fast" };
-        lengthDropDown = new JComboBox<String>(lengths);
         
         // Create audio loop check box
         audioLoopCheck = new JCheckBox(checkbox);
@@ -357,13 +331,8 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add length label
 		c.gridx = 0;
 		c.gridy = 4;
-		settingsPanel.add(durationLabel, c);
-		
-		// Set constraints and add duration label
-		c.gridx = 0;
-		c.gridy = 5;
 		c.insets = new Insets(10, 0, 30, 15);
-		settingsPanel.add(lengthLabel, c);
+		settingsPanel.add(durationLabel, c);
 		
 		// Set constraints and add duration label
 		c.gridx = 0;
@@ -386,7 +355,7 @@ public class SettingsPane extends FloatingPane
 		// Set constraints and add duration text
 		c.gridx = 1;
 		c.gridy = 4;
-		c.insets = new Insets(7, 7, 7, 0);
+		c.insets = new Insets(10, 7, 30, 0);
 		settingsPanel.add(durationText, c);
 		
 		// Set constraints and add auto button
@@ -406,12 +375,6 @@ public class SettingsPane extends FloatingPane
 		c.gridy = 3;
 		c.insets = new Insets(5, 5, 5, 5);
 		settingsPanel.add(audioButton, c);
-		
-		// Set constraints and add length drop down
-		c.gridx = 1;
-		c.gridy = 5;
-		c.insets = new Insets(10, 7, 30, 0);
-		settingsPanel.add(lengthDropDown, c);
 		
 		// Set constraints and add audio loop check
 		c.gridx = 1;
@@ -513,17 +476,7 @@ public class SettingsPane extends FloatingPane
 		else {
 			audioFilePath = "none";
 		}
-		String transitionText = (String)lengthDropDown.getSelectedItem();
-		int transitionTime = 1;
-		if(transitionText == "Slow") {
-			transitionTime = 5;
-		}else if(transitionText == "Medium") {
-			transitionTime = 3;
-		}else if(transitionText == "Fast") {
-			transitionTime = 1;
-		}else {
-			System.out.println("Transition time is invalid!");
-		}
+		
 		int slideTime = 1;
 		try {
 			slideTime = Integer.parseInt(durationText.getText());
@@ -531,7 +484,7 @@ public class SettingsPane extends FloatingPane
 			System.out.println("Slide duration not a valid integer - using default value of 1.");
 		}
 		
-		Settings s = new Settings(loopSlides, loopAudio, isManual, transitionTime, slideTime);
+		Settings s = new Settings(loopSlides, loopAudio, isManual, slideTime);
 		t.UpdateProjectSettings(s);
 	}
 }

@@ -113,14 +113,14 @@ public class SelectScene extends Scene
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		back = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
-		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
-		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
-		deselectAll = new ImageIcon(getClass().getResource("Images/deselectAllButton.png"));
-		highlightedBack = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
-		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
-		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
-		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
+		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
+		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
+		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
+		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
+		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
+		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
+		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);
@@ -226,6 +226,8 @@ public class SelectScene extends Scene
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(SliderColor.light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
+		imageScroller.getVerticalScrollBar().setUnitIncrement(20);
+
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -261,7 +263,7 @@ public class SelectScene extends Scene
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
 		imagePanel.setBackground(SliderColor.dark_gray);
-		ShowImages(imagePanel, allThumbs);
+		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -300,17 +302,47 @@ public class SelectScene extends Scene
 	}
 	
     /**
+     * UpdateSelected() - updates the highlighted images to reflect changes in thumbnails list
+     * 
+     * @author Fernando Palacios
+     */
+	public void UpdateSelected()
+	{
+		for(int i = 0; i < thumbButtons.length; i++)
+		{
+			//get instance of timeline to compare what is in it
+			Timeline timeline = SceneHandler.singleton.getTimeline();
+			
+			//grab individual thumbnail
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
+
+			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
+			//if thumbnail is in the timeline, keep it highlighted
+			if (slideIndex >= 0)
+			{
+				thumbButtons[i].setBorder(new LineBorder(SliderColor.aqua, 3));
+				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
+			}
+			else//thumbnail not on timeline, remove highlight
+			{
+				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
+				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
+			}
+		}
+	}
+	
+    /**
      * ShowImages() - creates thumbnail icons to display in scrollpane
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages(JPanel panel, ThumbnailsList list)
+	private void ShowImages()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		thumbButtons = new JButton[list.getSize()];
+		thumbButtons = new JButton[allThumbs.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
 		for(i = 0; i < thumbButtons.length; i++) {
@@ -328,7 +360,7 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = list.getThumbnail(i);
+			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
 			
 			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JButton keeper = thumbButtons [i];
@@ -361,7 +393,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			panel.add(thumbButtons[i], c);
+			imagePanel.add(thumbButtons[i], c);
 		}
 	}
 
