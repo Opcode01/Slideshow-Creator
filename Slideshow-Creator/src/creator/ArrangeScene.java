@@ -139,7 +139,7 @@ public class ArrangeScene extends Scene{
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(SliderColor.light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;

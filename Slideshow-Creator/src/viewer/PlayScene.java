@@ -97,7 +97,7 @@ public class PlayScene extends Scene {
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		this.setLayout(gridBag);
-		setBackground(SliderColor.light_gray);
+		setBackground(SliderColor.medium_gray);
 		
 		// Set slide panel configurations
 		currentSlideIndex = 0;
@@ -120,7 +120,7 @@ public class PlayScene extends Scene {
 		// Set options panel configurations
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(SliderColor.light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Create exit button

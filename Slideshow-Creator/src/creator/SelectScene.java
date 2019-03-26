@@ -184,7 +184,7 @@ public class SelectScene extends Scene
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(SliderColor.light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -212,7 +212,7 @@ public class SelectScene extends Scene
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
-		imagePanelContainer.setBackground(SliderColor.image_gray);
+		imagePanelContainer.setBackground(SliderColor.dark_gray);
 		
 		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
@@ -260,7 +260,7 @@ public class SelectScene extends Scene
 		// Create image panel with new images
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
-		imagePanel.setBackground(SliderColor.image_gray);
+		imagePanel.setBackground(SliderColor.dark_gray);
 		ShowImages(imagePanel, allThumbs);
 		
 		// add to outer panel that houses the image panel for layout and whitespace

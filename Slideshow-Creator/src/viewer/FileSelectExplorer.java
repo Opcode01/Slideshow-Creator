@@ -119,7 +119,7 @@ public class FileSelectExplorer extends Scene {
 		// Set panel configurations
 		bgPanel = new JPanel();
 		bgPanel.setLayout(gridBag);
-		bgPanel.setBackground(SliderColor.dark_gray);
+		bgPanel.setBackground(SliderColor.beige_gray);
 		
 		// Set constraints and add directory button
 		c.gridx = 0;

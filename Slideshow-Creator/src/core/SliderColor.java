@@ -15,13 +15,16 @@ import java.awt.Color;
 public final class SliderColor {
 	
 	/** Create custom light gray color */
-	public static final Color light_gray = new Color(60, 60, 60);
+	public static final Color light_gray = new Color(41, 41, 41);
+	
+	/** Create custom medium gray color */
+	public static final Color medium_gray = new Color(31, 31, 31);
 	
 	/** Create custom dark_gray color */
-	public static final Color dark_gray = new Color(30, 30, 30);
+	public static final Color dark_gray = new Color(0, 0, 0);
 	
-	/** Create custom image_gray color */
-	public static final Color image_gray = new Color(30, 30, 30);
+	/** Create custom beige_gray color */
+	public static final Color beige_gray = new Color(71, 70, 70);
 	
 	/** Create custom aqua color */
 	public static final Color aqua = new Color(132, 200, 202);

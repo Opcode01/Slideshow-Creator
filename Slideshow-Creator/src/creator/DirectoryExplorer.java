@@ -147,7 +147,7 @@ public class DirectoryExplorer extends Scene {
 		// Set panel configurations
 		bgPanel = new JPanel();
 		bgPanel.setLayout(gridBag);
-		bgPanel.setBackground(SliderColor.dark_gray);
+		bgPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add directory button
 		c.gridx = 0;

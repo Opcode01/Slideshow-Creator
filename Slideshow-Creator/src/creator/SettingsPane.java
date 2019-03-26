@@ -184,7 +184,7 @@ public class SettingsPane extends FloatingPane
 		//Construct original panel container and configurations
 		JPanel settingsGui = new JPanel();
 		settingsGui.setLayout(gridBag);
-		settingsGui.setBackground(SliderColor.dark_gray);
+		settingsGui.setBackground(SliderColor.medium_gray);
 		
 		// Create save button
 		saveButton = new JButton(save);
@@ -295,7 +295,7 @@ public class SettingsPane extends FloatingPane
 		
 		// Create text field for audio
 		audioText = new JTextField(13);
-		audioText.setBackground(SliderColor.dark_gray);
+		audioText.setBackground(SliderColor.medium_gray);
 		Border audioBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
 		audioText.setBorder(audioBorder);
 		audioText.setForeground(SliderColor.white);
@@ -303,7 +303,7 @@ public class SettingsPane extends FloatingPane
         
         // Create text field for duration
 		durationText = new JTextField(13);
-		durationText.setBackground(SliderColor.dark_gray);
+		durationText.setBackground(SliderColor.medium_gray);
 		Border durationBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
 		durationText.setBorder(durationBorder);
 		durationText.setForeground(SliderColor.white);
@@ -318,7 +318,7 @@ public class SettingsPane extends FloatingPane
         audioLoopCheck.setRolloverIcon(highlightedCheckbox);
         audioLoopCheck.setPressedIcon(highlightedCheckbox);
         audioLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
-        audioLoopCheck.setBackground(SliderColor.dark_gray);
+        audioLoopCheck.setBackground(SliderColor.medium_gray);
         
         // Create slideshow loop checkbox
         slideshowLoopCheck = new JCheckBox(checkbox);
@@ -326,12 +326,12 @@ public class SettingsPane extends FloatingPane
         slideshowLoopCheck.setRolloverIcon(highlightedCheckbox);
         slideshowLoopCheck.setPressedIcon(highlightedCheckbox);
         slideshowLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
-        slideshowLoopCheck.setBackground(SliderColor.dark_gray);
+        slideshowLoopCheck.setBackground(SliderColor.medium_gray);
         
 		// Set settings panel configurations
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(gridBag);
-		settingsPanel.setBackground(SliderColor.dark_gray);
+		settingsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add header label
 		c.gridx = 0;
@@ -444,7 +444,7 @@ public class SettingsPane extends FloatingPane
 		// Set options panel configurations
 		confirmationPanel = new JPanel();
 		confirmationPanel.setLayout(gridBag);
-		confirmationPanel.setBackground(SliderColor.dark_gray);
+		confirmationPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.gridx = 0;
