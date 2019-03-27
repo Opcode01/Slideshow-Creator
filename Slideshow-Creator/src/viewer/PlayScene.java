@@ -327,20 +327,22 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void startTransition(SlideDir dir) {
+	private synchronized void startTransition(SlideDir dir) {
 		//if transitioning right, use current transition. If left, use previous transition
-		Transition transition = dir == SlideDir.RIGHT ? timeline.transitionsList.getTransition(currentSlideIndex) : timeline.transitionsList.getTransition(getNextSlideIndex(dir));
-		//if (transition.getTransitionType() != TransitionType.NONE)
-		{
-			slidePanel.removeAll();
-			JPanel transitionPanel = new JPanel();
-			slidePanel.add(transitionPanel, BorderLayout.CENTER);
-			transitionPanel.setBorder(BorderFactory.createEmptyBorder());
-			transitionPanel.setBackground(SliderColor.dark_gray);
-			revalidate();
-			
-			transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
-		}
+		if (dir == SlideDir.LEFT)
+			currentTransitionIndex = getNextSlideIndex(dir);
+		else currentTransitionIndex = currentSlideIndex;
+		
+		Transition transition = timeline.transitionsList.getTransition(currentSlideIndex);
+		
+		slidePanel.removeAll();
+		JPanel transitionPanel = new JPanel();
+		slidePanel.add(transitionPanel, BorderLayout.CENTER);
+		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
+		transitionPanel.setBackground(SliderColor.dark_gray);
+		revalidate();
+		
+		transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
 	}
 	
 	/**
@@ -349,7 +351,7 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void scheduleStartTransition(SlideDir dir) {
+	private synchronized void scheduleStartTransition(SlideDir dir) {
 		stopSlideshow();
 		slideTimer = new Timer();
 		slideTimer.schedule(
@@ -381,7 +383,7 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void scheduleStartSlide(SlideDir dir) {
+	private synchronized void scheduleStartSlide(SlideDir dir) {
 		stopSlideshow();
 		slideTimer = new Timer();
 		slideTimer.schedule(
@@ -392,8 +394,6 @@ public class PlayScene extends Scene {
 					public void run() 
 					{
 						System.out.println("Finishing transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
-						
-						//TODO: finish transition if there are any loose ends to wrap up
 						
 						if (getNextSlideIndex(dir) != currentSlideIndex)
 						{
@@ -415,10 +415,23 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private void startSlideshow() {
+	private synchronized void startSlideshow() {
 		slideTimes = new SlideShowTime[timeline.transitionsList.getSize()];
 		for (int i = 0; i < slideTimes.length; i++)
 			slideTimes[i] = new SlideShowTime(timeline, i);
+		
+		Timer t = new Timer();
+		t.schedule(
+				new TimerTask() {
+					@Override
+					public void run()
+					{
+						
+					}
+				},
+				10,
+				10
+				);
 		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual)
@@ -431,7 +444,7 @@ public class PlayScene extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	private boolean stopSlideshow() {
+	private synchronized boolean stopSlideshow() {
 		if (slideTimer != null)
 		{
 			slideTimer.cancel();
@@ -440,6 +453,20 @@ public class PlayScene extends Scene {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Whether the program is currently transitioning
+	 * @return true if there's a transition running
+	 */
+	private boolean isTransitioning() {
+		Transition currentTransition = null;
+		if (currentTransitionIndex >= 0)
+		{
+			currentTransition = timeline.transitionsList.getTransition(currentTransitionIndex);
+			return currentTransition.isRunning();
+		}
+		else return false;
 	}
 	
 	/**
