@@ -59,6 +59,9 @@ public class PlayScene extends Scene {
 	/** Index of thumbnail currently showing */
 	private int currentSlideIndex;
 	
+	/** Index of transition currently playing, -1 if none playing */
+	private int currentTransitionIndex = -1;
+	
 	/** reference to SceneHandler's timeline */
 	private Timeline timeline;
 	
@@ -302,6 +305,7 @@ public class PlayScene extends Scene {
 	private boolean advanceSlide(SlideDir dir) {
 		int prevSlideIndex = currentSlideIndex;
 		currentSlideIndex = getNextSlideIndex(dir);
+		currentTransitionIndex = -1;
 		
 		//didn't advance slide
 		if (currentSlideIndex == prevSlideIndex)
