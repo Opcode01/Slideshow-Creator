@@ -378,6 +378,7 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private void scheduleStartSlide(SlideDir dir) {
+		stopSlideshow();
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
