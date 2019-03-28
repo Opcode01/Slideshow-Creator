@@ -8,7 +8,8 @@ public final class Settings {
 	public final boolean isManual;
 	public final String audioPath;
 	public final int slideDuration;
-		
+	
+	
 	public Settings(
 			boolean loopSlides, 
 			boolean loopAudio, 
@@ -31,5 +32,6 @@ public final class Settings {
 		System.out.println("ManualMode: " + isManual);
 		System.out.println("AudioPath: " + audioPath);
 		System.out.println("SlideDuration: " + slideDuration);
+		System.out.println("ParentDir: " + SceneHandler.singleton.getDirectory());
 	}
 }

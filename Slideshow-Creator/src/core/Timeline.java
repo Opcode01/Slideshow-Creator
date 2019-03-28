@@ -16,16 +16,32 @@ public class Timeline
 {
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
+    public Settings timelineSettings;
+    
+    private String directory;
+    
+    public void setDirectory(String dir)
+    {
+    	directory = dir;
+    }
+    
+    public String getDirectory()
+    {
+    	return directory;
+    }
 
     /**
      * Timeline - initializes an empty timeline
      * 
      * @author Timothy Couch
+     * @author Joe Hoang
      */
     public Timeline()
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
+        timelineSettings = new Settings(false, false, false, "", 1);
+        directory = SceneHandler.singleton.getDirectory();
     }
     
     /**
@@ -35,7 +51,6 @@ public class Timeline
      */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
-    	
     	System.out.println("Timeline Settings updated!");
     }
     

@@ -305,6 +305,8 @@ public class SelectScene extends Scene
 			System.out.println(t.getImagePath());
 		SceneHandler.singleton.GetSceneInstanceByType(SceneType.ARRANGE).initialize();
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
+		
+		TimelineParser.ExportTimeline("test");
 	}
 	
     /**

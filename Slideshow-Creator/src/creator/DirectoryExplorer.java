@@ -232,6 +232,7 @@ public class DirectoryExplorer extends Scene {
 	public void GoToSelectScene(File slFile)
 	{
 		SceneHandler.singleton.setDirectory(slFile);
+	    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 	}
 	

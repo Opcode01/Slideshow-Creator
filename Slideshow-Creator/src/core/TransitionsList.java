@@ -77,6 +77,21 @@ public class TransitionsList
     }
 
     /**
+     * addTransition will append given Transition object to transitions arrayList
+     * Overloaded to add transition at certain index
+     * 
+     * @param transition transition object to be added to end of transitions list
+     * @param index to add transition to 
+     * 
+     * @author Joe Hoang
+     */
+    public void addTransition(Transition transition, int index)
+    {
+        transitions.add(index, transition);
+    }
+
+    
+    /**
      * removeTransition will remove given transition object from transitions arrayList
      * 
      * @param transition Transition object to be removed from transitions list
@@ -154,15 +169,14 @@ public class TransitionsList
     }
     
     /**
-     * gets index of supplied Transition or -1 if not found
-     * @param Transition transition to search for
+     * gets index of supplied thumbnail or -1 if not found
+     * @param thumbnail thumbnail to search for
      * 
-     * @return index of supplied transition or -1 if not found
+     * @return index of supplied thumbnail or -1 if not found
      */
-    public int indexOf(Transition t)
+    public int indexOf(Transition transition)
     {
-        return transitions.indexOf(t);
+        return transitions.indexOf(transition);
     }
-
 
 }
