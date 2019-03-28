@@ -184,7 +184,7 @@ public class ArrangeScene extends Scene{
 		// Create outer panel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
-		timelinePanelContainer.setBackground(SliderColor.medium_gray);
+		timelinePanelContainer.setBackground(SliderColor.light_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
@@ -274,7 +274,7 @@ public class ArrangeScene extends Scene{
 		// Create image panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
-		timelinePanel.setBackground(SliderColor.medium_gray);
+		timelinePanel.setBackground(SliderColor.light_gray);
 		ShowImages();
 		
 		// Add to outer panel that houses the timeline panel with formatting
