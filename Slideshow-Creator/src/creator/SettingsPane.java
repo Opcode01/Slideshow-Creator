@@ -322,15 +322,9 @@ public class SettingsPane extends FloatingPane
 		c.insets = new Insets(30, 0, 10, 15);
 		settingsPanel.add(typeLabel, c);
 		
-		// Set constraints and add audio label
-		c.gridx = 0;
-		c.gridy = 3;
-		c.insets = new Insets(10, 0, 10, 15);
-		settingsPanel.add(audioLabel, c);
-		
 		// Set constraints and add length label
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.insets = new Insets(10, 0, 30, 15);
 		settingsPanel.add(durationLabel, c);
 		
@@ -346,15 +340,9 @@ public class SettingsPane extends FloatingPane
 		c.insets = new Insets(5, 0, 10, 0);
 		settingsPanel.add(slideshowLoopLabel, c);
 		
-		// Set constraints and add audio text display
-		c.gridx = 1;
-		c.gridy = 3;
-		c.insets = new Insets(10, 7, 10, 0);
-		settingsPanel.add(audioText, c);
-		
 		// Set constraints and add duration text
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 3;
 		c.insets = new Insets(10, 7, 30, 0);
 		settingsPanel.add(durationText, c);
 		
@@ -369,12 +357,6 @@ public class SettingsPane extends FloatingPane
 		c.gridy = 2;
 		c.insets = new Insets(30, 0, 10, 0);
 		settingsPanel.add(manualButton, c);
-		
-		// Set constraints and add audio button
-		c.gridx = 2;
-		c.gridy = 3;
-		c.insets = new Insets(5, 5, 5, 5);
-		settingsPanel.add(audioButton, c);
 		
 		// Set constraints and add audio loop check
 		c.gridx = 1;

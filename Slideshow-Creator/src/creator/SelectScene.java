@@ -226,8 +226,7 @@ public class SelectScene extends Scene
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(SliderColor.light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
-		imageScroller.getVerticalScrollBar().setUnitIncrement(20);
-
+		imageScroller.getVerticalScrollBar().setUnitIncrement(25);
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -296,6 +295,7 @@ public class SelectScene extends Scene
 		System.out.println("Thumbnails in Timeline:");
 		for (Thumbnail t : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
 			System.out.println(t.getImagePath());
+		SceneHandler.singleton.GetSceneInstanceByType(SceneType.ARRANGE).initialize();
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
 		
 		TimelineParser.ExportTimeline("test");
