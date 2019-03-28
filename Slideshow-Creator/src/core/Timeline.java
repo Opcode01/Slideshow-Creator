@@ -40,23 +40,33 @@ public class Timeline
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
-        timelineSettings = new Settings(false, false, false, 1, 5);
+        timelineSettings = new Settings(false, false, false, "", 1);
         directory = SceneHandler.singleton.getDirectory();
     }
     
+    /**
+     * UpdateProjectSettings - updates the settings
+     * 
+     * @author Austin Vickers
+     */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
-    	
-    	timelineSettings = s;
-    	//Update all transition lengths
-    	
-    	ArrayList<Transition> list = transitionsList.getTransitions();
-    	for(Transition t : list) 
-    	{
-    		t.setTransitionLength(s.transitionLength);
-    	}
-    	
     	System.out.println("Timeline Settings updated!");
+    }
+    
+    /**
+     * UpdateTransitionSettings - updates all transition settings
+     * 
+     * @author Fernando Palacios
+     */
+    public void UpdateTransitionSettings(double speed, TransitionType type)
+    {
+    	//Update all transition lengths and types
+    	ArrayList<Transition> list = transitionsList.getTransitions();
+    	for(Transition t : list) {
+    		t.setTransitionLength(speed);
+    		t.setTransitionType(type);
+    	}
     }
 
     /**
@@ -68,7 +78,7 @@ public class Timeline
     public void addSlide(Thumbnail thumbnail)
     {
         thumbnailsList.addThumbnail(thumbnail);
-        transitionsList.addTransition(new Transition(TransitionType.NONE, 1));
+        transitionsList.addTransition(new Transition(TransitionType.WIPE_LEFT, 1));
     }
 
     /**

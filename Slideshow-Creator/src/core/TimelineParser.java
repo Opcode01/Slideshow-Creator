@@ -39,7 +39,6 @@ public class TimelineParser
 		out.put("isLoopingSlides", output.timelineSettings.isLoopingSlides);
 		out.put("isLoopingAudio", output.timelineSettings.isLoopingAudio);
 		out.put("isManual", output.timelineSettings.isManual);
-		out.put("transitionLength", output.timelineSettings.transitionLength);
 		out.put("slideDuration", output.timelineSettings.slideDuration);
 		out.put("parentDir", SceneHandler.singleton.getDirectory());
 		
@@ -130,11 +129,10 @@ public class TimelineParser
 			boolean isManual = (boolean) in.get("isManual");
 			boolean isLoopingAudio = (boolean) in.get("isLoopingAudio");
 			long slideDuration = (Long) in.get("slideDuration");
-			long transitionLength = (Long) in.get("transitionLength");
 			Settings importedSettings = new Settings(loopingSlides, 
 													isLoopingAudio, 
 													isManual, 
-													(int)transitionLength, 
+													"", 
 													(int)slideDuration);
 			
 			importedTimeline.setDirectory((String) in.get("parentDir"));
