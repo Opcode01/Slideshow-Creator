@@ -167,8 +167,8 @@ public class PlayScene extends Scene {
 			leftButton.setRolloverIcon(backIconHigh);
 			leftButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	scheduleStartTransition(SlideDir.LEFT);
-			    	//advanceSlide(SlideDir.LEFT);
+			    	if (!isTransitioning())
+			    		scheduleStartTransition(SlideDir.LEFT);
 			    }
 			});
 			
@@ -191,8 +191,8 @@ public class PlayScene extends Scene {
 			rightButton.setRolloverIcon(forwardIconHigh);
 			rightButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	scheduleStartTransition(SlideDir.RIGHT);
-			    	//advanceSlide(SlideDir.RIGHT);
+			    	if (!isTransitioning())
+			    		scheduleStartTransition(SlideDir.RIGHT);
 			    }
 			});
 			
@@ -246,6 +246,8 @@ public class PlayScene extends Scene {
 	/**
 	 * creates a JLabel with the current slide thumbnail on it
 	 * @return JLabel of the current slide
+	 * 
+	 * @author Timothy Couch
 	 */
 	private JLabel createSlideLabel()
 	{
@@ -263,6 +265,8 @@ public class PlayScene extends Scene {
 	 * gets the thumbnail at the slide index specified
 	 * @param i slide index to get thumbnail
 	 * @return thumbnail at index i
+	 * 
+	 * @author Timothy Couch
 	 */
 	private Thumbnail getSlide(int i) {
 		return timeline.thumbnailsList.getThumbnail(i);
@@ -420,19 +424,6 @@ public class PlayScene extends Scene {
 		for (int i = 0; i < slideTimes.length; i++)
 			slideTimes[i] = new SlideShowTime(timeline, i);
 		
-		Timer t = new Timer();
-		t.schedule(
-				new TimerTask() {
-					@Override
-					public void run()
-					{
-						
-					}
-				},
-				10,
-				10
-				);
-		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual)
 			scheduleStartTransition(SlideDir.RIGHT);
@@ -458,15 +449,11 @@ public class PlayScene extends Scene {
 	/**
 	 * Whether the program is currently transitioning
 	 * @return true if there's a transition running
+	 * 
+	 * @author Timothy Couch
 	 */
-	private boolean isTransitioning() {
-		Transition currentTransition = null;
-		if (currentTransitionIndex >= 0)
-		{
-			currentTransition = timeline.transitionsList.getTransition(currentTransitionIndex);
-			return currentTransition.isRunning();
-		}
-		else return false;
+	private synchronized boolean isTransitioning() {
+		return currentTransitionIndex >= 0;
 	}
 	
 	/**
