@@ -464,6 +464,7 @@ public class PlayScene extends Scene {
 	@Override
 	public void destroy()
 	{
+		super.destroy();
 		stopSlideshow();
 	}
 }

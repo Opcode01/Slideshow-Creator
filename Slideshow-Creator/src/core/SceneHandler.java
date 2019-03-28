@@ -241,5 +241,7 @@ public class SceneHandler {
 			Scene scene = scenesIt.next().getValue();
 			scene.destroy();
 		}
+		timeline = null;
+		System.gc();
 	}
 }
