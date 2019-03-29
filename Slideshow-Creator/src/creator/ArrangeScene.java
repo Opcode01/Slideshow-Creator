@@ -47,11 +47,17 @@ public class ArrangeScene extends Scene{
 	/** Back button */
 	private JButton backButton;
 	
-	/** Select all button */
+	/** Settings button */
 	private JButton settingsButton;
 	
-	/** Deselect all button */
+	/** Remove current button */
 	private JButton removeCurrentButton;
+	
+	/** Swap thumbnail forward button */
+	private JButton swapForwardButton;
+	
+	/** Swap thumbnail backward button */
+	private JButton swapBackwardButton;
 	
 	/** Back custom button image */
 	private ImageIcon back;
@@ -164,6 +170,51 @@ public class ArrangeScene extends Scene{
 		    	revalidate();
 		    }
 		});
+
+		swapForwardButton = new JButton("FWD");
+		swapForwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		swapForwardButton.setToolTipText("Swap selected thumbnail forward");
+		//swapForwardButton.setBorder(BorderFactory.createEmptyBorder());
+		//swapForwardButton.setContentAreaFilled(false);
+		swapForwardButton.setFocusable(false);
+		//swapForwardButton.setRolloverIcon(highlightedRemoveCurrent);
+		swapForwardButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	// Swap selected thumbnail forward
+		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	if(selectedThumbnail != null) {
+			    	timeline.thumbnailsList.swapForward(selectedThumbnail);
+		    	}
+		    	
+		    	// Remove components and repaint 
+		    	timelinePanel.removeAll();
+		    	ShowImages();
+		    	revalidate();
+		    }
+		});
+		
+		swapBackwardButton = new JButton("BCK");
+		swapBackwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		swapBackwardButton.setToolTipText("Swap selected thumbnail backward");
+		//swapBackwardButton.setBorder(BorderFactory.createEmptyBorder());
+		//swapBackwardButton.setContentAreaFilled(false);
+		swapBackwardButton.setFocusable(false);
+		//swapBackwardButton.setRolloverIcon(highlightedRemoveCurrent);
+		swapBackwardButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	// Swap selected thumbnail forward
+		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	if(selectedThumbnail != null) {
+			    	timeline.thumbnailsList.swapBackward(selectedThumbnail);
+		    	}
+		    	
+		    	// Remove components and repaint 
+		    	timelinePanel.removeAll();
+		    	ShowImages();
+		    	revalidate();
+		    }
+		});
+		
 		
 		// Set options panel configurations
 		optionsPanel = new JPanel();
@@ -184,10 +235,22 @@ public class ArrangeScene extends Scene{
 		optionsPanel.add(settingsButton, c);
 		
 		// Set constraints and add remove current button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
+		
+		// Set constraints and add swap forward button
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(swapForwardButton, c);
+		
+		// Set constraints and add swap backward button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 5;
+		optionsPanel.add(swapBackwardButton, c);
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
