@@ -536,6 +536,10 @@ public class TransitionPane extends FloatingPane {
 			transition.setTransitionType(type);
 			transition.setTransitionLength(speed);
 		}
+		
+		// Tell arrange scene to revalidate its buttons
+		ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		scene.setupTimelinePanel(true);
 	}
 	
     /**
