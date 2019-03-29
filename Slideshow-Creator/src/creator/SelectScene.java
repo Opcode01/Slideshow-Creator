@@ -423,6 +423,7 @@ public class SelectScene extends Scene
 		allThumbs = new ThumbnailsList();
 		addImagesInDirectory(new File(SceneHandler.singleton.getDirectory()));
 		setupImagePanel(true);
+		UpdateSelected();
     }
     
     /**
@@ -519,15 +520,37 @@ public class SelectScene extends Scene
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                    int red = (c.getRed() - 30) <= 0 ? 0 : c.getRed() - 30;
-                    int green = (c.getGreen() - 30) <= 0 ? 0
-                        : c.getGreen() - 30;
-                    int blue = (c.getBlue() - 30) <= 0 ? 0 : c.getBlue() - 30;
+                    int red = (c.getRed() - 40) <= 0 ? 0 : c.getRed() - 40;
+                    int green = (c.getGreen() - 40) <= 0 ? 0
+                        : c.getGreen() - 40;
+                    int blue = (c.getBlue() - 40) <= 0 ? 0 : c.getBlue() - 40;
                     c = new Color(red, green, blue);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
         }
         return buffered;
+    }
+    
+    private Image tint(Image thumbnail, Color color) {
+    	
+        Image img = thumbnail;
+
+        BufferedImage image = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        image.getGraphics().drawImage(img, 0, 0, null);
+        
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                Color pixelColor = new Color(image.getRGB(x, y), true);
+                int r = (pixelColor.getRed() + color.getRed()) / 2;
+                int g = (pixelColor.getGreen() + color.getGreen()) / 2;
+                int b = (pixelColor.getBlue() + color.getBlue()) / 2;
+                int a = pixelColor.getAlpha();
+                int rgba = (a << 24) | (r << 16) | (g << 8) | b;
+                image.setRGB(x, y, rgba);
+            }
+        }
+        return image;
     }
 }
