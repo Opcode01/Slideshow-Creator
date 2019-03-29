@@ -273,6 +273,15 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
+	 * gets the transition at the slide index specified
+	 * @param i slide index to get transition
+	 * @return transition at index i
+	 */
+	private Transition getTransition(int i) {
+		return timeline.transitionsList.getTransition(i);
+	}
+	
+	/**
 	 * gets the index of the next slide to the right or left. Accounts for looping or not
 	 * @param dir left or right to get index
 	 * @return index of next slide
@@ -337,7 +346,7 @@ public class PlayScene extends Scene {
 			currentTransitionIndex = getNextSlideIndex(dir);
 		else currentTransitionIndex = currentSlideIndex;
 		
-		Transition transition = timeline.transitionsList.getTransition(currentSlideIndex);
+		Transition transition = getTransition(currentTransitionIndex);
 		
 		slidePanel.removeAll();
 		JPanel transitionPanel = new JPanel();
