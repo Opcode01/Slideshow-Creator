@@ -51,6 +51,7 @@ public class Timeline
      */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
+    	timelineSettings = s;
     	System.out.println("Timeline Settings updated!");
     }
     
