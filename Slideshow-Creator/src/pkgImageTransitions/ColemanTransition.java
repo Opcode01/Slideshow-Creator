@@ -17,7 +17,19 @@ import javax.swing.JPanel;
 // Last Modified by Austin Vickers - March 2019
 //==========================================================================================
 public class ColemanTransition
-{	
+{
+	private boolean aborting = false;
+	
+	public synchronized void abort()
+	{
+		aborting = true;
+	}
+	
+	public synchronized boolean isAborting()
+	{
+		return aborting;
+	}
+	
 	//--------------------------------------------------------
 	/** Default constructor */
 	//--------------------------------------------------------
@@ -36,7 +48,7 @@ public class ColemanTransition
 	//  ImageB - Image to transition to
 	//  time - Number of seconds to take to do this transition
 	//---------------------------------------------------------
-	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
+	public synchronized void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		// Get all the graphics objects
 		Graphics gPan = imgPanel.getGraphics();

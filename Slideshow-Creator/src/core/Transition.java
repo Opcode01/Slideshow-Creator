@@ -114,22 +114,23 @@ public class Transition {
 	}
 	
 	/**
-	 * Stop the transition
+	 * Stop the transition while it is running
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void StopTransition() throws Exception
+	public void stopTransition()
 	{
-		//TODO: Implement https://stackoverflow.com/questions/10961714/how-to-properly-stop-the-thread-in-java
 		if (isRunning())
 		{
 			try {
+				transition.abort();
+				System.out.println("Joining");
 				transitionThread.join();
+				System.out.println("Done waiting");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		throw new Exception("NOT IMPLEMENTED");
 	}
 
 }

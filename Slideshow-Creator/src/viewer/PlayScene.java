@@ -136,7 +136,7 @@ public class PlayScene extends Scene {
 		exitButton.setRolloverIcon(removeCurrentIconHigh);
 		exitButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	GoToDirectoryScene();
+		    	stopSlideshow();
 		    }
 		});
 		
@@ -365,7 +365,7 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private synchronized void scheduleStartTransition(SlideDir dir) {
-		stopSlideshow();
+		cancelTimer();
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
@@ -397,7 +397,7 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private synchronized void scheduleStartSlide(SlideDir dir) {
-		stopSlideshow();
+		cancelTimer();
 		slideTimer = new Timer();
 		slideTimer.schedule(
 				new TimerTask() {
@@ -439,12 +439,25 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
+	 * ends the slideshow, waits on the transition to stop (not to finish), returns to menu
+	 */
+	private synchronized void stopSlideshow()
+	{
+		cancelTimer();
+		
+		if (currentTransitionIndex >= 0)
+			getTransition(currentTransitionIndex).stopTransition();
+		
+		GoToDirectoryScene();
+	}
+	
+	/**
 	 * cancels the timer for the slideshow
 	 * @return whether the timer existed before
 	 * 
 	 * @author Timothy Couch
 	 */
-	private synchronized boolean stopSlideshow() {
+	private synchronized boolean cancelTimer() {
 		if (slideTimer != null)
 		{
 			slideTimer.cancel();
@@ -474,6 +487,6 @@ public class PlayScene extends Scene {
 	public void destroy()
 	{
 		super.destroy();
-		stopSlideshow();
+		cancelTimer();
 	}
 }
