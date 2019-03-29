@@ -10,6 +10,7 @@ import pkgImageTransitions.Transitions.*;
 
 public class Transition {
 
+	/** The type of transition */
 	private TransitionType type;
 	public void setTransitionType(TransitionType t) {
 		type = t;
@@ -59,11 +60,15 @@ public class Transition {
 		return transitionLength;
 	}
 	
-	//The actual transition implementation provided by Dr.Coleman
+	/** The actual transition implementation provided by Dr.Coleman */
 	private ColemanTransition transition;
 	
-	//thread to run the transition on
+	/** thread to run the transition on */
 	private Thread transitionThread;
+	
+	public Thread getTransitionThread() {
+		return transitionThread;
+	}
 	
 	/**
 	 * Transition() - default constructor for Transition class
@@ -123,8 +128,8 @@ public class Transition {
 		if (isRunning())
 		{
 			try {
-				transition.abort();
 				System.out.println("Joining");
+				transition.abort();
 				transitionThread.join();
 				System.out.println("Done waiting");
 			} catch (InterruptedException e) {

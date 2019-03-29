@@ -60,7 +60,7 @@ public class PlayScene extends Scene {
 	private int currentSlideIndex;
 	
 	/** Index of transition currently playing, -1 if none playing */
-	private int currentTransitionIndex = -1;
+	private int currentTransitionIndex;
 	
 	/** reference to SceneHandler's timeline */
 	private Timeline timeline;
@@ -93,6 +93,7 @@ public class PlayScene extends Scene {
 	{
 		//clear out if it had stuff previously
 		this.removeAll();
+		currentTransitionIndex = -1;
 		
 		timeline = SceneHandler.singleton.getTimeline();
 		
@@ -137,6 +138,7 @@ public class PlayScene extends Scene {
 		exitButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	stopSlideshow();
+				GoToDirectoryScene();
 		    }
 		});
 		
@@ -440,15 +442,18 @@ public class PlayScene extends Scene {
 	
 	/**
 	 * ends the slideshow, waits on the transition to stop (not to finish), returns to menu
+	 * 
+	 * @author Timothy Couch
 	 */
 	private synchronized void stopSlideshow()
 	{
 		cancelTimer();
 		
 		if (currentTransitionIndex >= 0)
+		{
 			getTransition(currentTransitionIndex).stopTransition();
-		
-		GoToDirectoryScene();
+			currentTransitionIndex = -1;
+		}
 	}
 	
 	/**
@@ -487,6 +492,6 @@ public class PlayScene extends Scene {
 	public void destroy()
 	{
 		super.destroy();
-		cancelTimer();
+		stopSlideshow();
 	}
 }
