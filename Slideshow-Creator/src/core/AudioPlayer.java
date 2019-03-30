@@ -1,30 +1,13 @@
-/**
- * AudioPlayer.java
- * Holds and plays an audio track
- * 
- * Slideshow Creator
- * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
- * CS 499 Senior Design with Dr. Rick Coleman
- * 2/26/19
- */
 
 package core;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-import javax.sound.midi.Synthesizer;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -32,36 +15,20 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
 //=============================================================================
 /** Class: AudioPlayer
 *  Purpose: This class implements the audio file player object which runs
 *  	in a separate thread.  Parts of this code were adapted from the project
 *   JavaSound found on-line.
+*   
 *  Author: Dr. Rick Coleman
 *  Date: January 2016
 */
 //=============================================================================
 
 public class AudioPlayer implements Runnable, LineListener
-{
-	
-	/** Floating frame width  */
-	public int m_iScnWidth = 640;
-	
-	/** Floating frame height  */
-	public int m_iScnHeight = 100;
-	
+{	
 	/** Name of the file to play */
 	private String m_CurrentName;
 	
@@ -96,15 +63,7 @@ public class AudioPlayer implements Runnable, LineListener
 		// Get the sequencer for this system and open it
         try 
         {
-
             sequencer = MidiSystem.getSequencer();
-
-            // Don't think I need the synthesizer
-//			if (sequencer instanceof Synthesizer) 
-//			{
-//				synthesizer = (Synthesizer)sequencer;
-//				channels = synthesizer.getChannels();
-//			} 
 
         }
         catch (Exception ex) 
@@ -112,12 +71,11 @@ public class AudioPlayer implements Runnable, LineListener
         	ex.printStackTrace(); 
         	return; 
         }
-//        sequencer.addMetaEventListener(this);
         
         // Create the thread for this player
 		m_PlayerThread = new Thread(this);
 		m_PlayerThread.start();
-
+		
 	}
 	
 	//---------------------------------------------------
@@ -129,6 +87,7 @@ public class AudioPlayer implements Runnable, LineListener
     		return;		// Oops! Couldn't load the file so terminate
     	playAudioFile();	// If all OK play the file
 	}
+    
 	//---------------------------------------------------
 	// Load the audio file
 	//---------------------------------------------------
@@ -136,37 +95,29 @@ public class AudioPlayer implements Runnable, LineListener
     {
     	System.out.println("In loadAudioFile.");
        if (m_AudioFile instanceof File) 
-        {
+       {
         	m_CurrentName = m_AudioFile.getName();
-//            playbackMonitor.repaint();
             try 
             {
             	m_CurrentSound = AudioSystem.getAudioInputStream(m_AudioFile);
             } 
             catch(Exception e1) 
             {
-                // load midi & rmf as inputstreams for now
-                //try { 
-                    //currentSound = MidiSystem.getSequence((File) object);
-                //} catch (Exception e2) { 
-                    try 
-                    { 
-                    	System.out.println("loadAudioFile is creating a BufferedInputStream.");
-                        FileInputStream is = new FileInputStream(m_AudioFile);
-                        m_CurrentSound = new BufferedInputStream(is, 1024);
-                    } 
-                    catch (Exception e3) 
-                    { 
-                        e3.printStackTrace(); 
-                        m_CurrentSound = null;
-                        return false;
-                    }
-                //}
+            	try 
+                { 
+                  	System.out.println("loadAudioFile is creating a BufferedInputStream.");
+                    FileInputStream is = new FileInputStream(m_AudioFile);
+                    m_CurrentSound = new BufferedInputStream(is, 1024);
+                } 
+                catch (Exception e3) 
+                { 
+                	e3.printStackTrace(); 
+                    m_CurrentSound = null;
+                    return false;
+                }
+         
             }
-        }
-
-
-//        loading.interrupt();
+       }
 
         // user pressed stop or changed tabs while loading
         if (sequencer == null) 
@@ -211,7 +162,6 @@ public class AudioPlayer implements Runnable, LineListener
                 clip.addLineListener(this);
                 clip.open(stream);
                 m_CurrentSound = clip;
-//                seekSlider.setMaximum((int) stream.getFrameLength());
             } 
            catch (Exception ex) 
            { 
@@ -235,7 +185,6 @@ public class AudioPlayer implements Runnable, LineListener
                 {
                     sequencer.setSequence((BufferedInputStream) m_CurrentSound);
                 }
-//				seekSlider.setMaximum((int)(sequencer.getMicrosecondLength() / 1000));
 
             } 
             catch (InvalidMidiDataException imde) 
@@ -252,45 +201,7 @@ public class AudioPlayer implements Runnable, LineListener
             }
         }
 
-    	// CODE BELOW WORKS BUT WAS NOT FROM THE JAVASOUND DEMONSTRATION AND Juke.java
-/*
-		if(m_AudioFile != null)
-		{
-			// Load the file for playing - Code taken from loadSound in JavaSound.Juke
-            //currentName = ((File) object).getName();  We already have the name of the file in m_sAudioFileName
-           //  playbackMonitor.repaint(); Class in JavaSound.Juke.  This is probably mostly just eye candy as it extends JPanel
-            try 
-            {
-            	m_CurrentSound = AudioSystem.getAudioInputStream(m_AudioFile);
-            	return true;
-            } 
-            catch(Exception e1) 
-            {
-                // load midi & rmf as inputstreams for now
-                //try { 
-                    //currentSound = MidiSystem.getSequence((File) object);
-                //} catch (Exception e2) { 
-                    try 
-                    { 
-                        FileInputStream is = new FileInputStream(m_AudioFile);
-                        m_CurrentSound = new BufferedInputStream(is, 1024);
-                        return true;
-                    } 
-                    catch (Exception e3) 
-                    { 
-                        e3.printStackTrace(); 
-                        m_CurrentSound = null;
-                        // If we get here we don't have a playable sound so send warning
-            			JOptionPane.showMessageDialog(m_ParentFrame, 
-            					"Error: Unable to load sound file. Do not try to start playing.", 
-            					"Error Loading Sound", JOptionPane.ERROR_MESSAGE);
-            			return false;
-                    }
-                //}
-            }
-		}
-		*/
-		return true;  // Assume if we get here everything is OK so start playing
+        return true;  // Assume if we get here everything is OK so start playing
     }
     
 	//----------------------------------------------------------------------
@@ -298,11 +209,6 @@ public class AudioPlayer implements Runnable, LineListener
 	//----------------------------------------------------------------------
 	public void playAudioFile()
 	{
-		// THE CODE BELOW WAS ADAPTED FROM JAVASOUND DEMONSTRATION AND THE Juke.java FILE.
-		//   FIRST TRY CODE IS COMMENTED OUT BELOW THAT.
- //       playbackMonitor.start();
- //       setGain();
- //       setPan();
         midiEOM = audioEOM = bump = false;
         if (m_CurrentSound instanceof Sequence || 
         		m_CurrentSound instanceof BufferedInputStream && m_PlayerThread != null) 
@@ -327,12 +233,11 @@ public class AudioPlayer implements Runnable, LineListener
         else if (m_CurrentSound instanceof Clip && m_PlayerThread != null) 
         {
         	System.out.println("playAudioFile is creating a clip.");
-           Clip clip = (Clip) m_CurrentSound;
+            Clip clip = (Clip) m_CurrentSound;
             clip.start();
             try 
             { 
             	m_PlayerThread.sleep(99); 
-//            	thread.sleep(99); 
             } 
             catch (Exception e) 
             { }
@@ -352,67 +257,8 @@ public class AudioPlayer implements Runnable, LineListener
             clip.close();
         }
         m_CurrentSound = null;
-//        playbackMonitor.stop();
-		// THE CODE BELOW WAS MY FIRST TRY AT PLAYING AN AUDIO FILE.  IT WORKS BUT
-		//  DOESN'T ALLOW FOR PAUSING, FAST FORWARD, ETC.  
-/*
-	      SourceDataLine soundLine = null;
-	      int BUFFER_SIZE = 64*1024;  // 64 KB
-	   
-	      // Set up an audio input stream piped from the sound file.
-	      try 
-	      {
-//	         File soundFile = new File(m_sAudioFileName);
-	         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(m_AudioFile);
-	         AudioFormat audioFormat = audioInputStream.getFormat();
-	         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-	         soundLine = (SourceDataLine) AudioSystem.getLine(info);
-	         soundLine.open(audioFormat);
-	         soundLine.start();
-	         int nBytesRead = 0;
-	         byte[] sampledData = new byte[BUFFER_SIZE];
-	         while (nBytesRead != -1) 
-	         {
-	            nBytesRead = audioInputStream.read(sampledData, 0, sampledData.length);
-	            if (nBytesRead >= 0) 
-	            {
-	               // Writes audio data to the mixer via this source data line.
-	               soundLine.write(sampledData, 0, nBytesRead);
-	            }
-	         }
-	      }
-	      catch (UnsupportedAudioFileException ex) 
-	      {
-	         ex.printStackTrace();
-	      }
-	      catch (IOException ex) 
-	      {
-	         ex.printStackTrace();
-	      }
-	      catch (LineUnavailableException ex) 
-	      {
-	         ex.printStackTrace();
-	      }
-	      finally 
-	      {
-	         soundLine.drain();
-	         soundLine.close();
-	      }
-		// Can't use the following without the AudioStream library from Sun
-//		InputStream in = new FileInputStream(new File(m_sAudioFile));
-//		AudioStream audioStream = new AudioStream(in);
-//		AudioPlayer.player.start(audioStream);
- 
- */
-	}
-	
-	/* need to add this somewhere after playing
-	    if (sequencer != null) 
-        {
-            sequencer.close();
-        }
 
-	 */
+	}
 	
 	//----------------------------------------------------------------
 	/** Pause playing the audio file.  Called by the pause button. */
