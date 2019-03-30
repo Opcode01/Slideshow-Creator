@@ -142,12 +142,17 @@ public class ArrangeScene extends Scene{
 		this.setLayout(gridBag);
 		
 		// Create images and add icons
+		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
+		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -551,17 +556,6 @@ public class ArrangeScene extends Scene{
 	 */
 	private void AddAudio()
 	{
-	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
-	    int transitionLength = (100) * timeline.transitionsList.getSize();
-	    
-	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
-	    //TO DO: int audioTrackSize = (size of audio track in seconds) * secondsToPixels
-	    int audioTrackSize = Math.round(15 * secondsToPixels); //2150 should be the answer i thin
-	    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
-	    System.out.println(audioTrackSize);
-	    
-	    audioPanel.remove(audioButton);
-	    --audioxCounter;
 	    
 	    // Create text field for audio
 		JTextField audioText = new JTextField();
@@ -573,12 +567,12 @@ public class ArrangeScene extends Scene{
 	    
 	    // CReate remove audio button
 	    JButton removeAudioButton = new JButton(audio);
-	    audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		audioButton.setBorder(BorderFactory.createEmptyBorder());
-		audioButton.setContentAreaFilled(false);
-		audioButton.setFocusable(false);
-		audioButton.setRolloverIcon(highlightedAudio);
-		audioButton.addActionListener(new ActionListener() {
+	    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
+		removeAudioButton.setContentAreaFilled(false);
+		removeAudioButton.setFocusable(false);
+		removeAudioButton.setRolloverIcon(highlightedAudio);
+		removeAudioButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	//RemoveAudio();
 		    }
@@ -594,7 +588,6 @@ public class ArrangeScene extends Scene{
 	    
 	    // Re-add audio button to end of panel
 	    audioPanel.add(audioButton, audioConstraints);
-	    ++audioxCounter;
 	}
 	
 	/**
@@ -614,11 +607,22 @@ public class ArrangeScene extends Scene{
      */
 	public void UpdateAudio()
 	{
-		//for(int i = 0; i < timeline.audioList.getSize(); i++)
-		//{
-		//    audioFile = timeline.audioList.getAudio(i);
-		//    AddAudio();
-		//}
+	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
+	    int transitionLength = (100) * timeline.transitionsList.getSize();
+	    
+	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
+	    //TO DO: int audioTrackSize = (size of audio track in seconds) * secondsToPixels
+	    int audioTrackSize = Math.round(15 * secondsToPixels); //2150 should be the answer i thin
+	    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
+	    System.out.println(audioTrackSize);
+	    
+		for(int i = 0; i < timeline.audioList.getSize(); i++)
+		{
+		    audioFile = timeline.audioList.getAudio(i);
+		}
+		
+	    // Add audio button to end of panel
+	    audioPanel.add(audioButton, audioConstraints);
 	}
 	
 	/**
