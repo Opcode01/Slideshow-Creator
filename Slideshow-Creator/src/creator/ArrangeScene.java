@@ -132,7 +132,8 @@ public class ArrangeScene extends Scene{
 	 *
 	 * @author Fernando Palacios
 	 */
-	public ArrangeScene () {
+	public ArrangeScene () 
+	{
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -194,14 +195,14 @@ public class ArrangeScene extends Scene{
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	// Remove selected thumb from timeline
-		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	timeline = SceneHandler.singleton.getTimeline();
 		    	System.out.println(selectedThumbnail.getImagePath() + "remove");
 		    	int removeIndex = timeline.thumbnailsList.indexOf(selectedThumbnail);
 		    	timeline.removeSlide(removeIndex);
 		    	
 		    	// Remove components and repaint 
 		    	timelinePanel.removeAll();
-		    	ShowImages();
+		    	PopulateTimeline();
 		    	revalidate();
 		    }
 		});
@@ -242,15 +243,16 @@ public class ArrangeScene extends Scene{
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
+		audioConstraints = new GridBagConstraints();
 		
 		// Set up blank timeline panel
-		setupTimelinePanel(false);
+		SetupTimelinePanel(false);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		timelineScroller.setPreferredSize(new Dimension(200, 235));
+		timelineScroller.setPreferredSize(new Dimension(200, 400)); //235
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
 		///////////////////////
@@ -311,11 +313,11 @@ public class ArrangeScene extends Scene{
     {
 		super.initialize();
 
-		setupTimelinePanel(true);
+		SetupTimelinePanel(true);
     }
 	
     /**
-     * setupTimelinePanel() - opens the images and sets up the scene for use
+     * SetupTimelinePanel() - opens the images and sets up the scene for use
      * 
      * @param revalidate - calls revalidate if boolean is set to true otherwise not
 	 * 
@@ -323,21 +325,36 @@ public class ArrangeScene extends Scene{
 	 * @author Joseph Hoang
 	 * @author Fernando Palacios
      */
-	public void setupTimelinePanel(boolean revalidate)
+	public void SetupTimelinePanel(boolean revalidate)
 	{		
-		// Create image panel with new images
+		// Create timeline panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
 		timelinePanel.setBackground(medium_gray);
-		ShowImages();
+		PopulateTimeline();
 		
-		// Add to outer panel that houses the timeline panel with formatting
+		// Create audio panel
+		audioPanel = new JPanel();
+		audioPanel.setLayout(new GridBagLayout());
+		audioPanel.setBackground(aqua);
+		PopulateAudio();
+		UpdateAudio();
+		
+		// Make sure timeline panel container is blank by removing all
 		timelinePanelContainer.removeAll();
-		timelinePanelConstraints.weighty = 1;
+		
+		// Add timeline to outer panel
+		timelinePanelConstraints.weighty = 0;
 		timelinePanelConstraints.weightx = 1;
 		timelinePanelConstraints.gridx = 0;
 		timelinePanelConstraints.gridy = 0;
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
+		
+		// Add audio to outer panel
+		timelinePanelConstraints.weighty = 1;
+		timelinePanelConstraints.gridx = 0;
+		timelinePanelConstraints.gridy = 1;
+		timelinePanelContainer.add(audioPanel, timelinePanelConstraints);
 
 		if (revalidate) {
 			this.revalidate();
@@ -345,20 +362,20 @@ public class ArrangeScene extends Scene{
 	}
 	
     /**
-     * ShowImages() - creates thumbnail icons to display in scrollpane
+     * PopulateTimeline() - creates thumbnail icons to display in scrollpane
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
 	 * @author Joseph Hoang
      */
-	private void ShowImages()
+	private void PopulateTimeline()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; //layout counter y
 		
 		// Get instance of timeline and create button lists for thumb and transitions
-		Timeline timeline = SceneHandler.singleton.getTimeline();
+		timeline = SceneHandler.singleton.getTimeline();
 		JToggleButton[] thumbButtons = new JToggleButton[timeline.thumbnailsList.getSize()];
 		JButton[] transButtons = new JButton[timeline.transitionsList.getSize()];
 		
@@ -495,8 +512,8 @@ public class ArrangeScene extends Scene{
 		audioxCounter = 0;
 		
 		// Set constraints for formatting
-		audioConstraints.weighty = 0;
-		audioConstraints.weightx = 0;
+		//audioConstraints.weighty = 0;
+		//audioConstraints.weightx = 0;
 		audioConstraints.gridx = audioxCounter;
 		audioConstraints.gridy = 0;
 		
@@ -537,56 +554,12 @@ public class ArrangeScene extends Scene{
 	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
 	    int transitionLength = (100) * timeline.transitionsList.getSize();
 	    
-	    //TO DO: float secondsToPixels = (thumbnailLength + transitionLength) / slideshowDuration;
 	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
 	    //TO DO: int audioTrackSize = (size of audio track in seconds) * secondsToPixels
-	    int audioTrackSize = Math.round(15 * secondsToPixels); //2150 should be the answer i think
+	    int audioTrackSize = Math.round(15 * secondsToPixels); //2150 should be the answer i thin
+	    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
 	    System.out.println(audioTrackSize);
 	    
-	    audioPanel.remove(audioButton);
-	    --audioxCounter;
-	    
-	    // Create text field for audio
-		JTextField audioText = new JTextField();
-		audioText.setBackground(aqua);
-		audioText.setForeground(white);
-        audioText.setEditable(false);
-	    audioText.setText(audioFile.getName());
-	    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
-	    
-	    // CReate remove audio button
-	    JButton removeAudioButton = new JButton(audio);
-	    audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		audioButton.setBorder(BorderFactory.createEmptyBorder());
-		audioButton.setContentAreaFilled(false);
-		audioButton.setFocusable(false);
-		audioButton.setRolloverIcon(highlightedAudio);
-		audioButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	//RemoveAudio();
-		    }
-		});
-		
-		// Add audio remove button to audio panel
-	    audioPanel.add(removeAudioButton, audioConstraints);
-	    ++audioxCounter;
-	    
-	    // Add audio track to audio panel
-	    audioPanel.add(audiotext, audioConstraints);
-	    ++audioxCounter;
-	    
-	    // Re-add audio button to end of panel
-	    audioPanel.add(audioButton, audioConstraints);
-	    ++audioxCounter;
-	}
-	
-	/**
-	 * RemoveAudio() - removes visual audio textfield and audio from audioList
-	 * 
-	 * @author Fernando Palacios
-	 */
-	private void RemoveAudio()
-	{
 	    audioPanel.remove(audioButton);
 	    --audioxCounter;
 	    
@@ -616,12 +589,22 @@ public class ArrangeScene extends Scene{
 	    ++audioxCounter;
 	    
 	    // Add audio track to audio panel
-	    audioPanel.add(audiotext, audioConstraints);
+	    audioPanel.add(audioText, audioConstraints);
 	    ++audioxCounter;
 	    
 	    // Re-add audio button to end of panel
 	    audioPanel.add(audioButton, audioConstraints);
 	    ++audioxCounter;
+	}
+	
+	/**
+	 * RemoveAudio() - removes visual audio textfield and audio from audioList
+	 * 
+	 * @author Fernando Palacios
+	 */
+	private void RemoveAudio()
+	{
+
 	}
 	
     /**
@@ -631,11 +614,11 @@ public class ArrangeScene extends Scene{
      */
 	public void UpdateAudio()
 	{
-		for(int i = 0; i < timeline.audioList.getSize(); i++)
-		{
-		    audioFile = timeline.audioList.getAudio(i);
-		    AddAudio();
-		}
+		//for(int i = 0; i < timeline.audioList.getSize(); i++)
+		//{
+		//    audioFile = timeline.audioList.getAudio(i);
+		//    AddAudio();
+		//}
 	}
 	
 	/**
@@ -648,36 +631,8 @@ public class ArrangeScene extends Scene{
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 		SelectScene select = (SelectScene) SceneHandler.singleton.GetSceneInstanceByType(SceneType.SELECTION);
 		select.UpdateSelected();
-	}
+	} 
 	
-    /**
-     * TransHover() - darkens the image so that it adds a hovered effect
-     * 
-     * @param thumbnail - the thumbnail image that needs to be processed
-	 * 
-	 * @author Fernando Palacios
-     */
-    private Image TransHover(Image thumbnail) {
-        Image img = thumbnail;
-
-        BufferedImage buffered = new BufferedImage(img.getWidth(null),
-        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        buffered.getGraphics().drawImage(img, 0, 0, null);
-
-        for (int i = 0; i < buffered.getWidth(); i++) {
-            for (int j = 0; j < buffered.getHeight(); j++) {                    
-                int rgb = buffered.getRGB(i, j);
-                int alpha = (rgb >> 24) & 0x000000FF;
-                Color c = new Color(rgb);
-                if (alpha != 0) {
-                	c = new Color(254, 250, 238);
-                    buffered.setRGB(i, j, c.getRGB());
-                }
-            }
-        } 
-        return buffered;
-    }
-        
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
      * 
@@ -709,4 +664,33 @@ public class ArrangeScene extends Scene{
         } 
         return buffered;
     }
+    
+    /**
+     * TransHover() - darkens the image so that it adds a hovered effect
+     * 
+     * @param thumbnail - the thumbnail image that needs to be processed
+	 * 
+	 * @author Fernando Palacios
+     */
+    private Image TransHover(Image thumbnail) {
+        Image img = thumbnail;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                	c = new Color(254, 250, 238);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        } 
+        return buffered;
+    }
+
 }

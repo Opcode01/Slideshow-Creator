@@ -539,7 +539,7 @@ public class TransitionPane extends FloatingPane {
 		
 		// Tell arrange scene to revalidate its buttons
 		ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
-		scene.setupTimelinePanel(true);
+		scene.SetupTimelinePanel(true);
 	}
 	
     /**
