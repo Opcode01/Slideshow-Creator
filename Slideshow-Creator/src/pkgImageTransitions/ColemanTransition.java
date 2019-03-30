@@ -48,7 +48,7 @@ public class ColemanTransition
 	//  ImageB - Image to transition to
 	//  time - Number of seconds to take to do this transition
 	//---------------------------------------------------------
-	public synchronized void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
+	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		// Get all the graphics objects
 		Graphics gPan = imgPanel.getGraphics();

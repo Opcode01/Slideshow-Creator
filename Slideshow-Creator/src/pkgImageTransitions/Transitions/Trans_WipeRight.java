@@ -23,7 +23,7 @@ public class Trans_WipeRight extends ColemanTransition
 	//      Copy from B iterationIndex * incX of B onto the screen overwriting Image A that is there
 	//	        Sections of B are drawn from left to right
 	//---------------------------------------------------------
-	public synchronized void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
+	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
 		Graphics gA = ImageA.getGraphics();
