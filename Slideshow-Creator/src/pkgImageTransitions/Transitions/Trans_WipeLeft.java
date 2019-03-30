@@ -55,6 +55,8 @@ public class Trans_WipeLeft extends ColemanTransition
 		// Draw image A
 		for(int i=0; i<numIterations; i++)
 		{
+			if (isAborting())
+				break;
 			// Draw part of B over A on the screen
 			gPan.drawImage(ImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
 			bX2 = bX1;
@@ -69,10 +71,13 @@ public class Trans_WipeLeft extends ColemanTransition
 			    Thread.currentThread().interrupt();
 			}
 		}
-		// Move m_NextImage into m_CurrentImage for next time -  May not need this
-		ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-		// And one final draw to the panel to be sure it's all there
-		gPan.drawImage(ImageA, 0,0, imgPanel); 
+		if (!isAborting())
+		{
+			// Move m_NextImage into m_CurrentImage for next time -  May not need this
+			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
+			// And one final draw to the panel to be sure it's all there
+			gPan.drawImage(ImageA, 0,0, imgPanel);
+		}
 	}
 
 }
