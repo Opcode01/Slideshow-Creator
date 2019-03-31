@@ -16,6 +16,7 @@ public class Timeline
 {
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
+    public AudioPlayer audioPlayer;
     public Settings timelineSettings;
     
     private String directory;
@@ -40,7 +41,16 @@ public class Timeline
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
+        audioPlayer = new AudioPlayer();
         timelineSettings = new Settings(false, false, false, "", 1);
+        
+        /*
+        //testAudio
+        audioPlayer.addAudio(new Audio("C:\\Users\\jhoan\\Desktop\\Aloe\\VOL III\\Calgary Live.wav"));
+        System.out.println(audioPlayer.getAudio(0).getAudioPath());
+        System.out.println(audioPlayer.getAudio(0).getAudioLength());
+        */
+        
         directory = SceneHandler.singleton.getDirectory();
     }
     
