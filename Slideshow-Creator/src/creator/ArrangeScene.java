@@ -77,7 +77,10 @@ public class ArrangeScene extends Scene{
 	private Thumbnail selectedThumbnail;
 	
 	/** Audio file */
-	private File audioFile;
+	private Audio audioFile;
+	
+	/** Temp audio file */
+	private File tempFile;
 	
 	/** Create timeline object */
 	private Timeline timeline;
@@ -542,52 +545,12 @@ public class ArrangeScene extends Scene{
         
     	int returnVal = chooser.showDialog(ArrangeScene.this, "Open");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    audioFile = chooser.getSelectedFile();
-    	    //timeline.addAudio(audioFile);
+    	    tempFile = chooser.getSelectedFile();
+    	    audioFile = new Audio(tempFile.getPath(), tempFile.getName());
+    	    timeline.audioPlayer.addAudio(audioFile);
     	    audioPanel.removeAll();
         	UpdateAudio();
     	}
-	}
-	
-	/**
-	 * AddAudio() - adds visual audio textfield to display length of audiotrack
-	 * 
-	 * @author Fernando Palacios
-	 */
-	private void AddAudio()
-	{
-	    
-	    // Create text field for audio
-		JTextField audioText = new JTextField();
-		audioText.setBackground(aqua);
-		audioText.setForeground(Color.white);
-        audioText.setEditable(false);
-	    audioText.setText(audioFile.getName());
-	    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
-	    
-	    // CReate remove audio button
-	    JButton removeAudioButton = new JButton(audio);
-	    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
-		removeAudioButton.setContentAreaFilled(false);
-		removeAudioButton.setFocusable(false);
-		removeAudioButton.setRolloverIcon(highlightedAudio);
-		removeAudioButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	//RemoveAudio();
-		    }
-		});
-		
-		// Add audio remove button to audio panel
-	    audioPanel.add(removeAudioButton, audioConstraints);
-	    ++audioxCounter;
-	    
-	    // Add audio track to audio panel
-	    audioPanel.add(audioText, audioConstraints);
-	    ++audioxCounter;
-	    
-	    // Re-add audio button to end of panel
-	    audioPanel.add(audioButton, audioConstraints);
 	}
 	
 	/**
@@ -616,9 +579,41 @@ public class ArrangeScene extends Scene{
 	    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
 	    System.out.println(audioTrackSize);
 	    
-		for(int i = 0; i < timeline.audioList.getSize(); i++)
+		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
 		{
-		    audioFile = timeline.audioList.getAudio(i);
+		    audioFile = timeline.audioPlayer.getAudio(i);
+		    
+		    // Create text field for audio
+			JTextField audioText = new JTextField();
+			audioText.setBackground(aqua);
+			audioText.setForeground(Color.white);
+	        audioText.setEditable(false);
+		    audioText.setText(timeline.audioPlayer.getAudio(i).getAudioName());
+		    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
+		    
+		    // CReate remove audio button
+		    JButton removeAudioButton = new JButton(audio);
+		    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
+			removeAudioButton.setContentAreaFilled(false);
+			removeAudioButton.setFocusable(false);
+			removeAudioButton.setRolloverIcon(highlightedAudio);
+			removeAudioButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			    	//RemoveAudio();
+			    }
+			});
+			
+			// Add audio remove button to audio panel
+		    audioPanel.add(removeAudioButton, audioConstraints);
+		    ++audioxCounter;
+		    
+		    // Add audio track to audio panel
+		    audioPanel.add(audioText, audioConstraints);
+		    ++audioxCounter;
+		    
+		    // Re-add audio button to end of panel
+		    audioPanel.add(audioButton, audioConstraints);
 		}
 		
 	    // Add audio button to end of panel

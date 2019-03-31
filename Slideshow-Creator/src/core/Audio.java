@@ -11,6 +11,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Audio 
 {
 	private String audioPath;
+	private String audioName;
 	
 	/**
 	 * return local path to audio file 
@@ -19,6 +20,15 @@ public class Audio
 	public String getAudioPath()
 	{
 		return audioPath;
+	}
+	
+	/**
+	 * return name of audio file 
+	 * @return
+	 */
+	public String getAudioName()
+	{
+		return audioName;
 	}
 	
 	private float audioLength;
@@ -59,9 +69,10 @@ public class Audio
 	    
 	}
 	
-	public Audio(String audioPath)
+	public Audio(String audioPath, String audioName)
 	{
 		this.audioPath = audioPath;
+		this.audioName = audioName;
 		setAudioLength();
 	}
 	

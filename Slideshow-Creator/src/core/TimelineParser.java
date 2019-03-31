@@ -144,7 +144,8 @@ public class TimelineParser
 				JSONObject audio = (JSONObject) audioList.get(i);
 				long index = (Long) audio.get("index");
 				String path = (String) audio.get("path");
-				Audio newAudio = new Audio(path);
+				String name = (String) audio.get("name");
+				Audio newAudio = new Audio(path, name);
 				importedTimeline.audioPlayer.addAudio(newAudio, (int) index);
 			}
 			
