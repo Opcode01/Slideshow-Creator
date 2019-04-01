@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -236,10 +235,6 @@ public class ArrangeScene extends Scene{
 				AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
 				player.playAudioClipAtIndex(0);
 				
-				//Debugging
-				for(Audio clip : player.getAudioList()) {
-					System.out.println(clip.getAudioPath());
-				}
 			}
 		});
 		
@@ -422,6 +417,7 @@ public class ArrangeScene extends Scene{
         	player.addAudio(new Audio(audioFile));
         	display.setText(audioFile.getName());
     	}
+    
 	}
 	
     /**

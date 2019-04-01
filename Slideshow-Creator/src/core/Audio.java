@@ -33,7 +33,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 */
 //=============================================================================
 
-public class Audio implements Runnable, LineListener
+public class Audio extends NotifyingThread implements LineListener
 {
 	private String audioPath;
 	
@@ -148,7 +148,7 @@ public class Audio implements Runnable, LineListener
 	//---------------------------------------------------
 	// Run function required by the Runnable interface
 	//---------------------------------------------------
-    public void run()
+    public void doRun()
     {
     	if(!loadAudioFile())
     		return;		// Oops! Couldn't load the file so terminate
@@ -160,7 +160,6 @@ public class Audio implements Runnable, LineListener
 	//---------------------------------------------------
     private boolean loadAudioFile()
     {
-    	System.out.println("In loadAudioFile.");
        if (m_AudioFile instanceof File) 
        {
             try 
@@ -194,7 +193,6 @@ public class Audio implements Runnable, LineListener
 
         if (m_CurrentSound instanceof AudioInputStream) 
         {
-        	System.out.println("In if (m_CurrentSound instanceof AudioInputStream).");
           try 
            {
                 AudioInputStream stream = (AudioInputStream) m_CurrentSound;
@@ -388,6 +386,7 @@ public class Audio implements Runnable, LineListener
         if (event.getType() == LineEvent.Type.STOP && !m_bPaused) 
         { 
             audioEOM = true;
+            //notifyListeners();
         }
     }
 	
