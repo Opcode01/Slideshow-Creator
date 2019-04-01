@@ -85,9 +85,6 @@ public class ArrangeScene extends Scene{
 	/** Create timeline object */
 	private Timeline timeline;
 	
-	/** Counter for audio panel formatting */
-	private int audioxCounter;
-	
 	/** Back custom button image */
 	private ImageIcon back;
 	
@@ -507,6 +504,8 @@ public class ArrangeScene extends Scene{
 	    int transitionLength = (100) * timeline.transitionsList.getSize();
 	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
 	    
+	    int audioxCounter = 0;
+	    
 	    // Create audio button
 		audioButton = new JButton(audio);
 		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -548,7 +547,6 @@ public class ArrangeScene extends Scene{
 			    }
 			});
 			
-			audioxCounter = 0;
 			audioConstraints.gridx = audioxCounter;
 			audioConstraints.gridy = 0;
 			
@@ -560,11 +558,10 @@ public class ArrangeScene extends Scene{
 		    audioConstraints.gridx = audioxCounter;
 		    audioPanel.add(audioText, audioConstraints);
 		    audioxCounter++;
-		    
-		    // Re-add audio button to end of panel
-		    audioPanel.add(audioButton, audioConstraints);
-		    audioxCounter++;
 		}
+		
+	    // Re-add audio button to end of panel
+	    audioPanel.add(audioButton, audioConstraints);
 	}
 	
 	/**
