@@ -61,7 +61,7 @@ public class ArrangeScene extends Scene{
 	private JButton audioButton;
 	
 	//TESTING PURPOSES ONLY 3/29/19
-	private JButton playButton;
+	//private JButton playButton;
 	
 	/** Back custom button image */
 	private ImageIcon back;
@@ -79,7 +79,7 @@ public class ArrangeScene extends Scene{
 	private ImageIcon highlightedAudio;
 	
 	//TESTING PURPOSES ONLY 3/29/19
-	private ImageIcon play;
+	//private ImageIcon play;
 	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
@@ -135,7 +135,7 @@ public class ArrangeScene extends Scene{
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		
 		//TESTING PURPOSES ONLY 3/29/19
-		play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
+		//play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -194,6 +194,14 @@ public class ArrangeScene extends Scene{
 		    	revalidate();
 		    }
 		});
+////////////////////////////////////////////////////////////////////////
+/**
+* 	TESTING PURPOSES ONLY! - Eventually these buttons will be implemented
+* 	for real once the audio timeline is done
+* 
+* 	@author austinvickers
+* 	@date 3/31/19
+*
 		
 		//TODO: Put this where its supposed to be
 		//Create audio button - temporary until audio timeline GUI is done
@@ -217,7 +225,7 @@ public class ArrangeScene extends Scene{
 		audioText.setBorder(audioBorder);
 		audioText.setForeground(white);
 		audioText.setEditable(false);	
-		
+*/		
 ////////////////////////////////////////////////////////////////////////
 /**
  *  TESTING PURPOSES ONLY - Just to make sure file loading and playing actually works
@@ -226,7 +234,7 @@ public class ArrangeScene extends Scene{
  *  
  * 	@author austinvickers
  *  @date 3/29/19
- */
+ *
 		playButton = new JButton(play);
 		playButton.addActionListener(new ActionListener()
 		{
@@ -237,7 +245,7 @@ public class ArrangeScene extends Scene{
 				
 			}
 		});
-		
+*/	
 ////////////////////////////////////////////////////////////////////////	
 		
 		// Set options panel configurations
@@ -259,11 +267,15 @@ public class ArrangeScene extends Scene{
 		optionsPanel.add(settingsButton, c);
 		
 		// Set constraints and add remove current button
-		c.weighty = 0;
+		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
 		
+/////////////////////////////////////////
+/*
+* 	TESTING ONLY 3/29/19 - austinvickers
+*
 		// TODO: Put this where its supposed to be
 		// Set constraints and add audio button
 		c.weighty = 0;
@@ -271,15 +283,12 @@ public class ArrangeScene extends Scene{
 		c.gridy = 4;
 		optionsPanel.add(audioButton, c);
 		
-/////////////////////////////////////////
-/*
- * 	TESTING ONLY 3/29/19 - austinvickers
- */
+
 		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 5;
 		optionsPanel.add(playButton, c);
-		
+*/		
 /////////////////////////////////////////
 		
 		// Set image panel configurations
