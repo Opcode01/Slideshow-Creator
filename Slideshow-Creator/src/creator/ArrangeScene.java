@@ -346,7 +346,6 @@ public class ArrangeScene extends Scene{
 		audioPanel.setLayout(new GridBagLayout());
 		audioPanel.setBackground(aqua);
 		PopulateAudio();
-		UpdateAudio();
 		
 		// Make sure timeline panel container is blank by removing all
 		timelinePanelContainer.removeAll();
@@ -503,6 +502,11 @@ public class ArrangeScene extends Scene{
      */
 	public void PopulateAudio()
 	{
+		timeline = SceneHandler.singleton.getTimeline();
+	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
+	    int transitionLength = (100) * timeline.transitionsList.getSize();
+	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
+	    
 	    // Create audio button
 		audioButton = new JButton(audio);
 		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -515,19 +519,52 @@ public class ArrangeScene extends Scene{
 		    	SelectAudio();
 		    }
 		});
-		
-		// Set audio gridx counter for formatting
-		audioxCounter = 0;
-		
-		// Set constraints for formatting
-		//audioConstraints.weighty = 0;
-		//audioConstraints.weightx = 0;
-		audioConstraints.gridx = audioxCounter;
-		audioConstraints.gridy = 0;
-		
-		// Add audio button to audio panel and increment counter
-	    audioPanel.add(audioButton, audioConstraints);
-	    ++audioxCounter;
+	    
+		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
+		{
+		    audioFile = timeline.audioPlayer.getAudio(i);
+		    int audioTrackSize = Math.round(audioFile.getAudioLength() * secondsToPixels);
+		    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
+		    System.out.println(audioTrackSize);
+		    
+		    // Create text field for audio
+			JTextField audioText = new JTextField();
+			audioText.setBackground(aqua);
+			audioText.setForeground(Color.white);
+	        audioText.setEditable(false);
+		    audioText.setText(audioFile.getAudioName());
+		    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
+		    
+		    // CReate remove audio button
+		    JButton removeAudioButton = new JButton(audio);
+		    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
+			removeAudioButton.setContentAreaFilled(false);
+			removeAudioButton.setFocusable(false);
+			removeAudioButton.setRolloverIcon(highlightedAudio);
+			removeAudioButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			    	//RemoveAudio();
+			    }
+			});
+			
+			audioxCounter = 0;
+			audioConstraints.gridx = audioxCounter;
+			audioConstraints.gridy = 0;
+			
+			// Add audio remove button to audio panel
+		    audioPanel.add(removeAudioButton, audioConstraints);
+		    audioxCounter++;
+		    
+		    // Add audio track to audio panel
+		    audioConstraints.gridx = audioxCounter;
+		    audioPanel.add(audioText, audioConstraints);
+		    audioxCounter++;
+		    
+		    // Re-add audio button to end of panel
+		    audioPanel.add(audioButton, audioConstraints);
+		    audioxCounter++;
+		}
 	}
 	
 	/**
@@ -547,9 +584,10 @@ public class ArrangeScene extends Scene{
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    tempFile = chooser.getSelectedFile();
     	    audioFile = new Audio(tempFile.getPath(), tempFile.getName());
+    	    timeline = SceneHandler.singleton.getTimeline();
     	    timeline.audioPlayer.addAudio(audioFile);
     	    audioPanel.removeAll();
-        	UpdateAudio();
+        	PopulateAudio();
     	}
 	}
 	
@@ -561,63 +599,6 @@ public class ArrangeScene extends Scene{
 	private void RemoveAudio()
 	{
 
-	}
-	
-    /**
-     * UpdateAudio() - updates the audio display on import of slider file
-     * 
-     * @author Fernando Palacios
-     */
-	public void UpdateAudio()
-	{
-	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
-	    int transitionLength = (100) * timeline.transitionsList.getSize();
-	    
-	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
-	    //TO DO: int audioTrackSize = (size of audio track in seconds) * secondsToPixels
-	    int audioTrackSize = Math.round(15 * secondsToPixels); //2150 should be the answer i thin
-	    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
-	    System.out.println(audioTrackSize);
-	    
-		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
-		{
-		    audioFile = timeline.audioPlayer.getAudio(i);
-		    
-		    // Create text field for audio
-			JTextField audioText = new JTextField();
-			audioText.setBackground(aqua);
-			audioText.setForeground(Color.white);
-	        audioText.setEditable(false);
-		    audioText.setText(timeline.audioPlayer.getAudio(i).getAudioName());
-		    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
-		    
-		    // CReate remove audio button
-		    JButton removeAudioButton = new JButton(audio);
-		    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
-			removeAudioButton.setContentAreaFilled(false);
-			removeAudioButton.setFocusable(false);
-			removeAudioButton.setRolloverIcon(highlightedAudio);
-			removeAudioButton.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent e) {
-			    	//RemoveAudio();
-			    }
-			});
-			
-			// Add audio remove button to audio panel
-		    audioPanel.add(removeAudioButton, audioConstraints);
-		    ++audioxCounter;
-		    
-		    // Add audio track to audio panel
-		    audioPanel.add(audioText, audioConstraints);
-		    ++audioxCounter;
-		    
-		    // Re-add audio button to end of panel
-		    audioPanel.add(audioButton, audioConstraints);
-		}
-		
-	    // Add audio button to end of panel
-	    audioPanel.add(audioButton, audioConstraints);
 	}
 	
 	/**
