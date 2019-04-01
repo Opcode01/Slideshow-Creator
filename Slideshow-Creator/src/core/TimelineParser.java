@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -144,8 +145,8 @@ public class TimelineParser
 				JSONObject audio = (JSONObject) audioList.get(i);
 				long index = (Long) audio.get("index");
 				String path = (String) audio.get("path");
-				String name = (String) audio.get("name");
-				Audio newAudio = new Audio(path, name);
+				File audioFile = new File(path);
+				Audio newAudio = new Audio(audioFile);
 				importedTimeline.audioPlayer.addAudio(newAudio, (int) index);
 			}
 			
