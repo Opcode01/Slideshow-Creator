@@ -128,8 +128,21 @@ public class Audio implements Runnable, LineListener
         
         // Create the thread for this player
 		m_PlayerThread = new Thread(this);
-		m_PlayerThread.start();
 		
+	}
+	
+	//Allow the user to start the thread
+	public void Play() {
+		
+		if(!m_PlayerThread.isAlive()) {
+			m_PlayerThread = new Thread(this);
+			m_PlayerThread.start();
+		}
+		else {
+			//TODO: We can decide what to do about the user stopping a current clip 
+			//and playing another later
+			System.out.println("Audio is currently still playing!");
+		}
 	}
 	
 	//---------------------------------------------------
@@ -139,7 +152,7 @@ public class Audio implements Runnable, LineListener
     {
     	if(!loadAudioFile())
     		return;		// Oops! Couldn't load the file so terminate
-    	playAudioFile();	// If all OK play the file
+    	playAudioFile();
 	}
     
 	//---------------------------------------------------
@@ -260,7 +273,7 @@ public class Audio implements Runnable, LineListener
 	//----------------------------------------------------------------------
 	/** Play the file. */
 	//----------------------------------------------------------------------
-	public void playAudioFile()
+	private void playAudioFile()
 	{
         midiEOM = audioEOM = bump = false;
         if (m_CurrentSound instanceof Sequence || 
@@ -307,9 +320,9 @@ public class Audio implements Runnable, LineListener
             }
         	System.out.println("playAudioFile is stopping a clip.");
             clip.stop();
-            clip.close();
+            //clip.close();
         }
-        m_CurrentSound = null;
+        //m_CurrentSound = null;
 
 	}
 	
