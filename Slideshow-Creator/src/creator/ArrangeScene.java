@@ -108,15 +108,9 @@ public class ArrangeScene extends Scene{
 	
 	/**selected thumbnail on the timeline */
 	private Thumbnail selectedThumbnail;
-
-	/** Audio file */
-	private File audioFile;
 	
 	/** Create audio text field - will be put on timeline panel later */
-	private JTextField audioText;
-	
-	private AudioPlayer audioPlayer;
-	
+	private JTextField audioText;	
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -228,6 +222,8 @@ public class ArrangeScene extends Scene{
 ////////////////////////////////////////////////////////////////////////
 /**
  *  TESTING PURPOSES ONLY - Just to make sure file loading and playing actually works
+ *  Eventually, we may want a play button on each clip so that the user can preview their
+ *  sound clips in the creator.
  *  
  * 	@author austinvickers
  *  @date 3/29/19
@@ -237,16 +233,12 @@ public class ArrangeScene extends Scene{
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if(audioFile != null)
-				{
-					// Create an audio player and start the file playing
-					if(audioPlayer == null) {
-						audioPlayer = new AudioPlayer(audioFile);
-					}
-					else {
-						audioPlayer.stopPlaying();
-						audioPlayer = new AudioPlayer(audioFile);
-					}
+				AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+				player.playAudioClipAtIndex(0);
+				
+				//Debugging
+				for(Audio clip : player.getAudioList()) {
+					System.out.println(clip.getAudioPath());
 				}
 			}
 		});
@@ -422,9 +414,12 @@ public class ArrangeScene extends Scene{
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
         
+        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+        
     	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    audioFile = chooser.getSelectedFile();
+    	    File audioFile = chooser.getSelectedFile();
+        	player.addAudio(new Audio(audioFile));
         	display.setText(audioFile.getName());
     	}
 	}
@@ -486,7 +481,6 @@ public class ArrangeScene extends Scene{
 							"Transition Settings", 
 							point, 
 							new Dimension(450, 395),
-							timeline,
 							index
 							);
 					parent.setEnabled(false);

@@ -16,6 +16,7 @@ public class Timeline
 {
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
+    public AudioPlayer audioPlayer;
     public Settings timelineSettings;
     
     private String directory;
@@ -40,7 +41,16 @@ public class Timeline
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
+        audioPlayer = new AudioPlayer();
         timelineSettings = new Settings(false, false, false, "", 1);
+        
+        /*
+        //testAudio
+        audioPlayer.addAudio(new Audio("C:\\Users\\jhoan\\Desktop\\Aloe\\VOL III\\Calgary Live.wav"));
+        System.out.println(audioPlayer.getAudio(0).getAudioPath());
+        System.out.println(audioPlayer.getAudio(0).getAudioLength());
+        */
+        
         directory = SceneHandler.singleton.getDirectory();
     }
     
@@ -51,6 +61,7 @@ public class Timeline
      */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
+    	timelineSettings = s;
     	System.out.println("Timeline Settings updated!");
     }
     
@@ -78,7 +89,7 @@ public class Timeline
     public void addSlide(Thumbnail thumbnail)
     {
         thumbnailsList.addThumbnail(thumbnail);
-        transitionsList.addTransition(new Transition(TransitionType.WIPE_LEFT, 1));
+        transitionsList.addTransition(new Transition(TransitionType.WIPE_RIGHT, 1));
     }
 
     /**
