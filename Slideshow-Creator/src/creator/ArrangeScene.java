@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -71,23 +70,11 @@ public class ArrangeScene extends Scene{
 	//TESTING PURPOSES ONLY 3/29/19
 	//private JButton playButton;
 	
-	/** Create audio button */
-	private JButton audioButton;
-	
-	/** Create audio track field arrayList */
-	private ArrayList<JTextField> audioTrackList;
-	
-    /** Create remove audio button arrayList */
-	private ArrayList<JButton> removeAudioButtonList;
-	
 	/** Selected thumbnail on the timeline */
 	private Thumbnail selectedThumbnail;
 	
 	/** Audio file */
-	private Audio audioFile;
-	
-	/** Temp audio file */
-	private File tempFile;
+	private File audioFile;
 	
 	/** Create timeline object */
 	private Timeline timeline;
@@ -104,8 +91,8 @@ public class ArrangeScene extends Scene{
 	/** Icon for adding an audio track */
 	private ImageIcon audio;
 	
-	/** Highlighted Icon for adding an audio track */
-	private ImageIcon highlightedAudio;
+	/** Remove audio custom button image */
+	private ImageIcon removeAudio;
 	
 	//TESTING PURPOSES ONLY 3/29/19
 	//private ImageIcon play;
@@ -119,14 +106,8 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
-	/** Audio custom button image */
-	private ImageIcon audio;
-	
 	/** Highlighted audio custom button image */
 	private ImageIcon highlightedAudio;
-	
-	/** Remove audio custom button image */
-	private ImageIcon removeAudio;
 	
 	/** Highlighted remove audio custom button image */
 	private ImageIcon highlightedRemoveAudio;
@@ -142,15 +123,6 @@ public class ArrangeScene extends Scene{
 	
 	/** Create custom medium_gray color */
 	private Color medium_gray = new Color(41, 41, 41);
-	
-	/** Create custom white color */
-	private Color white = new Color(255, 255, 255);
-	
-	/**selected thumbnail on the timeline */
-	private Thumbnail selectedThumbnail;
-	
-	/** Create audio text field - will be put on timeline panel later */
-	private JTextField audioText;	
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -465,30 +437,6 @@ public class ArrangeScene extends Scene{
 		}
 	}
 	
-	/**
-	 * SelectAudio() - brings up dialogue box to select audio
-	 * 
-	 * @author Fernando Palacios
-	 */
-	public void SelectAudio(JTextField display) {
-		
-    	JFileChooser chooser = new JFileChooser();
-    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
-    	
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
-        
-        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-        
-    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
-    	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    File audioFile = chooser.getSelectedFile();
-        	player.addAudio(new Audio(audioFile));
-        	display.setText(audioFile.getName());
-    	}
-    
-	}
-	
     /**
      * PopulateTimeline() - creates thumbnail icons to display in scrollpane
      * 
@@ -623,12 +571,20 @@ public class ArrangeScene extends Scene{
      */
 	public void PopulateAudio()
 	{
+		// Get instance of timeline
 		timeline = SceneHandler.singleton.getTimeline();
+		
+		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
 	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
 	    int transitionLength = (100) * timeline.transitionsList.getSize();
 	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
 	    
+	    // Set counter for grid x
 	    int audioxCounter = 0;
+	    
+	    // Set constraints
+	    audioConstraints.gridx = audioxCounter;
+	    audioConstraints.gridy = 0;
 	    
 	    // Create audio button
 		audioButton = new JButton(audio);
@@ -645,8 +601,8 @@ public class ArrangeScene extends Scene{
 	    
 		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
 		{
-		    audioFile = timeline.audioPlayer.getAudio(i);
-		    int audioTrackSize = Math.round(audioFile.getAudioLength() * secondsToPixels);
+		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
+		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
 		    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
 		    System.out.println(audioTrackSize);
 		    
@@ -655,8 +611,8 @@ public class ArrangeScene extends Scene{
 			audioText.setBackground(aqua);
 			audioText.setForeground(Color.white);
 	        audioText.setEditable(false);
-		    audioText.setText(audioFile.getAudioName());
-		    audioText.setPreferredSize(new Dimension(audioTrackSize, 10));
+		    audioText.setText(audioFile.getName());
+		    audioText.setPreferredSize(new Dimension(audioTrackSize, 25));
 		    
 		    // CReate remove audio button
 		    JButton removeAudioButton = new JButton(audio);
@@ -671,17 +627,13 @@ public class ArrangeScene extends Scene{
 			    }
 			});
 			
-			audioConstraints.gridx = audioxCounter;
-			audioConstraints.gridy = 0;
-			
 			// Add audio remove button to audio panel
 		    audioPanel.add(removeAudioButton, audioConstraints);
-		    audioxCounter++;
+		    audioConstraints.gridx = audioxCounter++;
 		    
 		    // Add audio track to audio panel
-		    audioConstraints.gridx = audioxCounter;
 		    audioPanel.add(audioText, audioConstraints);
-		    audioxCounter++;
+		    audioConstraints.gridx = audioxCounter++;
 		}
 		
 	    // Re-add audio button to end of panel
@@ -689,27 +641,29 @@ public class ArrangeScene extends Scene{
 	}
 	
 	/**
-	 * SelectAudio() - brings up dialogue box to select audio and then calls function to add it to timeline
+	 * SelectAudio() - brings up dialogue box to select audio
 	 * 
 	 * @author Fernando Palacios
 	 */
-	private void SelectAudio()
-	{
+	public void SelectAudio() {
+		
     	JFileChooser chooser = new JFileChooser();
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
         
-    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open");
+        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+        
+    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    tempFile = chooser.getSelectedFile();
-    	    audioFile = new Audio(tempFile.getPath(), tempFile.getName());
-    	    timeline = SceneHandler.singleton.getTimeline();
-    	    timeline.audioPlayer.addAudio(audioFile);
+    	    audioFile = chooser.getSelectedFile();
+        	player.addAudio(new Audio(audioFile));
     	    audioPanel.removeAll();
         	PopulateAudio();
+        	revalidate();
     	}
+    
 	}
 	
 	/**
