@@ -78,6 +78,9 @@ public class ArrangeScene extends Scene{
 	/** Audio file */
 	private File audioFile;
 	
+	/** Total length of audio */
+	private float audioTimelineDuration;
+	
 	/** Create timeline object */
 	private Timeline timeline;
 	
@@ -231,6 +234,7 @@ public class ArrangeScene extends Scene{
 		audioButton.setRolloverIcon(highlightedAudio);
 		audioButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	
 		    	SelectAudio();
 		    }
 		});
@@ -597,6 +601,9 @@ public class ArrangeScene extends Scene{
 		// Get instance of timeline
 		timeline = SceneHandler.singleton.getTimeline();
 		
+		// Reset audio timeline duration 
+		audioTimelineDuration = 0;
+		
 		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
 	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
 	    int transitionLength = (100) * timeline.transitionsList.getSize();
@@ -619,6 +626,10 @@ public class ArrangeScene extends Scene{
 		{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
+		    
+		    // Add each track size to the total duration of the audio
+		    audioTimelineDuration += audioTrackSize;
+		    
 		    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
 		    System.out.println(audioTrackSize);
 		    
@@ -692,7 +703,7 @@ public class ArrangeScene extends Scene{
 	 */
 	private void RemoveAudio()
 	{
-
+		
 	}
 	
 	/**
