@@ -1,5 +1,6 @@
 package creator;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -34,6 +35,8 @@ public class ArrangeScene extends Scene{
 	
 	/** Create timeline panel */
 	private JPanel timelinePanel;
+	
+	private Thumbnail currentSlide;
 	
 	/** Create container for timeline panel */
 	private JPanel timelinePanelContainer;
@@ -83,8 +86,6 @@ public class ArrangeScene extends Scene{
 	/** Create custom medium_gray color */
 	private Color medium_gray = new Color(41, 41, 41);
 	
-	/**selected thumbnail on the timeline */
-	private Thumbnail selectedThumbnail;
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -154,8 +155,8 @@ public class ArrangeScene extends Scene{
 		    public void actionPerformed(ActionEvent e) {
 		    	// Remove selected thumb from timeline
 		    	Timeline timeline = SceneHandler.singleton.getTimeline();
-		    	System.out.println(selectedThumbnail.getImagePath() + "remove");
-		    	int removeIndex = timeline.thumbnailsList.indexOf(selectedThumbnail);
+		    	//System.out.println(selectedThumbnail.getImagePath() + "remove");
+		    	int removeIndex = timeline.thumbnailsList.indexOf(currentSlide);
 		    	timeline.removeSlide(removeIndex);
 		    	
 		    	// Remove components and repaint 
@@ -379,7 +380,7 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
-					selectedThumbnail = buttonThumb;
+					currentSlide = buttonThumb;
 					
 					if(keeper.isSelected())
 					{
@@ -393,27 +394,16 @@ public class ArrangeScene extends Scene{
 						// Set border for newly selected button
 						keeper.setSelected(true);
 						keeper.setBorder(new LineBorder(aqua, 3));
-						System.out.println(buttonThumb.getImagePath() + "selected");
+						//System.out.println(buttonThumb.getImagePath() + "selected");
 						
-						///////////////////////
-						//Add example image - this is approximately what you should do to set up the display image! :)
-						//Thumbnail currentThumb = new Thumbnail("src/core/TransitionImages/wipeLeft.png");
-						JLabel testLabel = new JLabel() {
-							  @Override
-							  public void paintComponent(Graphics g) {
-								  buttonThumb.drawFill(g, this);
-								  //example 1 of drawing the image associated with a transition
-								  //g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
-								  }
-							  };
 						
 						c.weightx = 0.01;
 						c.fill = GridBagConstraints.BOTH;
 						c.anchor = GridBagConstraints.CENTER;
 						imagePanel.removeAll();
-						imagePanel.add(testLabel, c);
-						imagePanel.revalidate();
-						imagePanel.repaint();
+						imagePanel.add(createSlideLabel(), c);
+						revalidate();
+						//imagePanel.repaint();
 					}
 				}
 				});
@@ -428,6 +418,24 @@ public class ArrangeScene extends Scene{
 			c.insets = new Insets(0, 0, 0, 0);
 			timelinePanel.add(transButtons[i], c);
 		}
+	}
+	
+	/**
+	 * creates a JLabel with the current slide thumbnail on it
+	 * @return JLabel of the current slide
+	 * 
+	 * @author Timothy Couch
+	 */
+	private JLabel createSlideLabel()
+	{
+		JLabel label = new JLabel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				currentSlide.drawFill(g, this);
+			}
+		};
+		label.setBorder(BorderFactory.createEmptyBorder());
+		return label;
 	}
 	
     /**
