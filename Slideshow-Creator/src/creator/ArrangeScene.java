@@ -69,8 +69,8 @@ public class ArrangeScene extends Scene{
 	/** Create audio button */
 	private JButton audioButton;
 	
-	//TESTING PURPOSES ONLY 3/29/19
-	//private JButton playButton;
+	/** Create audio play button */
+	private JButton playButton;
 	
 	/** Selected thumbnail on the timeline */
 	private Thumbnail selectedThumbnail;
@@ -102,8 +102,11 @@ public class ArrangeScene extends Scene{
 	/** Remove audio custom button image */
 	private ImageIcon removeAudio;
 	
-	//TESTING PURPOSES ONLY 3/29/19
-	//private ImageIcon play;
+	/** Play audio custom button image */
+	private ImageIcon play;
+	
+	/** Play audio change custom button image */
+	private ImageIcon playChange;
 	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
@@ -122,6 +125,12 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted audio change custom button image */
 	private ImageIcon highlightedAudioChange;
+	
+	/** Highlighted audio play change custom button image */
+	private ImageIcon highlightedPlayChange;
+	
+	/** Highlighted audio play custom button image */
+	private ImageIcon highlightedPlay;
 	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
@@ -157,15 +166,16 @@ public class ArrangeScene extends Scene{
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		audioChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangeButton.png"));
 		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/removeAudioButton.png"));
+		play = new ImageIcon(getClass().getResource("/creator/Images/audioPlayButton.png"));
+		playChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangePlayButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
 		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
-		
-		//TESTING PURPOSES ONLY 3/29/19
-		//play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
+		highlightedPlay = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioPlayButton.png"));
+		highlightedPlayChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangePlayButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -234,63 +244,9 @@ public class ArrangeScene extends Scene{
 		audioButton.setRolloverIcon(highlightedAudio);
 		audioButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
 		    	SelectAudio();
 		    }
 		});
-////////////////////////////////////////////////////////////////////////
-/**
-* 	TESTING PURPOSES ONLY! - Eventually these buttons will be implemented
-* 	for real once the audio timeline is done
-* 
-* 	@author austinvickers
-* 	@date 3/31/19
-*
-		
-		//TODO: Put this where its supposed to be
-		//Create audio button - temporary until audio timeline GUI is done
-		audioButton = new JButton(audio);
-		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		audioButton.setBorder(BorderFactory.createEmptyBorder());
-		audioButton.setContentAreaFilled(false);
-		audioButton.setFocusable(false);
-		audioButton.setRolloverIcon(highlightedAudio);
-		audioButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	SelectAudio(audioText);
-		    }
-		});
-
-		//TODO: Put this where its supposed to be
-		// Create text field for audio
-		audioText = new JTextField(13);
-		audioText.setBackground(light_gray);
-		Border audioBorder = BorderFactory.createLineBorder(white, 1);
-		audioText.setBorder(audioBorder);
-		audioText.setForeground(white);
-		audioText.setEditable(false);	
-*/		
-////////////////////////////////////////////////////////////////////////
-/**
- *  TESTING PURPOSES ONLY - Just to make sure file loading and playing actually works
- *  Eventually, we may want a play button on each clip so that the user can preview their
- *  sound clips in the creator.
- *  
- * 	@author austinvickers
- *  @date 3/29/19
- *
-		playButton = new JButton(play);
-		playButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-				player.playAudioClipAtIndex(0);
-				
-			}
-		});
-*/	
-////////////////////////////////////////////////////////////////////////	
 		
 		// Set options panel configurations
 		optionsPanel = new JPanel();
@@ -315,25 +271,6 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
-		
-/////////////////////////////////////////
-/*
-* 	TESTING ONLY 3/29/19 - austinvickers
-*
-		// TODO: Put this where its supposed to be
-		// Set constraints and add audio button
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 4;
-		optionsPanel.add(audioButton, c);
-		
-
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 5;
-		optionsPanel.add(playButton, c);
-*/		
-/////////////////////////////////////////
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
@@ -373,7 +310,6 @@ public class ArrangeScene extends Scene{
 		
 		c.weightx = 0.01;
 		c.fill = GridBagConstraints.BOTH;
-		//c.anchor = GridBagConstraints.CENTER;
 		imagePanel.add(testLabel, c);
 		///////////////////////
 		
@@ -651,11 +587,28 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	//RemoveAudio(i);
+			    	RemoveAudio(audioTrack);
 			    }
 			});
 			
-		    // Set constraints
+		    // CReate remove audio button
+		    JButton playButton = new JButton(play);
+		    playButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			playButton.setBorder(BorderFactory.createEmptyBorder());
+			playButton.setContentAreaFilled(false);
+			playButton.setFocusable(false);
+			playButton.setRolloverIcon(highlightedPlay);
+			playButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+					player.playAudioClipAtIndex(0);
+			    }
+			});
+			
+			if(timeline.audioPlayer.getSize() == (i + 1)) {
+				playButton.setIcon(playChange);
+				playButton.setRolloverIcon(highlightedPlayChange);
+			}
 		    
 			// Add audio remove button to audio panel
 		    audioPanel.add(removeAudioButton, audioConstraints);
@@ -663,6 +616,10 @@ public class ArrangeScene extends Scene{
 		    
 		    // Add audio track to audio panel
 		    audioPanel.add(audioText, audioConstraints);
+		    audioConstraints.gridx = ++audioxCounter;
+		    
+		    // Add audio track to audio panel
+		    audioPanel.add(playButton, audioConstraints);
 		    audioConstraints.gridx = ++audioxCounter;
 		}
 		
@@ -701,9 +658,17 @@ public class ArrangeScene extends Scene{
 	 * 
 	 * @author Fernando Palacios
 	 */
-	private void RemoveAudio()
+	private void RemoveAudio(Audio track)
 	{
-		
+    	// Remove selected thumb from timeline
+    	timeline = SceneHandler.singleton.getTimeline();
+    	int removeIndex = timeline.audioPlayer.indexOf(track);
+    	timeline.audioPlayer.removeAudioAtIndex(removeIndex);
+    	
+    	// Remove components and repaint 
+    	audioPanel.removeAll();
+    	PopulateAudio();
+    	revalidate();
 	}
 	
 	/**
