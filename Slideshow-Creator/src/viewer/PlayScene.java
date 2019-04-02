@@ -420,6 +420,7 @@ public class PlayScene extends Scene {
 						//if the transition playing has finished
 						if (!getTransition(currentTransitionIndex).isRunning())
 						{
+							slideTimer.cancel();
 							//if the slideshow will advance (otherwise, it doesn't loop and is at the end)
 							if (getNextSlideIndex(dir) != currentSlideIndex)
 							{
@@ -431,7 +432,6 @@ public class PlayScene extends Scene {
 									scheduleStartTransition(dir);
 							}
 							else System.out.println("StartSlide: No more slides available in that direction!");
-							slideTimer.cancel();
 						}
 						else System.out.println("Transition not finished! Running timer again");
 					}
