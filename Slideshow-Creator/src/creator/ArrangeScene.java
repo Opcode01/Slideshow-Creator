@@ -93,6 +93,9 @@ public class ArrangeScene extends Scene{
 	/** Icon for adding an audio track */
 	private ImageIcon audio;
 	
+	/** Icon for adding an audio /change/ track */
+	private ImageIcon audioChange;
+	
 	/** Remove audio custom button image */
 	private ImageIcon removeAudio;
 	
@@ -113,6 +116,9 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted remove audio custom button image */
 	private ImageIcon highlightedRemoveAudio;
+	
+	/** Highlighted audio change custom button image */
+	private ImageIcon highlightedAudioChange;
 	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
@@ -146,12 +152,14 @@ public class ArrangeScene extends Scene{
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
-		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
+		audioChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangeButton.png"));
+		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/removeAudioButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
-		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
+		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
 		
 		//TESTING PURPOSES ONLY 3/29/19
 		//play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
@@ -211,6 +219,19 @@ public class ArrangeScene extends Scene{
 		    	timelinePanel.removeAll();
 		    	PopulateTimeline();
 		    	revalidate();
+		    }
+		});
+		
+	    // Create audio button
+		audioButton = new JButton(audio);
+		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		audioButton.setBorder(BorderFactory.createEmptyBorder());
+		audioButton.setContentAreaFilled(false);
+		audioButton.setFocusable(false);
+		audioButton.setRolloverIcon(highlightedAudio);
+		audioButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	SelectAudio();
 		    }
 		});
 ////////////////////////////////////////////////////////////////////////
@@ -588,18 +609,11 @@ public class ArrangeScene extends Scene{
 	    audioConstraints.gridx = audioxCounter;
 	    audioConstraints.gridy = 0;
 	    
-	    // Create audio button
-		audioButton = new JButton(audio);
-		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		audioButton.setBorder(BorderFactory.createEmptyBorder());
-		audioButton.setContentAreaFilled(false);
-		audioButton.setFocusable(false);
-		audioButton.setRolloverIcon(highlightedAudio);
-		audioButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	SelectAudio();
-		    }
-		});
+		//Change icon of add audioButton
+		if(timeline.audioPlayer.getSize() > 0) {
+			audioButton.setIcon(audioChange);
+			audioButton.setRolloverIcon(highlightedAudioChange);
+		}
 	    
 		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
 		{
@@ -618,12 +632,12 @@ public class ArrangeScene extends Scene{
 		    audioText.setPreferredSize(new Dimension(audioTrackSize, 20));
 		    
 		    // CReate remove audio button
-		    JButton removeAudioButton = new JButton(audio);
+		    JButton removeAudioButton = new JButton(removeAudio);
 		    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
 			removeAudioButton.setContentAreaFilled(false);
 			removeAudioButton.setFocusable(false);
-			removeAudioButton.setRolloverIcon(highlightedAudio);
+			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 			    	RemoveAudio();
