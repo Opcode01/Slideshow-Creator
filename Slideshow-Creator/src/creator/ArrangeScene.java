@@ -634,6 +634,27 @@ public class ArrangeScene extends Scene{
 	 */
 	public void SelectAudio() {
 		
+		// Get instance of timeline
+		timeline = SceneHandler.singleton.getTimeline();
+				
+		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
+		int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
+		int transitionLength = (100) * timeline.transitionsList.getSize();
+		
+		//If we have more audio than the length of the slides:
+	    if(audioTimelineDuration >= thumbnailLength + transitionLength) {
+	    	
+	    	// Open warning pane in the center of our workspace
+	    	JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(370, 200));
+	    	parent.setEnabled(false);
+	    	return;
+	    }
+				
     	JFileChooser chooser = new JFileChooser();
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	
@@ -644,13 +665,16 @@ public class ArrangeScene extends Scene{
         
     	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
+    		
     	    audioFile = chooser.getSelectedFile();
-        	player.addAudio(new Audio(audioFile));
-    	    audioPanel.removeAll();
-        	PopulateAudio();
-        	revalidate();
+    	    Audio a = new Audio(audioFile);
+			player.addAudio(a);
+			audioPanel.removeAll();
+			PopulateAudio();
+			revalidate();
+    	    	
     	}
-    
+    	
 	}
 	
 	/**
