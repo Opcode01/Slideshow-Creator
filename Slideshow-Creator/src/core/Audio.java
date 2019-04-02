@@ -36,6 +36,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Audio extends NotifyingThread implements LineListener
 {
 	private String audioPath;
+	private String audioName;
 	
 	/**
 	 * return local path to audio file 
@@ -44,6 +45,15 @@ public class Audio extends NotifyingThread implements LineListener
 	public String getAudioPath()
 	{
 		return audioPath;
+	}
+	
+	/**
+	 * return local path to audio file 
+	 * @return
+	 */
+	public String getAudioName()
+	{
+		return audioName;
 	}
 	
 	private float audioLength;
@@ -111,6 +121,7 @@ public class Audio extends NotifyingThread implements LineListener
 	public Audio(File audioFile)
 	{
 		this.audioPath = audioFile.getAbsolutePath();
+		this.audioName = audioFile.getName();
 		m_AudioFile = audioFile;
 		setAudioLength();
 

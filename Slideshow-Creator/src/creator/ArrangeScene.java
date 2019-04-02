@@ -628,7 +628,7 @@ public class ArrangeScene extends Scene{
 			audioText.setBorder(BorderFactory.createEmptyBorder());
 			audioText.setForeground(dark_gray);
 	        audioText.setEditable(false);
-		    audioText.setText(audioFile.getName());
+		    audioText.setText(audioTrack.getAudioName());
 		    audioText.setPreferredSize(new Dimension(audioTrackSize, 20));
 		    
 		    // CReate remove audio button
@@ -640,7 +640,7 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	RemoveAudio();
+			    	//RemoveAudio(i);
 			    }
 			});
 			
