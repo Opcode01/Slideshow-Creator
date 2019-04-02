@@ -37,6 +37,15 @@ public class PlayScene extends Scene {
 	
 	/** panel showing the current slide */
 	private JPanel slidePanel;
+	
+	private static final SlideDir autoDir = SlideDir.RIGHT;
+	
+	//pause button and constraints
+	private JButton playPauseButton;
+	private GridBagConstraints playPauseConstraints;
+	
+	/** whether or not the slideshow is paused. Only relevant on auto playback */
+	private boolean isPaused;
 
 	//gui icons
 	private ImageIcon backIcon;
@@ -45,6 +54,10 @@ public class PlayScene extends Scene {
 	private ImageIcon forwardIconHigh;
 	private ImageIcon removeCurrentIcon;
 	private ImageIcon removeCurrentIconHigh;
+	private ImageIcon playIcon;
+	private ImageIcon playIconHigh;
+	private ImageIcon pauseIcon;
+	private ImageIcon pauseIconHigh;
 	
 	/**	Thumbnail that displays on the player */
 	private Thumbnail slideThumb;
@@ -84,6 +97,10 @@ public class PlayScene extends Scene {
 		forwardIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedForwardButton.png"));
 		removeCurrentIcon = new ImageIcon(SceneHandler.class.getResource("Images/removeCurrentButton.png"));
 		removeCurrentIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedRemoveCurrentButton.png"));
+		playIcon = new ImageIcon(getClass().getResource("Images/playButton.png"));
+		playIconHigh = new ImageIcon(getClass().getResource("Images/highlightedPlayButton.png"));
+		pauseIcon = new ImageIcon(getClass().getResource("Images/pauseButton.png"));
+		pauseIconHigh = new ImageIcon(getClass().getResource("Images/highlightedPauseButton.png"));
 	}
 	
 	/**
@@ -97,6 +114,7 @@ public class PlayScene extends Scene {
 		//clear out if it had stuff previously
 		this.removeAll();
 		currentTransitionIndex = -1;
+		isPaused = false;
 		
 		timeline = SceneHandler.singleton.getTimeline();
 		
@@ -159,7 +177,7 @@ public class PlayScene extends Scene {
 		controlPanel.setLayout(gridBag);
 		controlPanel.setBackground(SliderColor.medium_gray);
 		
-		//enable buttons if the timeline advances manually
+		//use left and right buttons if the timeline advances manually
 		if (timeline.timelineSettings.isManual)
 		{
 			//left button
@@ -209,6 +227,32 @@ public class PlayScene extends Scene {
 			c.gridx = 1;
 			c.gridy = 0;
 			controlPanel.add(rightButton, c);
+		}
+		else//use play/pause button if manual
+		{
+			//playPause button
+			playPauseButton = new JButton(pauseIcon);
+			playPauseButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			playPauseButton.setToolTipText("Pause Slideshow");
+			playPauseButton.setBorder(BorderFactory.createEmptyBorder());
+			playPauseButton.setContentAreaFilled(false);
+			playPauseButton.setFocusable(false);
+			playPauseButton.setRolloverIcon(pauseIconHigh);
+			playPauseButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+		    		togglePauseSlideshow();
+			    }
+			});
+			
+			// Set constraints and add left button
+			playPauseConstraints = new GridBagConstraints();
+			playPauseConstraints.fill = GridBagConstraints.NONE;
+			playPauseConstraints.anchor = GridBagConstraints.CENTER;
+			playPauseConstraints.weightx = 0;
+			playPauseConstraints.weighty = 0;
+			playPauseConstraints.gridx = 0;
+			playPauseConstraints.gridy = 0;
+			controlPanel.add(playPauseButton, playPauseConstraints);
 		}
 		
 		//calculate timers and set up automatic slideshow when not manual
@@ -264,6 +308,45 @@ public class PlayScene extends Scene {
 		};
 		label.setBorder(BorderFactory.createEmptyBorder());
 		return label;
+	}
+	
+	/**
+	 * pauses or plays the slideshow based on what it currently is
+	 */
+	private void togglePauseSlideshow()
+	{
+		//pause/play if not transitioning, only pause otherwise
+		if (!isTransitioning() || !isPaused)
+		{
+			isPaused = !isPaused;
+			System.out.println("Paused: " + isPaused);
+		}
+		
+		System.out.println("YO");
+		
+		//just hit pause
+		if (isPaused)
+		{
+			//pause slideshow
+			if (!isTransitioning())
+				cancelTimer();
+			
+			//swap gui button to play
+			playPauseButton.setToolTipText("Play Slideshow");
+			playPauseButton.setIcon(playIcon);
+			playPauseButton.setRolloverIcon(playIconHigh);
+		}
+		else //just hit play
+		{
+			//play slideshow
+			scheduleStartTransition(autoDir);
+			
+			//swap gui button to pause
+			playPauseButton.setToolTipText("Pause Slideshow");
+			playPauseButton.setIcon(pauseIcon);
+			playPauseButton.setRolloverIcon(pauseIconHigh);
+		}
+		revalidate();
 	}
 	
 	/**
@@ -427,8 +510,8 @@ public class PlayScene extends Scene {
 								System.out.println("Advancing Slide from " + currentSlideIndex);
 								advanceSlide(dir);
 								
-								//start the next slide if auto
-								if (!timeline.timelineSettings.isManual)
+								//start the next slide if auto and not paused
+								if (!timeline.timelineSettings.isManual && !isPaused)
 									scheduleStartTransition(dir);
 							}
 							else System.out.println("StartSlide: No more slides available in that direction!");
@@ -453,7 +536,7 @@ public class PlayScene extends Scene {
 		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual)
-			scheduleStartTransition(SlideDir.RIGHT);
+			scheduleStartTransition(autoDir);
 	}
 	
 	/**
