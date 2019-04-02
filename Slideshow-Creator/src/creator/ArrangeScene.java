@@ -651,7 +651,7 @@ public class ArrangeScene extends Scene{
     	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
     	
         chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
+        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF"}));
         
         AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
         
