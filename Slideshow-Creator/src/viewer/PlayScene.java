@@ -68,6 +68,9 @@ public class PlayScene extends Scene {
 	/** slide advancement and transition timer */
 	private Timer slideTimer;
 	
+	/** time to wait between checking if the transition is finished if waiting for it to finish */
+	private static final int checkTransitionFinishedInterval = 100;
+	
 	/**
 	 * list of times for each slide
 	 */
@@ -394,6 +397,7 @@ public class PlayScene extends Scene {
 	
 	/**
 	 * starts the timer to finish the current transition and start a new slide timer
+	 * The timer waits and loops until the transition is finished
 	 * @param dir left or right to move the slide
 	 * 
 	 * @author Timothy Couch
@@ -410,18 +414,26 @@ public class PlayScene extends Scene {
 					{
 						System.out.println("Finishing transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
 						
-						if (getNextSlideIndex(dir) != currentSlideIndex)
+						//if the transition playing has finished
+						if (!getTransition(currentTransitionIndex).isRunning())
 						{
-							advanceSlide(dir);
-							
-							//start the next slide if auto
-							if (!timeline.timelineSettings.isManual)
-								scheduleStartTransition(dir);
+							//if the slideshow will advance (otherwise, it doesn't loop and is at the end)
+							if (getNextSlideIndex(dir) != currentSlideIndex)
+							{
+								advanceSlide(dir);
+								
+								//start the next slide if auto
+								if (!timeline.timelineSettings.isManual)
+									scheduleStartTransition(dir);
+							}
+							else System.out.println("StartSlide: No more slides available in that direction!");
+							slideTimer.cancel();
 						}
-						else System.out.println("StartSlide: No more slides available in that direction!");
+						else System.out.println("Transition not finished! Running timer again");
 					}
 				},
-				slideTimes[currentSlideIndex].transitionDuration
+				slideTimes[currentSlideIndex].transitionDuration,
+				checkTransitionFinishedInterval
 				);
 	}
 	
