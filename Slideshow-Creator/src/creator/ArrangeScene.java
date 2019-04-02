@@ -3,7 +3,9 @@ package creator;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -413,7 +415,7 @@ public class ArrangeScene extends Scene{
 		// Create audio panel
 		audioPanel = new JPanel();
 		audioPanel.setLayout(new GridBagLayout());
-		audioPanel.setBackground(aqua);
+		audioPanel.setBackground(medium_gray);
 		PopulateAudio();
 		
 		// Make sure timeline panel container is blank by removing all
@@ -609,10 +611,11 @@ public class ArrangeScene extends Scene{
 		    // Create text field for audio
 			JTextField audioText = new JTextField();
 			audioText.setBackground(aqua);
-			audioText.setForeground(Color.white);
+			audioText.setBorder(BorderFactory.createEmptyBorder());
+			audioText.setForeground(dark_gray);
 	        audioText.setEditable(false);
 		    audioText.setText(audioFile.getName());
-		    audioText.setPreferredSize(new Dimension(audioTrackSize, 25));
+		    audioText.setPreferredSize(new Dimension(audioTrackSize, 20));
 		    
 		    // CReate remove audio button
 		    JButton removeAudioButton = new JButton(audio);
@@ -623,17 +626,19 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
-			    	//RemoveAudio();
+			    	RemoveAudio();
 			    }
 			});
 			
+		    // Set constraints
+		    
 			// Add audio remove button to audio panel
 		    audioPanel.add(removeAudioButton, audioConstraints);
-		    audioConstraints.gridx = audioxCounter++;
+		    audioConstraints.gridx = ++audioxCounter;
 		    
 		    // Add audio track to audio panel
 		    audioPanel.add(audioText, audioConstraints);
-		    audioConstraints.gridx = audioxCounter++;
+		    audioConstraints.gridx = ++audioxCounter;
 		}
 		
 	    // Re-add audio button to end of panel
