@@ -307,6 +307,9 @@ public class SettingsPane extends FloatingPane
 		settingsPanel.setLayout(gridBag);
 		settingsPanel.setBackground(SliderColor.medium_gray);
 		
+		// Update Settings items with current values
+		LoadSettingsFromTimeline();
+		
 		// Set constraints and add header label
 		c.gridx = 0;
 		c.gridy = 0;
@@ -468,5 +471,23 @@ public class SettingsPane extends FloatingPane
 		
 		Settings s = new Settings(loopSlides, loopAudio, isManual, slideTime);
 		t.UpdateProjectSettings(s);
+	}
+	
+	private void LoadSettingsFromTimeline() {
+		Timeline t = SceneHandler.singleton.getTimeline();
+		Settings s = t.timelineSettings;
+		
+		//Defaults are all off and auto selected - we need to set these accordingly
+		if(s.isLoopingSlides) {
+			slideshowLoopCheck.setSelected(true);
+		}
+		if(s.isLoopingAudio) {
+			audioLoopCheck.setSelected(true);
+		}
+		if(s.isManual) {
+			autoButton.setSelected(false);
+			manualButton.setSelected(true);
+		}
+		durationText.setText(Integer.toString(s.slideDuration));	
 	}
 }

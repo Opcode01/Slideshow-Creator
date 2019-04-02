@@ -347,7 +347,6 @@ public class ArrangeScene extends Scene{
 							"Transition Settings", 
 							point, 
 							new Dimension(450, 395),
-							timeline,
 							index
 							);
 					parent.setEnabled(false);
