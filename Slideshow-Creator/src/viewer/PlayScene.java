@@ -370,6 +370,10 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private synchronized void scheduleStartTransition(SlideDir dir) {
+		//run after slide duration if automatic, run immediately if manual
+		int timerLength = !timeline.timelineSettings.isManual ? slideTimes[currentSlideIndex].showSlideDuration : 0;
+		System.out.println("Scheduling start of transition with timer " + timerLength);
+		
 		cancelTimer();
 		slideTimer = new Timer();
 		slideTimer.schedule(
@@ -390,8 +394,7 @@ public class PlayScene extends Scene {
 						else System.out.println("StartTransition: No more slides available in that direction!");
 					}
 				},
-				//run after slide duration if automatic, run immediately if manual
-				!timeline.timelineSettings.isManual ? slideTimes[currentSlideIndex].showSlideDuration : 0
+				timerLength
 				);
 	}
 	
@@ -420,6 +423,7 @@ public class PlayScene extends Scene {
 							//if the slideshow will advance (otherwise, it doesn't loop and is at the end)
 							if (getNextSlideIndex(dir) != currentSlideIndex)
 							{
+								System.out.println("Advancing Slide from " + currentSlideIndex);
 								advanceSlide(dir);
 								
 								//start the next slide if auto
@@ -432,7 +436,7 @@ public class PlayScene extends Scene {
 						else System.out.println("Transition not finished! Running timer again");
 					}
 				},
-				slideTimes[currentSlideIndex].transitionDuration,
+				slideTimes[currentTransitionIndex].transitionDuration,
 				checkTransitionFinishedInterval
 				);
 	}
@@ -461,7 +465,7 @@ public class PlayScene extends Scene {
 	{
 		cancelTimer();
 		
-		if (currentTransitionIndex >= 0)
+		if (isInitialized() && currentTransitionIndex >= 0)
 		{
 			getTransition(currentTransitionIndex).stopTransition();
 			currentTransitionIndex = -1;
