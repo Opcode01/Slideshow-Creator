@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="Transitions.svg"
+   inkscape:export-filename="C:\Users\catsu\transitions.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient4614"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4612" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="mirror_symmetry"
+       start_point="120.41607,51.344734"
+       end_point="89.085493,51.344734"
+       center_point="104.75078,51.344734"
+       id="path-effect843"
+       is_visible="true"
+       mode="free"
+       discard_orig_path="false"
+       fuse_paths="false"
+       oposite_fuse="false" />
+    <inkscape:path-effect
+       oposite_fuse="false"
+       fuse_paths="false"
+       discard_orig_path="false"
+       mode="free"
+       is_visible="true"
+       id="path-effect823"
+       center_point="137.22386,49.238193"
+       end_point="137.22386,37.163675"
+       start_point="137.22386,61.312711"
+       effect="mirror_symmetry" />
+    <inkscape:path-effect
+       effect="mirror_symmetry"
+       start_point="100.56017,40.495072"
+       end_point="100.56017,64.644106"
+       center_point="100.56017,52.569589"
+       id="path-effect817"
+       is_visible="true"
+       mode="free"
+       discard_orig_path="false"
+       fuse_paths="false"
+       oposite_fuse="false" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="419.08482"
+     inkscape:cy="809.56226"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1304"
+     inkscape:window-height="745"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:measure-start="0,0"
+     inkscape:measure-end="0,0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g833"
+       transform="translate(-75.916993,98.068581)"
+       inkscape:export-filename="C:\Users\catsu\wipeUp.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50">
+      <path
+         inkscape:original-d="M 100.56017,64.777739 H 98.273326 V 50.416947 h -5.67914 l 7.965984,-9.921875"
+         inkscape:path-effect="#path-effect817"
+         sodipodi:nodetypes="ccccc"
+         id="path815"
+         inkscape:connector-curvature="0"
+         d="M 100.56017,64.777739 H 98.273326 V 50.416947 h -5.67914 l 7.965984,-9.921875 m 0,24.282667 h 2.28684 V 50.416947 h 5.67914 l -7.96598,-9.921875"
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <rect
+         y="36.085098"
+         x="82.71994"
+         height="4.4099469"
+         width="35.680485"
+         id="rect819"
+         style="fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.07978642;stroke-opacity:1" />
+    </g>
+    <g
+       id="g829"
+       transform="translate(-32.223875,97.123638)"
+       inkscape:export-filename="C:\Users\catsu\wipeDown.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50">
+      <path
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 137.22386,37.030045 h -2.28684 v 14.360791 h -5.67914 l 7.96598,9.921875 m 0,-24.282666 h 2.28684 v 14.360791 h 5.67914 l -7.96598,9.921875"
+         inkscape:connector-curvature="0"
+         id="path821"
+         sodipodi:nodetypes="ccccc"
+         inkscape:path-effect="#path-effect823"
+         inkscape:original-d="m 137.22386,37.030045 h -2.28684 v 14.360791 h -5.67914 l 7.96598,9.921875" />
+      <rect
+         transform="scale(1,-1)"
+         style="fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.07978642;stroke-opacity:1"
+         id="rect825"
+         width="35.680485"
+         height="4.4099469"
+         x="119.38363"
+         y="-65.722679" />
+    </g>
+    <g
+       id="g861"
+       transform="translate(-42.164182,96.888548)"
+       inkscape:export-filename="C:\Users\catsu\wipeRight.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50">
+      <path
+         sodipodi:nodetypes="cccccccccc"
+         inkscape:connector-curvature="0"
+         id="path835"
+         d="m 89.145531,51.344734 v 2.28685 H 110.4942 v 5.679135 l 9.92187,-7.965985 m -31.270539,0 v -2.28685 H 110.4942 v -5.679135 l 9.92187,7.965985"
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <rect
+         y="-124.82602"
+         x="-66.006157"
+         height="4.4099469"
+         width="28.78941"
+         id="rect837"
+         style="fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.9699266;stroke-opacity:1"
+         transform="matrix(0,-1,-1,0,0,0)" />
+    </g>
+    <g
+       id="g900"
+       transform="translate(59.54172,48.625605)"
+       inkscape:export-filename="C:\Users\catsu\g900.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50">
+      <path
+         inkscape:connector-curvature="0"
+         id="path891"
+         transform="scale(0.26458333)"
+         d="m 408.0957,335.39453 v 17.28711 h 23.50977 l 21.08594,21.33984 12.66797,-12.82031 -25.36133,-25.80664 z m 76.71289,45.5957 -12.58007,12.80274 25.32226,25.62695 h 24.75977 v 12.46289 l 20.64062,-21.21679 -20.64062,-21.12891 v 12.5957 h -16.72266 z"
+         style="fill:#808080;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path895"
+         d="m 107.97528,111.00916 h 8.44073 l 17.35394,-17.657968 h 4.42474 v 3.332761 l 5.46108,-5.590086 -5.46108,-5.614069 v 3.29769 h -6.55086 L 114.1954,106.43546 h -6.22012 z"
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       id="g867"
+       transform="matrix(-1,0,0,1,252.16402,96.888548)"
+       inkscape:export-filename="C:\Users\catsu\wipeLeft.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50">
+      <path
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 89.145531,51.344734 v 2.28685 H 110.4942 v 5.679135 l 9.92187,-7.965985 m -31.270539,0 v -2.28685 H 110.4942 v -5.679135 l 9.92187,7.965985"
+         id="path863"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccc" />
+      <rect
+         transform="matrix(0,-1,-1,0,0,0)"
+         style="fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.9699266;stroke-opacity:1"
+         id="rect865"
+         width="28.78941"
+         height="4.4099469"
+         x="-66.006157"
+         y="-124.82602" />
+    </g>
+    <g
+       id="g906"
+       style="display:inline"
+       inkscape:label="crossfade_blueprint"
+       transform="translate(2.4568452,-16.158482)">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect845"
+         d="M 55.590449,116.67463 H 91.270938 V 87.885224 H 55.590449 Z"
+         style="fill:#2b0000;fill-opacity:1;stroke:none;stroke-width:2.75891018;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cccccccccccc"
+         inkscape:connector-curvature="0"
+         id="path877"
+         d="m 55.590449,91.145269 h 8.440732 l 17.353937,17.657971 h 4.42474 v -3.33276 l 5.46108,5.59009 -5.46108,5.61406 v -3.29769 h -6.55086 L 61.810571,95.71897 h -6.220122 z"
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path887"
+         d="M 59.914508,119.46221 86.709918,92.197341 83.427088,85.135295 56.485765,112.40016 Z"
+         style="fill:#2b0000;stroke:none;stroke-width:0.15440542;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:#808080;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 55.590449,113.41459 h 8.440732 L 81.385118,95.756618 h 4.42474 v 3.332761 l 5.46108,-5.590086 -5.46108,-5.614069 v 3.29769 h -6.55086 L 61.810571,108.84089 h -6.220122 z"
+         id="path883"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccccc" />
+    </g>
+    <path
+       id="rect4596-6"
+       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:1.4903934;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.96157276, 1.49039319;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 111.41385,63.788689 v -3.054192 h 21.80644 v -7.584744 l 12.65532,10.638936 m -34.46176,0 v 3.054192 h 21.80644 v 7.584744 l 12.65532,-10.638936"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\catsu\rect4596.png"
+       inkscape:export-xdpi="50"
+       inkscape:export-ydpi="50" />
+  </g>
+</svg>

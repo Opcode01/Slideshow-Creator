@@ -69,7 +69,7 @@ public class DirectoryExplorer extends Scene {
 	private ImageIcon highlightedSelectExisting;
 	
 	/** Create custom color */
-	private Color dark_gray = new Color(30, 30, 30);
+	private Color dark_gray = new Color(31, 31, 31);
 
 	/**
 	 * DirectoryExplorer() - sets up directory explorer with GUI stuff
@@ -85,12 +85,12 @@ public class DirectoryExplorer extends Scene {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Create images
-		selectDirectory = new ImageIcon(getClass().getResource("Images/selectDirectoryButton.png"));
-		highlightedSelectDirectory = new ImageIcon(getClass().getResource("Images/highlightedSelectDirectoryButton.png"));
-		selectExisting = new ImageIcon(getClass().getResource("Images/selectExistingButton.png"));
-		highlightedSelectExisting = new ImageIcon(getClass().getResource("Images/highlightedSelectExistingButton.png"));
-		bg = new ImageIcon(getClass().getResource("Images/bg.jpg"));
-		header = new ImageIcon(getClass().getResource("Images/header.png"));
+		selectDirectory = new ImageIcon(getClass().getResource("/creator/Images/selectDirectoryButton.png"));
+		highlightedSelectDirectory = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectDirectoryButton.png"));
+		selectExisting = new ImageIcon(getClass().getResource("/creator/Images/selectExistingButton.png"));
+		highlightedSelectExisting = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectExistingButton.png"));
+		bg = new ImageIcon(getClass().getResource("/creator/Images/bg.jpg"));
+		header = new ImageIcon(getClass().getResource("/creator/Images/header.png"));
 		
 		// Change look and feel
 		try {
@@ -232,6 +232,7 @@ public class DirectoryExplorer extends Scene {
 	public void GoToSelectScene(File slFile)
 	{
 		SceneHandler.singleton.setDirectory(slFile);
+	    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
 		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 	}
 	
