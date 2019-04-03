@@ -196,6 +196,8 @@ public class SettingsPane extends FloatingPane
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	UpdateProjectSettings();
+		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    	scene.SetupTimelinePanel(true);
 		    	ClosePane();
 		    }
 		});
