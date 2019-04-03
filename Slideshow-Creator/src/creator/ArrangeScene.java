@@ -293,7 +293,7 @@ public class ArrangeScene extends Scene{
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		timelineScroller.setPreferredSize(new Dimension(200, 400)); //235
+		timelineScroller.setPreferredSize(new Dimension(200, 250));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
 		///////////////////////
@@ -436,9 +436,11 @@ public class ArrangeScene extends Scene{
 			
 			// Create transition button and configurations
 			transButtons[i] = new JButton(new ImageIcon(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage()));
+			JButton keeperTrans = transButtons [i];
 			transButtons[i].setPreferredSize(new Dimension(100, 75));
 			transButtons[i].setRolloverEnabled(true);
 			transButtons[i].setRolloverIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
+			transButtons[i].setPressedIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
 			transButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			transButtons[i].setFocusable(false);
@@ -460,6 +462,8 @@ public class ArrangeScene extends Scene{
 							index
 							);
 					parent.setEnabled(false);
+					keeperTrans.setIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
+
 				}
 			});
 			
@@ -469,6 +473,8 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].setPreferredSize(new Dimension(290, 170));
 			thumbButtons[i].setRolloverEnabled(true);
 			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
+			thumbButtons[i].setPressedIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
+			thumbButtons[i].setSelectedIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
 			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			thumbButtons[i].setFocusable(false);
@@ -763,7 +769,7 @@ public class ArrangeScene extends Scene{
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                	c = new Color(254, 250, 238);
+                	c = new Color(217, 202, 192);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }

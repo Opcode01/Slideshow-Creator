@@ -224,6 +224,8 @@ public class TransitionPane extends FloatingPane {
 		cancelButton.setRolloverIcon(highlightedCancel);
 		cancelButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    	scene.SetupTimelinePanel(true);
 		    	ClosePane();
 		    }
 		});
@@ -490,7 +492,7 @@ public class TransitionPane extends FloatingPane {
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                    c = new Color(228, 199, 193);
+                    c = new Color(217, 202, 192);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
