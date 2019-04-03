@@ -11,6 +11,7 @@
 package viewer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -49,14 +50,19 @@ public class PlayScene extends Scene {
 	//gui icons
 	private ImageIcon backIcon;
 	private ImageIcon backIconHigh;
+	private ImageIcon backIconGray;
 	private ImageIcon forwardIcon;
 	private ImageIcon forwardIconHigh;
+	private ImageIcon forwardIconGray;
 	private ImageIcon removeCurrentIcon;
 	private ImageIcon removeCurrentIconHigh;
 	private ImageIcon playIcon;
 	private ImageIcon playIconHigh;
 	private ImageIcon pauseIcon;
 	private ImageIcon pauseIconHigh;
+	
+	/** The gray color to use for graying out images */
+	private static final Color grayColor = SliderColor.light_gray;
 	
 	/**	Thumbnail that displays on the player */
 	private Thumbnail slideThumb;
@@ -92,8 +98,10 @@ public class PlayScene extends Scene {
 	{
 		backIcon = new ImageIcon(SceneHandler.class.getResource("Images/backButton.png"));
 		backIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedBackButton.png"));
+		backIconGray = ImageGray(backIcon);
 		forwardIcon = new ImageIcon(SceneHandler.class.getResource("Images/forwardButton.png"));
 		forwardIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedForwardButton.png"));
+		forwardIconGray = ImageGray(forwardIcon);
 		removeCurrentIcon = new ImageIcon(SceneHandler.class.getResource("Images/removeCurrentButton.png"));
 		removeCurrentIconHigh = new ImageIcon(SceneHandler.class.getResource("Images/highlightedRemoveCurrentButton.png"));
 		playIcon = new ImageIcon(getClass().getResource("Images/playButton.png"));
@@ -604,6 +612,34 @@ public class PlayScene extends Scene {
 	private synchronized boolean isTransitioning() {
 		return currentTransitionIndex >= 0;
 	}
+	
+
+	
+    /**
+     * Replaces all rgb with gray while preserving alpha
+     * 
+     * @param imIcon - the ImageIcon to gray out
+	 * 
+	 * @author Fernando Palacios
+	 * @author Timothy Couch
+     */
+    public static ImageIcon ImageGray(ImageIcon imIcon) {
+    	Image img = imIcon.getImage();
+        BufferedImage imgBuff = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        imgBuff.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < imgBuff.getWidth(); i++) {
+            for (int j = 0; j < imgBuff.getHeight(); j++) {                    
+                Color pixColor = new Color(imgBuff.getRGB(i, j), true);
+                
+                if (pixColor.getAlpha() > 0) {
+                	pixColor = new Color(grayColor.getRed(), grayColor.getGreen(), grayColor.getBlue(), pixColor.getAlpha());
+                	imgBuff.setRGB(i, j, pixColor.getRGB());
+                }
+            }
+        } 
+        return new ImageIcon(imgBuff);
+    }
 	
 	/**
 	 * removes the timer when the scene is destroyed
