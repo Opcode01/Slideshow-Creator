@@ -75,7 +75,7 @@ public class ArrangeScene extends Scene{
 	private ImageIcon highlightedRemoveCurrent;
 	
 	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
+	private static Color aqua = new Color(132, 200, 202);
 	
 	/** Create custom light gray color */
 	private Color light_gray = new Color(31, 31, 31);
@@ -93,12 +93,6 @@ public class ArrangeScene extends Scene{
 	 * @author Fernando Palacios
 	 */
 	public ArrangeScene () {
-		// Create GridBagLayout object and constraints
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		
-		// Set panel configurations
-		this.setLayout(gridBag);
 		
 		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
@@ -107,6 +101,15 @@ public class ArrangeScene extends Scene{
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+
+		//clear out if it previously had stuff
+		removeAll();
+		// Create GridBagLayout object and constraints
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Set panel configurations
+		this.setLayout(gridBag);
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -192,7 +195,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
-		imagePanel.setLayout(gridBag);
+		imagePanel.setLayout(new BorderLayout());
 		imagePanel.setBackground(dark_gray);
 		
 		// Create outer panel that houses the timeline panel for layout and whitespace
@@ -213,6 +216,7 @@ public class ArrangeScene extends Scene{
 		timelineScroller.setPreferredSize(new Dimension(200, 235));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
+		/*
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
 		Thumbnail testThumb = new Thumbnail(getClass().getResource("/core/TransitionImages/crossFade.png"));
@@ -230,6 +234,7 @@ public class ArrangeScene extends Scene{
 		//c.anchor = GridBagConstraints.CENTER;
 		imagePanel.add(testLabel, c);
 		///////////////////////
+		 */
 		
 		// Set constraints and add options panels
 		c.insets = new Insets(0, 0, 0, 0);
@@ -392,17 +397,10 @@ public class ArrangeScene extends Scene{
 						}
 						
 						// Set border for newly selected button
-						keeper.setSelected(true);
-						keeper.setBorder(new LineBorder(aqua, 3));
+						selectButton(keeper);
 						//System.out.println(buttonThumb.getImagePath() + "selected");
 						
-						
-						c.weightx = 0.01;
-						c.fill = GridBagConstraints.BOTH;
-						c.anchor = GridBagConstraints.CENTER;
-						imagePanel.removeAll();
-						imagePanel.add(createSlideLabel(), c);
-						revalidate();
+						showCurrentSlide();
 						//imagePanel.repaint();
 					}
 				}
@@ -418,6 +416,20 @@ public class ArrangeScene extends Scene{
 			c.insets = new Insets(0, 0, 0, 0);
 			timelinePanel.add(transButtons[i], c);
 		}
+		
+		//show the first slide
+		if (timeline.thumbnailsList.getSize() > 0)
+		{
+			currentSlide = timeline.thumbnailsList.getThumbnail(0);
+			selectButton(thumbButtons[0]);
+			showCurrentSlide();
+		}
+	}
+	
+	private static void selectButton(JToggleButton b)
+	{
+		b.setSelected(true);
+		b.setBorder(new LineBorder(aqua, 3));
 	}
 	
 	/**
@@ -436,6 +448,19 @@ public class ArrangeScene extends Scene{
 		};
 		label.setBorder(BorderFactory.createEmptyBorder());
 		return label;
+	}
+	
+	/**
+	 * updates the slideThumb and slidePanel to the slide at currentSlideIndex
+	 * 
+	 * @Timothy Couch
+	 */
+	private void showCurrentSlide()
+	{
+		//update the view
+		imagePanel.removeAll();
+		imagePanel.add(createSlideLabel(), BorderLayout.CENTER);
+		revalidate();
 	}
 	
     /**
