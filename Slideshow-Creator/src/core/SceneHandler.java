@@ -151,6 +151,7 @@ public class SceneHandler {
 			    if (confirmed == JOptionPane.YES_OPTION) {
 			    	restartProgram();
 			      mainFrame.dispose();
+			      System.exit(1);
 			    }
 			  }
 			});
