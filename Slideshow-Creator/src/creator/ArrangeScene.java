@@ -551,7 +551,8 @@ public class ArrangeScene extends Scene{
 	    int thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
 	    int transitionTotalLength = (100) * timeline.transitionsList.getSize();
 	    float secondsToPixels = (((290 + 40) + (100)) / (s.slideDuration));
-	    System.out.println(secondsToPixels);
+	    int extraAudioLength = 19 * 2;
+	    int extraLastAudioLength = 19 * 3;
 	    
 	    // Set counter for grid x
 	    int audioxCounter = 0;
@@ -564,17 +565,27 @@ public class ArrangeScene extends Scene{
 		if(timeline.audioPlayer.getSize() > 0) {
 			audioButton.setIcon(audioChange);
 			audioButton.setRolloverIcon(highlightedAudioChange);
+		} else {
+			audioButton.setIcon(audio);
+			audioButton.setRolloverIcon(highlightedAudio);
 		}
 	    
 		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
 		{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
-		    System.out.println(secondsToPixels);
 		    
+			if(timeline.audioPlayer.getSize() == (i + 1)) {
+				audioTrackSize -= (extraLastAudioLength);
+			} else {
+				audioTrackSize -= (extraAudioLength);
+			}
 		    
 		    // Add each track size to the total duration of the audio
 		    audioTimelineDuration += audioTrackSize;
+		    
+		    if(audioTimelineDuration >= thumbnailTotalLength + transitionTotalLength)
+		    	audioTrackSize = (int) ((thumbnailTotalLength + transitionTotalLength) - (audioTimelineDuration - audioTrackSize));
 		    
 		    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
 		    System.out.println(audioTrackSize);
