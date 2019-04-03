@@ -469,7 +469,7 @@ public class SettingsPane extends FloatingPane
 			audioFilePath = "none";
 		}
 		
-		int slideTime = 1;
+		int slideTime = 30;
 		try {
 			slideTime = Integer.parseInt(durationText.getText());
 		}catch(NumberFormatException e) {

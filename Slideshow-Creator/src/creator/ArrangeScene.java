@@ -536,14 +536,16 @@ public class ArrangeScene extends Scene{
 	{
 		// Get instance of timeline
 		timeline = SceneHandler.singleton.getTimeline();
+		Settings s = timeline.timelineSettings;
 		
 		// Reset audio timeline duration 
 		audioTimelineDuration = 0;
 		
 		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
-	    int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
-	    int transitionLength = (100) * timeline.transitionsList.getSize();
-	    float secondsToPixels = (thumbnailLength + transitionLength) / 30; //TO DO: get slideshowduration to replace number with; EX of 30 seconds for testing
+	    int thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
+	    int transitionTotalLength = (100) * timeline.transitionsList.getSize();
+	    float secondsToPixels = (((290 + 40) + (100)) / (s.slideDuration));
+	    System.out.println(secondsToPixels);
 	    
 	    // Set counter for grid x
 	    int audioxCounter = 0;
@@ -562,6 +564,8 @@ public class ArrangeScene extends Scene{
 		{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
+		    System.out.println(secondsToPixels);
+		    
 		    
 		    // Add each track size to the total duration of the audio
 		    audioTimelineDuration += audioTrackSize;
@@ -638,11 +642,11 @@ public class ArrangeScene extends Scene{
 		timeline = SceneHandler.singleton.getTimeline();
 				
 		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
-		int thumbnailLength = (290 + 40) * timeline.thumbnailsList.getSize();
-		int transitionLength = (100) * timeline.transitionsList.getSize();
+		int thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
+		int transitionTotalLength = (100) * timeline.transitionsList.getSize();
 		
 		//If we have more audio than the length of the slides:
-	    if(audioTimelineDuration >= thumbnailLength + transitionLength) {
+	    if(audioTimelineDuration >= thumbnailTotalLength + transitionTotalLength) {
 	    	
 	    	// Open warning pane in the center of our workspace
 	    	JFrame parent = SceneHandler.singleton.getMainFrame();
@@ -650,7 +654,7 @@ public class ArrangeScene extends Scene{
 	    			parent.getX() + parent.getSize().width/2,
 	    			parent.getY() + parent.getSize().height/2
 	    			);
-	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(370, 200));
+	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 200));
 	    	parent.setEnabled(false);
 	    	return;
 	    }
