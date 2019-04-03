@@ -40,9 +40,8 @@ public class PlayScene extends Scene {
 	
 	private static final SlideDir autoDir = SlideDir.RIGHT;
 	
-	//pause button and constraints
+	/** button that controls play and pause on auto slideshow */
 	private JButton playPauseButton;
-	private GridBagConstraints playPauseConstraints;
 	
 	/** whether or not the slideshow is paused. Only relevant on auto playback */
 	private boolean isPaused;
@@ -113,6 +112,7 @@ public class PlayScene extends Scene {
 	{
 		//clear out if it had stuff previously
 		this.removeAll();
+		currentSlideIndex = 0;
 		currentTransitionIndex = -1;
 		isPaused = false;
 		
@@ -125,7 +125,6 @@ public class PlayScene extends Scene {
 		setBackground(SliderColor.medium_gray);
 		
 		// Set slide panel configurations
-		currentSlideIndex = 0;
 		slideThumb = getSlide(currentSlideIndex);
 		slidePanel = new JPanel();
 		slidePanel.setLayout(new BorderLayout());
@@ -245,14 +244,13 @@ public class PlayScene extends Scene {
 			});
 			
 			// Set constraints and add left button
-			playPauseConstraints = new GridBagConstraints();
-			playPauseConstraints.fill = GridBagConstraints.NONE;
-			playPauseConstraints.anchor = GridBagConstraints.CENTER;
-			playPauseConstraints.weightx = 0;
-			playPauseConstraints.weighty = 0;
-			playPauseConstraints.gridx = 0;
-			playPauseConstraints.gridy = 0;
-			controlPanel.add(playPauseButton, playPauseConstraints);
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.CENTER;
+			c.weightx = 0;
+			c.weighty = 0;
+			c.gridx = 0;
+			c.gridy = 0;
+			controlPanel.add(playPauseButton, c);
 		}
 		
 		//calculate timers and set up automatic slideshow when not manual
@@ -322,8 +320,6 @@ public class PlayScene extends Scene {
 			System.out.println("Paused: " + isPaused);
 		}
 		
-		System.out.println("YO");
-		
 		//just hit pause
 		if (isPaused)
 		{
@@ -338,8 +334,13 @@ public class PlayScene extends Scene {
 		}
 		else //just hit play
 		{
-			//play slideshow
-			scheduleStartTransition(autoDir);
+			//play slideshow if not at end
+			if (getNextSlideIndex(autoDir) != currentSlideIndex)
+				scheduleStartTransition(autoDir);
+			else//restart because we're at the end
+			{
+				startSlideshow();
+			}
 			
 			//swap gui button to pause
 			playPauseButton.setToolTipText("Pause Slideshow");
@@ -412,14 +413,24 @@ public class PlayScene extends Scene {
 		if (currentSlideIndex == prevSlideIndex)
 			return false;
 		
+		showCurrentSlide();
+		
+		return true;
+	}
+	
+	/**
+	 * updates the slideThumb and slidePanel to the slide at currentSlideIndex
+	 * 
+	 * @Timothy Couch
+	 */
+	private void showCurrentSlide()
+	{
 		slideThumb = getSlide(currentSlideIndex);
 		
 		//update the view
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
-		
-		return true;
 	}
 	
 	/**
@@ -474,7 +485,14 @@ public class PlayScene extends Scene {
 							
 							scheduleStartSlide(dir);
 						}
-						else System.out.println("StartTransition: No more slides available in that direction!");
+						else
+						{
+							System.out.println("StartTransition: No more slides available in that direction!");
+							
+							//"pause" the slideshow at the end so that you can start it over from the beginning by pressing play
+							if (!timeline.timelineSettings.isManual && !timeline.timelineSettings.isLoopingSlides && !isPaused)
+								togglePauseSlideshow();
+						}
 					}
 				},
 				timerLength
@@ -533,6 +551,11 @@ public class PlayScene extends Scene {
 		slideTimes = new SlideShowTime[timeline.transitionsList.getSize()];
 		for (int i = 0; i < slideTimes.length; i++)
 			slideTimes[i] = new SlideShowTime(timeline, i);
+		
+		//start at the proper values
+		currentSlideIndex = 0;
+		currentTransitionIndex = -1;
+		showCurrentSlide();
 		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual)
