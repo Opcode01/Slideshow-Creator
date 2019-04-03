@@ -194,7 +194,7 @@ public class PlayScene extends Scene {
 		if (timeline.timelineSettings.isManual)
 		{
 			//left button
-			JButton leftButton = new JButton(backIcon);
+			leftButton = new JButton(backIcon);
 			leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			leftButton.setToolTipText("Previous Image");
 			leftButton.setBorder(BorderFactory.createEmptyBorder());
@@ -218,7 +218,7 @@ public class PlayScene extends Scene {
 			controlPanel.add(leftButton, c);
 			
 			//right button
-			JButton rightButton = new JButton(forwardIcon);
+			rightButton = new JButton(forwardIcon);
 			rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			rightButton.setToolTipText("Previous Image");
 			rightButton.setBorder(BorderFactory.createEmptyBorder());
