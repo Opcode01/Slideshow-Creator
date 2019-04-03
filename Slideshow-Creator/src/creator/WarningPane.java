@@ -26,16 +26,22 @@ public class WarningPane extends FloatingPane{
 	/** Create ok button */
 	private JButton okButton;
 	
+	/** Create second text label */
+	private JLabel warningHeader;
+	
 	/** Create text label */
 	private JLabel warningText;
 	
 	/** Create second text label */
 	private JLabel warningNextText;
 	
-	/** Auto custom button image */
+	/** Highlighted auto custom button image */
+	private ImageIcon warning;
+	
+	/** Ok custom button image */
 	private ImageIcon ok;
 	
-	/** Highlighted auto custom button image */
+	/** Highlighted ok custom button image */
 	private ImageIcon highlightedOk;
 	
 	/** Create custom light gray color */
@@ -64,6 +70,9 @@ public class WarningPane extends FloatingPane{
 		// Set images
 		ok = new ImageIcon(getClass().getResource("/creator/Images/okButton.png"));
 		highlightedOk = new ImageIcon(getClass().getResource("/creator/Images/highlightedOkButton.png"));
+		warning = new ImageIcon(getClass().getResource("/creator/Images/warningHeader.png"));
+		
+		warningHeader = new JLabel(warning);
 		
 		warningText = new JLabel("Your audio tracks extend past the length of your slideshow.");
 		warningText.setFont(commonFont);
@@ -86,19 +95,24 @@ public class WarningPane extends FloatingPane{
 			}
 		});
 		
-		//c.fill = GridBagConstraints.BOTH;
 		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0;
 		c.gridy = 0;
-		warningGui.add(warningText, c);
+		c.insets = new Insets(15, 0, 20, 0);
+		warningGui.add(warningHeader, c);
 		
 		c.gridx = 0;
 		c.gridy = 1;
-		warningGui.add(warningNextText, c);
+		c.insets = new Insets(0, 0, 0, 0);
+		warningGui.add(warningText, c);
 		
 		c.gridx = 0;
 		c.gridy = 2;
-		c.insets = new Insets(30, 0, 0, 0);
+		warningGui.add(warningNextText, c);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		c.insets = new Insets(25, 0, 20, 0);
 		warningGui.add(okButton, c);
 		
 		// Set settings into floating pane

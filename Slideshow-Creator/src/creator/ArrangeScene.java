@@ -654,7 +654,7 @@ public class ArrangeScene extends Scene{
 	    			parent.getX() + parent.getSize().width/2,
 	    			parent.getY() + parent.getSize().height/2
 	    			);
-	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 200));
+	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 190));
 	    	parent.setEnabled(false);
 	    	return;
 	    }
