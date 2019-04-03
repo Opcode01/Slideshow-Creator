@@ -44,6 +44,12 @@ public class PlayScene extends Scene {
 	/** button that controls play and pause on auto slideshow */
 	private JButton playPauseButton;
 	
+	/** manual left advance button */
+	private JButton leftButton;
+
+	/** manual right advance button */
+	private JButton rightButton;
+	
 	/** whether or not the slideshow is paused. Only relevant on auto playback */
 	private boolean isPaused;
 
