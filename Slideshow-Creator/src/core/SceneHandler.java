@@ -150,6 +150,7 @@ public class SceneHandler {
 
 			    if (confirmed == JOptionPane.YES_OPTION) {
 			      mainFrame.dispose();
+			      System.exit(1);
 			    }
 			  }
 			});

@@ -1,32 +1,22 @@
-/**
- * AudioPlayer.java
- * Holds and plays an audio track
- * 
- * Slideshow Creator
- * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
- * CS 499 Senior Design with Dr. Rick Coleman
- * 2/26/19
- */
 
 package core;
 
 import java.util.ArrayList;
 
-public class AudioPlayer 
-{
-	 /**
-     * List of Audio objects
-     */
+public class AudioPlayer implements ThreadOnCompleteListener
+{	
+	/** List of Audio objects */
     private ArrayList<Audio> audioList; 
     
-    /**
-     * Instantiate ArrayList instance of Audio 
-     */
-    public AudioPlayer()
-    {
-        audioList = new ArrayList<Audio>();
-    };
+    /** Index of the currently playing audio clip */
+    private int currentIndex = 0;
     
+    /** Should be set to true if the audio list should loop, or false otherwise*/
+    public boolean shouldLoop = false;
+    
+    public AudioPlayer() {
+    	audioList = new ArrayList<Audio>();
+    }
 
     /**
      * @return size of arraylist of Audio objects
@@ -48,7 +38,6 @@ public class AudioPlayer
         return audioList;
     }
 
-
     /**
      * getAudio will return the Audio object at the specified index 
      * 
@@ -60,9 +49,15 @@ public class AudioPlayer
      */
     public Audio getAudio(int audioIndex)
     {
-        return audioList.get(audioIndex);
+    	try {
+    		Audio result = audioList.get(audioIndex);
+    		return result;
+    		
+    	}catch(IndexOutOfBoundsException e) {
+    		System.out.println("An audio clip does not exist at that index!");
+    		return null;
+		}
     }
-    
 
     /**
      * addAudio will append given Audio object to Audio arrayList
@@ -74,6 +69,7 @@ public class AudioPlayer
     public void addAudio(Audio audio)
     {
         audioList.add(audio);
+        audio.addListener(this);
     }
     
     /**
@@ -86,7 +82,8 @@ public class AudioPlayer
      */
     public void addAudio(Audio audio, int index)
     {
-        audioList.add(index, audio);;
+        audioList.add(index, audio);
+        audio.addListener(this);
     }
 
     /**
@@ -176,5 +173,56 @@ public class AudioPlayer
     {
         return audioList.indexOf(audio);
     }
+    
+    //This method should be called when previewing an individual clip in the Creator
+    /** Plays an audio clip at a specific index */
+    public void playAudioClipAtIndex(int index) {
 
+    	if(getAudio(index) != null) {
+        	getAudio(index).Play();	
+    	}
+    	
+    }
+
+    /* This method should be called by the Viewer - if you spam this method,
+    *  you will notice that it can lead to multiple clips playing at once on certain edge 
+    *  cases. This would be a problem if this was attached to a button, but since it
+    *  will only be called by the viewer, lets just make sure its called automatically
+    */
+    /** Plays all the audio clips in the list sequentially
+     * @author austinvickers
+     */
+    public void playAudioClipsSequentially() {
+    	//First reset the counter
+    	currentIndex = 0;
+    	
+    	//Play the first clip
+    	playAudioClipAtIndex(currentIndex);
+    	
+    	//NotifyOfThreadComplete will get notified when its time to play the next clip
+    }
+
+    /** This method is called whenever an audio thread finishes 
+     *  @author austinvickers
+     */
+	@Override
+	public void notifyOfThreadComplete(NotifyingThread thread) {
+		
+		System.out.println("Audio player was notified");
+		
+		if(currentIndex + 1 < audioList.size()) {
+			currentIndex++;
+			playAudioClipAtIndex(currentIndex);
+		}
+		else {
+			if(shouldLoop) {
+				currentIndex = 0;
+				playAudioClipAtIndex(currentIndex);
+			}
+		}
+		
+		//Otherwise, stop playing clips
+	}
+	
 }
+
