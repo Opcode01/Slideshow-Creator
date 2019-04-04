@@ -68,7 +68,7 @@ public class PlayScene extends Scene {
 	private ImageIcon pauseIconHigh;
 	
 	/** The gray color to use for graying out images */
-	private static final Color grayColor = SliderColor.light_gray;
+	private static final Color grayColor = SliderColor.very_light_gray;
 	
 	/**	Thumbnail that displays on the player */
 	private Thumbnail slideThumb;
@@ -240,6 +240,8 @@ public class PlayScene extends Scene {
 			c.gridx = 1;
 			c.gridy = 0;
 			controlPanel.add(rightButton, c);
+			
+			setManualButtonIcons();
 		}
 		else//use play/pause button if manual
 		{
@@ -365,6 +367,44 @@ public class PlayScene extends Scene {
 	}
 	
 	/**
+	 * update the left and right buttons to be gray or colored based on whether they have functionality at the moment
+	 */
+	private void setManualButtonIcons()
+	{
+		if (timeline.timelineSettings.isManual)
+		{
+			//if you can't move left
+			if (isTransitioning() || currentSlideIndex == getNextSlideIndex(SlideDir.LEFT))
+			{
+				leftButton.setIcon(backIconGray);
+				leftButton.setRolloverIcon(backIconGray);
+				leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+			else
+			{
+				leftButton.setIcon(backIcon);
+				leftButton.setRolloverIcon(backIconHigh);
+				leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+			
+			//if you can't move right
+			if (isTransitioning() || currentSlideIndex == getNextSlideIndex(SlideDir.RIGHT))
+			{
+				rightButton.setIcon(forwardIconGray);
+				rightButton.setRolloverIcon(forwardIconGray);
+				rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+			else
+			{
+				rightButton.setIcon(forwardIcon);
+				rightButton.setRolloverIcon(forwardIconHigh);
+				rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+			revalidate();
+		}
+	}
+	
+	/**
 	 * gets the thumbnail at the slide index specified
 	 * @param i slide index to get thumbnail
 	 * @return thumbnail at index i
@@ -429,6 +469,8 @@ public class PlayScene extends Scene {
 		
 		showCurrentSlide();
 		
+		setManualButtonIcons();
+		
 		return true;
 	}
 	
@@ -467,6 +509,8 @@ public class PlayScene extends Scene {
 		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
 		transitionPanel.setBackground(SliderColor.dark_gray);
 		revalidate();
+		
+		setManualButtonIcons();
 		
 		transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
 	}
