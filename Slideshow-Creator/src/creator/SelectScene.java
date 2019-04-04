@@ -95,10 +95,10 @@ public class SelectScene extends Scene
 	private ImageIcon highlightedDeselectAll;
 	
 	/** Create custom light gray color */
-	private Color light_gray = new Color(41, 41, 41);
+	private Color light_gray = new Color(60, 60, 60);
 	
-	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(0, 0, 0);
+	/** Create custom image_gray color */
+	private Color image_gray = new Color(30, 30, 30);
 	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
@@ -122,14 +122,14 @@ public class SelectScene extends Scene
 		GridBagConstraints c = new GridBagConstraints();
 		
 		// Set image locations
-		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
-		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
-		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
-		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
-		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
-		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
-		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
-		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
+		back = new ImageIcon(getClass().getResource("Images/backButton.png"));
+		arrange = new ImageIcon(getClass().getResource("Images/arrangeButton.png"));
+		selectAll = new ImageIcon(getClass().getResource("Images/selectAllButton.png"));
+		deselectAll = new ImageIcon(getClass().getResource("Images/deselectAllButton.png"));
+		highlightedBack = new ImageIcon(getClass().getResource("Images/highlightedBackButton.png"));
+		highlightedArrange = new ImageIcon(getClass().getResource("Images/highlightedArrangeButton.png"));
+		highlightedSelectAll = new ImageIcon(getClass().getResource("Images/highlightedSelectAllButton.png"));
+		highlightedDeselectAll = new ImageIcon(getClass().getResource("Images/highlightedDeselectAllButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);
@@ -221,7 +221,7 @@ public class SelectScene extends Scene
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
-		imagePanelContainer.setBackground(dark_gray);
+		imagePanelContainer.setBackground(image_gray);
 		
 		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
@@ -235,7 +235,6 @@ public class SelectScene extends Scene
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		imageScroller.getVerticalScrollBar().setBackground(light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
-		imageScroller.getVerticalScrollBar().setUnitIncrement(25);
 		
 		// Set constraints and add options panel
 		c.fill = GridBagConstraints.BOTH;
@@ -270,8 +269,8 @@ public class SelectScene extends Scene
 		// Create image panel with new images
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
-		imagePanel.setBackground(dark_gray);
-		ShowImages();
+		imagePanel.setBackground(image_gray);
+		ShowImages(imagePanel, allThumbs);
 		
 		// add to outer panel that houses the image panel for layout and whitespace
 		imagePanelContainer.removeAll();
@@ -303,40 +302,7 @@ public class SelectScene extends Scene
 		System.out.println("Thumbnails in Timeline:");
 		for (Thumbnail t : SceneHandler.singleton.getTimeline().thumbnailsList.getThumbnails())
 			System.out.println(t.getImagePath());
-		SceneHandler.singleton.GetSceneInstanceByType(SceneType.ARRANGE).initialize();
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
-		
-		TimelineParser.ExportTimeline("test");
-	}
-	
-    /**
-     * UpdateSelected() - updates the highlighted images to reflect changes in thumbnails list
-     * 
-     * @author Fernando Palacios
-     */
-	public void UpdateSelected()
-	{
-		for(int i = 0; i < thumbButtons.length; i++)
-		{
-			//get instance of timeline to compare what is in it
-			Timeline timeline = SceneHandler.singleton.getTimeline();
-			
-			//grab individual thumbnail
-			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
-
-			int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
-			//if thumbnail is in the timeline, keep it highlighted
-			if (slideIndex >= 0)
-			{
-				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
-				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
-			}
-			else//thumbnail not on timeline, remove highlight
-			{
-				thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
-				thumbButtons[i].setIcon(new ImageIcon(buttonThumb.getImageThumb()));
-			}
-		}
 	}
 	
     /**
@@ -345,12 +311,12 @@ public class SelectScene extends Scene
      * @author Fernando Palacios
 	 * @author Timothy Couch
      */
-	private void ShowImages()
+	private void ShowImages(JPanel panel, ThumbnailsList list)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; // layout counter y
-		thumbButtons = new JButton[allThumbs.getSize()];
+		thumbButtons = new JButton[list.getSize()];
 		GridBagConstraints c = new GridBagConstraints();
 
 		for(i = 0; i < thumbButtons.length; i++) {
@@ -368,7 +334,7 @@ public class SelectScene extends Scene
 			
 			gridxCounter++;
 			
-			Thumbnail buttonThumb = allThumbs.getThumbnail(i);
+			Thumbnail buttonThumb = list.getThumbnail(i);
 			
 			thumbButtons[i] = new JButton(new ImageIcon(buttonThumb.getImageThumb()));
 			JButton keeper = thumbButtons [i];
@@ -401,7 +367,7 @@ public class SelectScene extends Scene
 					}
 				}
 				});
-			imagePanel.add(thumbButtons[i], c);
+			panel.add(thumbButtons[i], c);
 		}
 	}
 
@@ -423,7 +389,6 @@ public class SelectScene extends Scene
 		allThumbs = new ThumbnailsList();
 		addImagesInDirectory(new File(SceneHandler.singleton.getDirectory()));
 		setupImagePanel(true);
-		UpdateSelected();
     }
     
     /**
@@ -520,37 +485,15 @@ public class SelectScene extends Scene
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                    int red = (c.getRed() - 40) <= 0 ? 0 : c.getRed() - 40;
-                    int green = (c.getGreen() - 40) <= 0 ? 0
-                        : c.getGreen() - 40;
-                    int blue = (c.getBlue() - 40) <= 0 ? 0 : c.getBlue() - 40;
+                    int red = (c.getRed() - 30) <= 0 ? 0 : c.getRed() - 30;
+                    int green = (c.getGreen() - 30) <= 0 ? 0
+                        : c.getGreen() - 30;
+                    int blue = (c.getBlue() - 30) <= 0 ? 0 : c.getBlue() - 30;
                     c = new Color(red, green, blue);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
         }
         return buffered;
-    }
-    
-    private Image tint(Image thumbnail, Color color) {
-    	
-        Image img = thumbnail;
-
-        BufferedImage image = new BufferedImage(img.getWidth(null),
-        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        image.getGraphics().drawImage(img, 0, 0, null);
-        
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                Color pixelColor = new Color(image.getRGB(x, y), true);
-                int r = (pixelColor.getRed() + color.getRed()) / 2;
-                int g = (pixelColor.getGreen() + color.getGreen()) / 2;
-                int b = (pixelColor.getBlue() + color.getBlue()) / 2;
-                int a = pixelColor.getAlpha();
-                int rgba = (a << 24) | (r << 16) | (g << 8) | b;
-                image.setRGB(x, y, rgba);
-            }
-        }
-        return image;
     }
 }

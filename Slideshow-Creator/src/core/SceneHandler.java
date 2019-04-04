@@ -60,8 +60,8 @@ public class SceneHandler {
 	 */
 	public void setDirectory(File file)
 	{
+		directory = file.getParentFile().getAbsolutePath();
 		timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
-		directory = timeline.getDirectory();
 		
 		System.out.println("Dir: " + directory);
 		System.out.println("File: " + file.getAbsolutePath());
@@ -87,8 +87,6 @@ public class SceneHandler {
 	/* The currently selected scene type */
 	private SceneType currentScene;
 	
-	public final Map<TransitionType, ImageIcon> transitionImages;
-	
 	/**
 	 * SceneHandler - creates program with specified app type
 	 * @param aT AppType to open
@@ -104,16 +102,6 @@ public class SceneHandler {
 		appType = aT;
 		scenes = new HashMap<SceneType, Scene>();
 		currentScene = SceneType.NONE;
-		
-		//set up transition images
-		transitionImages = new HashMap<TransitionType, ImageIcon>();
-		transitionImages.put(TransitionType.NONE, new ImageIcon(getClass().getResource("/core/TransitionImages/none.png")));
-		transitionImages.put(TransitionType.CROSS_DISSOLVE, new ImageIcon(getClass().getResource("/core/TransitionImages/crossFade.png")));
-		transitionImages.put(TransitionType.WIPE_DOWN, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeDown.png")));
-		transitionImages.put(TransitionType.WIPE_LEFT, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeLeft.png")));
-		transitionImages.put(TransitionType.WIPE_RIGHT, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeRight.png")));
-		transitionImages.put(TransitionType.WIPE_UP, new ImageIcon(getClass().getResource("/core/TransitionImages/wipeUp.png")));
-		
 		launch();
 	}
 	
@@ -126,7 +114,7 @@ public class SceneHandler {
 	 */
 	public boolean launch()
 	{
-		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("/core/Images/slideshowIcon.png"));
+		ImageIcon slideshowIcon = new ImageIcon(getClass().getResource("Images/slideshowIcon.png"));
 		
 		if(appType == AppType.CREATOR) {
 			timeline = new Timeline();
@@ -137,7 +125,7 @@ public class SceneHandler {
 		mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		mainFrame.setTitle("Slideshow " + appType.getTitle());
 		mainFrame.setIconImage(slideshowIcon.getImage());
-		mainFrame.setMinimumSize(new Dimension(700, 590));
+		mainFrame.setMinimumSize(new Dimension(600, 490));
 		
 		//set up quit confirmation dialog
 		//Thanks to https://stackoverflow.com/questions/21330682/confirmation-before-press-yes-to-exit-program-in-java

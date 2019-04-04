@@ -16,68 +16,28 @@ public class Timeline
 {
     public ThumbnailsList thumbnailsList;
     public TransitionsList transitionsList;
-    public AudioPlayer audioPlayer;
-    public Settings timelineSettings;
-    
-    private String directory;
-    
-    public void setDirectory(String dir)
-    {
-    	directory = dir;
-    }
-    
-    public String getDirectory()
-    {
-    	return directory;
-    }
 
     /**
      * Timeline - initializes an empty timeline
      * 
      * @author Timothy Couch
-     * @author Joe Hoang
      */
     public Timeline()
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
-        audioPlayer = new AudioPlayer();
-        timelineSettings = new Settings(false, false, false, "", 1);
-        
-        /*
-        //testAudio
-        audioPlayer.addAudio(new Audio("C:\\Users\\jhoan\\Desktop\\Aloe\\VOL III\\Calgary Live.wav"));
-        System.out.println(audioPlayer.getAudio(0).getAudioPath());
-        System.out.println(audioPlayer.getAudio(0).getAudioLength());
-        */
-        
-        directory = SceneHandler.singleton.getDirectory();
     }
     
-    /**
-     * UpdateProjectSettings - updates the settings
-     * 
-     * @author Austin Vickers
-     */
     public void UpdateProjectSettings(Settings s) {
     	s.PrintAll();
-    	timelineSettings = s;
-    	System.out.println("Timeline Settings updated!");
-    }
-    
-    /**
-     * UpdateTransitionSettings - updates all transition settings
-     * 
-     * @author Fernando Palacios
-     */
-    public void UpdateTransitionSettings(double speed, TransitionType type)
-    {
-    	//Update all transition lengths and types
+    	
+    	//Update all transition lengths
     	ArrayList<Transition> list = transitionsList.getTransitions();
     	for(Transition t : list) {
-    		t.setTransitionLength(speed);
-    		t.setTransitionType(type);
+    		t.setTransitionLength(s.transitionLength);
     	}
+    	
+    	System.out.println("Timeline Settings updated!");
     }
 
     /**
@@ -89,7 +49,7 @@ public class Timeline
     public void addSlide(Thumbnail thumbnail)
     {
         thumbnailsList.addThumbnail(thumbnail);
-        transitionsList.addTransition(new Transition(TransitionType.WIPE_RIGHT, 1));
+        transitionsList.addTransition(new Transition(TransitionType.NONE, 1));
     }
 
     /**

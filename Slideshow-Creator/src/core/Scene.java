@@ -31,6 +31,7 @@ public abstract class Scene extends JPanel
 	 * @author Timothy Couch
 	 */
 	public void initialize() {
+		initialized = true;
 	}
 
 	/**
@@ -41,10 +42,7 @@ public abstract class Scene extends JPanel
 	public void show()
 	{
 		if (!initialized)
-		{
 			initialize();
-			initialized = true;
-		}
 	}
 
 	/**
