@@ -545,6 +545,10 @@ public class ArrangeScene extends Scene{
 		}
 	}
 	
+	/**
+	 * selects the supplied button and draws a box around it
+	 * @param b button to select
+	 */
 	private static void selectButton(JToggleButton b)
 	{
 		b.setSelected(true);
