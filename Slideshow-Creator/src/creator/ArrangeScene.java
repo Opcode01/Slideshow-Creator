@@ -538,6 +538,11 @@ public class ArrangeScene extends Scene{
 			selectButton(thumbButtons[0]);
 			showCurrentSlide();
 		}
+		else {//empty slideshow
+			imagePanel.removeAll();
+			imagePanel.add(new JLabel(), BorderLayout.CENTER);
+			revalidate();
+		}
 	}
 	
 	private static void selectButton(JToggleButton b)
