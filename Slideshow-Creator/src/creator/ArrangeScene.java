@@ -1,5 +1,6 @@
 package creator;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -38,6 +39,8 @@ public class ArrangeScene extends Scene{
 	
 	/** Create timeline panel */
 	private JPanel timelinePanel;
+	
+	private Thumbnail currentSlide;
 	
 	/** Create container for timeline panel */
 	private JPanel timelinePanelContainer;
@@ -102,12 +105,6 @@ public class ArrangeScene extends Scene{
 	 * @author Fernando Palacios
 	 */
 	public ArrangeScene () {
-		// Create GridBagLayout object and constraints
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		
-		// Set panel configurations
-		this.setLayout(gridBag);
 		
 		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
@@ -117,6 +114,16 @@ public class ArrangeScene extends Scene{
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+
+		//clear out if it previously had stuff
+		removeAll();
+		// Create GridBagLayout object and constraints
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Set panel configurations
+		this.setLayout(gridBag);
+
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		
 		//TESTING PURPOSES ONLY 3/29/19
@@ -169,8 +176,8 @@ public class ArrangeScene extends Scene{
 		    public void actionPerformed(ActionEvent e) {
 		    	// Remove selected thumb from timeline
 		    	Timeline timeline = SceneHandler.singleton.getTimeline();
-		    	System.out.println(selectedThumbnail.getImagePath() + "remove");
-		    	int removeIndex = timeline.thumbnailsList.indexOf(selectedThumbnail);
+		    	//System.out.println(selectedThumbnail.getImagePath() + "remove");
+		    	int removeIndex = timeline.thumbnailsList.indexOf(currentSlide);
 		    	timeline.removeSlide(removeIndex);
 		    	
 		    	// Remove components and repaint 
@@ -278,7 +285,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
-		imagePanel.setLayout(gridBag);
+		imagePanel.setLayout(new BorderLayout());
 		imagePanel.setBackground(SliderColor.dark_gray);
 		
 		// Create outer panel that houses the timeline panel for layout and whitespace
@@ -299,6 +306,7 @@ public class ArrangeScene extends Scene{
 		timelineScroller.setPreferredSize(new Dimension(200, 235));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
+		/*
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
 		Thumbnail testThumb = new Thumbnail(getClass().getResource("/core/TransitionImages/crossFade.png"));
@@ -316,6 +324,7 @@ public class ArrangeScene extends Scene{
 		//c.anchor = GridBagConstraints.CENTER;
 		imagePanel.add(testLabel, c);
 		///////////////////////
+		 */
 		
 		// Set constraints and add options panels
 		c.insets = new Insets(0, 0, 0, 0);
@@ -490,7 +499,7 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
-					selectedThumbnail = buttonThumb;
+					currentSlide = buttonThumb;
 					
 					if(keeper.isSelected())
 					{
@@ -502,29 +511,11 @@ public class ArrangeScene extends Scene{
 						}
 						
 						// Set border for newly selected button
-						keeper.setSelected(true);
-						keeper.setBorder(new LineBorder(SliderColor.aqua, 3));
-						System.out.println(buttonThumb.getImagePath() + "selected");
+						selectButton(keeper);
+						//System.out.println(buttonThumb.getImagePath() + "selected");
 						
-						///////////////////////
-						//Add example image - this is approximately what you should do to set up the display image! :)
-						//Thumbnail currentThumb = new Thumbnail("src/core/TransitionImages/wipeLeft.png");
-						JLabel testLabel = new JLabel() {
-							  @Override
-							  public void paintComponent(Graphics g) {
-								  buttonThumb.drawFill(g, this);
-								  //example 1 of drawing the image associated with a transition
-								  //g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
-								  }
-							  };
-						
-						c.weightx = 0.01;
-						c.fill = GridBagConstraints.BOTH;
-						c.anchor = GridBagConstraints.CENTER;
-						imagePanel.removeAll();
-						imagePanel.add(testLabel, c);
-						imagePanel.revalidate();
-						imagePanel.repaint();
+						showCurrentSlide();
+						//imagePanel.repaint();
 					}
 				}
 				});
@@ -539,6 +530,51 @@ public class ArrangeScene extends Scene{
 			c.insets = new Insets(0, 0, 0, 0);
 			timelinePanel.add(transButtons[i], c);
 		}
+		
+		//show the first slide
+		if (timeline.thumbnailsList.getSize() > 0)
+		{
+			currentSlide = timeline.thumbnailsList.getThumbnail(0);
+			selectButton(thumbButtons[0]);
+			showCurrentSlide();
+		}
+	}
+	
+	private static void selectButton(JToggleButton b)
+	{
+		b.setSelected(true);
+		b.setBorder(new LineBorder(SliderColor.aqua, 3));
+	}
+	
+	/**
+	 * creates a JLabel with the current slide thumbnail on it
+	 * @return JLabel of the current slide
+	 * 
+	 * @author Timothy Couch
+	 */
+	private JLabel createSlideLabel()
+	{
+		JLabel label = new JLabel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				currentSlide.drawFill(g, this);
+			}
+		};
+		label.setBorder(BorderFactory.createEmptyBorder());
+		return label;
+	}
+	
+	/**
+	 * updates the slideThumb and slidePanel to the slide at currentSlideIndex
+	 * 
+	 * @Timothy Couch
+	 */
+	private void showCurrentSlide()
+	{
+		//update the view
+		imagePanel.removeAll();
+		imagePanel.add(createSlideLabel(), BorderLayout.CENTER);
+		revalidate();
 	}
 	
     /**
