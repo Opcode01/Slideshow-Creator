@@ -12,16 +12,20 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import core.*;
 
@@ -56,6 +60,12 @@ public class ArrangeScene extends Scene{
 	/** Deselect all button */
 	private JButton removeCurrentButton;
 	
+	/** Create audio button */
+	private JButton audioButton;
+	
+	//TESTING PURPOSES ONLY 3/29/19
+	//private JButton playButton;
+	
 	/** Back custom button image */
 	private ImageIcon back;
 	
@@ -64,6 +74,15 @@ public class ArrangeScene extends Scene{
 	
 	/** Remove current custom button image */
 	private ImageIcon removeCurrent;
+	
+	/** Icon for adding an audio track */
+	private ImageIcon audio;
+	
+	/** Highlighted Icon for adding an audio track */
+	private ImageIcon highlightedAudio;
+	
+	//TESTING PURPOSES ONLY 3/29/19
+	//private ImageIcon play;
 	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
@@ -86,6 +105,14 @@ public class ArrangeScene extends Scene{
 	/** Create custom medium_gray color */
 	private Color medium_gray = new Color(41, 41, 41);
 	
+	/** Create custom white color */
+	private Color white = new Color(255, 255, 255);
+	
+	/**selected thumbnail on the timeline */
+	private Thumbnail selectedThumbnail;
+	
+	/** Create audio text field - will be put on timeline panel later */
+	private JTextField audioText;	
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -98,6 +125,7 @@ public class ArrangeScene extends Scene{
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
@@ -110,6 +138,11 @@ public class ArrangeScene extends Scene{
 		
 		// Set panel configurations
 		this.setLayout(gridBag);
+
+		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		
+		//TESTING PURPOSES ONLY 3/29/19
+		//play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -168,6 +201,59 @@ public class ArrangeScene extends Scene{
 		    	revalidate();
 		    }
 		});
+////////////////////////////////////////////////////////////////////////
+/**
+* 	TESTING PURPOSES ONLY! - Eventually these buttons will be implemented
+* 	for real once the audio timeline is done
+* 
+* 	@author austinvickers
+* 	@date 3/31/19
+*
+		
+		//TODO: Put this where its supposed to be
+		//Create audio button - temporary until audio timeline GUI is done
+		audioButton = new JButton(audio);
+		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		audioButton.setBorder(BorderFactory.createEmptyBorder());
+		audioButton.setContentAreaFilled(false);
+		audioButton.setFocusable(false);
+		audioButton.setRolloverIcon(highlightedAudio);
+		audioButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	SelectAudio(audioText);
+		    }
+		});
+
+		//TODO: Put this where its supposed to be
+		// Create text field for audio
+		audioText = new JTextField(13);
+		audioText.setBackground(light_gray);
+		Border audioBorder = BorderFactory.createLineBorder(white, 1);
+		audioText.setBorder(audioBorder);
+		audioText.setForeground(white);
+		audioText.setEditable(false);	
+*/		
+////////////////////////////////////////////////////////////////////////
+/**
+ *  TESTING PURPOSES ONLY - Just to make sure file loading and playing actually works
+ *  Eventually, we may want a play button on each clip so that the user can preview their
+ *  sound clips in the creator.
+ *  
+ * 	@author austinvickers
+ *  @date 3/29/19
+ *
+		playButton = new JButton(play);
+		playButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+				player.playAudioClipAtIndex(0);
+				
+			}
+		});
+*/	
+////////////////////////////////////////////////////////////////////////	
 		
 		// Set options panel configurations
 		optionsPanel = new JPanel();
@@ -192,6 +278,25 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
+		
+/////////////////////////////////////////
+/*
+* 	TESTING ONLY 3/29/19 - austinvickers
+*
+		// TODO: Put this where its supposed to be
+		// Set constraints and add audio button
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(audioButton, c);
+		
+
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 5;
+		optionsPanel.add(playButton, c);
+*/		
+/////////////////////////////////////////
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
@@ -307,6 +412,30 @@ public class ArrangeScene extends Scene{
 		if (revalidate) {
 			this.revalidate();
 		}
+	}
+	
+	/**
+	 * SelectAudio() - brings up dialogue box to select audio
+	 * 
+	 * @author Fernando Palacios
+	 */
+	public void SelectAudio(JTextField display) {
+		
+    	JFileChooser chooser = new JFileChooser();
+    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
+    	
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
+        
+        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+        
+    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
+    	if(returnVal == JFileChooser.APPROVE_OPTION) {
+    	    File audioFile = chooser.getSelectedFile();
+        	player.addAudio(new Audio(audioFile));
+        	display.setText(audioFile.getName());
+    	}
+    
 	}
 	
     /**
