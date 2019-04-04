@@ -314,14 +314,18 @@ public class PlayScene extends Scene {
 	 */
 	private JLabel createSlideLabel()
 	{
-		JLabel label = new JLabel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				slideThumb.drawFill(g, this);
-			}
-		};
-		label.setBorder(BorderFactory.createEmptyBorder());
-		return label;
+		if (slideThumb != null)
+		{
+			JLabel label = new JLabel() {
+				@Override
+				public void paintComponent(Graphics g) {
+					slideThumb.drawFill(g, this);
+				}
+			};
+			label.setBorder(BorderFactory.createEmptyBorder());
+			return label;
+		}
+		else return new JLabel();
 	}
 	
 	/**
@@ -412,7 +416,7 @@ public class PlayScene extends Scene {
 	 * @author Timothy Couch
 	 */
 	private Thumbnail getSlide(int i) {
-		return timeline.thumbnailsList.getThumbnail(i);
+		return timeline.thumbnailsList.getSize() > 0 ? timeline.thumbnailsList.getThumbnail(i) : null;
 	}
 	
 	/**
@@ -436,16 +440,19 @@ public class PlayScene extends Scene {
 		int deltaIndex = dir == SlideDir.RIGHT ? 1 : -1;
 		
 		int showLength = SceneHandler.singleton.getTimeline().thumbnailsList.getSize();
-
-		//update slide index
-		if (timeline.timelineSettings.isLoopingSlides)
-			//thanks to Fabian for the idea to add length to the number to loop left https://stackoverflow.com/questions/14785443/is-there-an-expression-using-modulo-to-do-backwards-wrap-around-reverse-overfl
-			return (currentSlideIndex + deltaIndex + showLength) % showLength;
-		else
+		
+		if (showLength > 0)
 		{
-			//change slide if not first or last slide
-			if ((deltaIndex < 0 && currentSlideIndex > 0) || (deltaIndex > 0 && currentSlideIndex < showLength - 1))
-				return currentSlideIndex + deltaIndex;
+			//update slide index
+			if (timeline.timelineSettings.isLoopingSlides)
+				//thanks to Fabian for the idea to add length to the number to loop left https://stackoverflow.com/questions/14785443/is-there-an-expression-using-modulo-to-do-backwards-wrap-around-reverse-overfl
+				return (currentSlideIndex + deltaIndex + showLength) % showLength;
+			else
+			{
+				//change slide if not first or last slide
+				if ((deltaIndex < 0 && currentSlideIndex > 0) || (deltaIndex > 0 && currentSlideIndex < showLength - 1))
+					return currentSlideIndex + deltaIndex;
+			}
 		}
 		
 		return currentSlideIndex;
@@ -616,7 +623,7 @@ public class PlayScene extends Scene {
 		showCurrentSlide();
 		
 		//begin running the auto slideshow
-		if (!timeline.timelineSettings.isManual)
+		if (!timeline.timelineSettings.isManual && timeline.thumbnailsList.getSize() > 0)
 			scheduleStartTransition(autoDir);
 	}
 	
