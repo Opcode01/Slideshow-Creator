@@ -192,6 +192,8 @@ public class SettingsPane extends FloatingPane
 		    	UpdateProjectSettings();
 		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
 		    	scene.SetupTimelinePanel(true);
+		    	scene.repaint();
+		    	scene.revalidate();
 		    	ClosePane();
 		    }
 		});
