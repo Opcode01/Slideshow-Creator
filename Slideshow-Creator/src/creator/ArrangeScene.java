@@ -529,7 +529,15 @@ public class ArrangeScene extends Scene{
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(0, 0, 0, 0);
-			timelinePanel.add(transButtons[i], c);
+			
+			if(timeline.transitionsList.getSize() == (i + 1))
+			{
+				c.insets = new Insets(0, 0, 0, 20);
+				timelinePanel.add(transButtons[i], c);
+			} else {
+				c.insets = new Insets(0, 0, 0, 0);
+				timelinePanel.add(transButtons[i], c);
+			}
 		}
 	}
 	
@@ -548,11 +556,11 @@ public class ArrangeScene extends Scene{
 		audioTimelineDuration = 0;
 		
 		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
-	    int thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
-	    int transitionTotalLength = (100) * timeline.transitionsList.getSize();
-	    float secondsToPixels = (((290 + 40) + (100)) / (s.slideDuration));
-	    int extraAudioLength = 19 * 2;
-	    int extraLastAudioLength = 19 * 3;
+	    float thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
+	    float transitionTotalLength = ((100) * timeline.transitionsList.getSize()) + 20;
+	    float secondsToPixels = (float) (((290.0 + 40.0) + (100.0)) / (float) (s.slideDuration));
+	    float extraAudioLength = 27 * 2;
+	    float extraLastAudioLength = 27 * 3;
 	    
 	    // Set counter for grid x
 	    int audioxCounter = 0;
@@ -575,11 +583,10 @@ public class ArrangeScene extends Scene{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
 		    
-			if(timeline.audioPlayer.getSize() == (i + 1)) {
-				audioTrackSize -= (extraLastAudioLength);
-			} else {
-				audioTrackSize -= (extraAudioLength);
-			}
+		    System.out.println(audioTrack.getAudioLength());
+		    System.out.println(secondsToPixels);
+		    System.out.println(thumbnailTotalLength + transitionTotalLength);
+		    System.out.println(audioTrackSize);
 		    
 		    // Add each track size to the total duration of the audio
 		    audioTimelineDuration += audioTrackSize;
@@ -587,8 +594,13 @@ public class ArrangeScene extends Scene{
 		    if(audioTimelineDuration >= thumbnailTotalLength + transitionTotalLength)
 		    	audioTrackSize = (int) ((thumbnailTotalLength + transitionTotalLength) - (audioTimelineDuration - audioTrackSize));
 		    
-		    //TO DO: Get size of audio tracks in seconds for above using Joe's audio class
-		    System.out.println(audioTrackSize);
+			if(timeline.audioPlayer.getSize() == (i + 1)) {
+				audioTrackSize -= (extraLastAudioLength);
+			} else {
+				audioTrackSize -= (extraAudioLength);
+			}
+			
+			System.out.println(audioTrackSize);
 		    
 		    // Create text field for audio
 			JTextField audioText = new JTextField();
