@@ -156,8 +156,7 @@ public class TimelineParser
 			long slideDuration = (Long) in.get("slideDuration");
 			Settings importedSettings = new Settings(loopingSlides, 
 													isLoopingAudio, 
-													isManual, 
-													"", 
+													isManual,
 													(int)slideDuration);
 			
 			importedTimeline.setDirectory((String) in.get("parentDir"));

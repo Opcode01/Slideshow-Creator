@@ -1,5 +1,6 @@
 package creator;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -41,6 +42,8 @@ public class ArrangeScene extends Scene{
 	
 	/** Create timeline panel */
 	private JPanel timelinePanel;
+	
+	private Thumbnail currentSlide;
 	
 	/** Create audio panel */
 	private JPanel audioPanel;
@@ -151,12 +154,6 @@ public class ArrangeScene extends Scene{
 	 */
 	public ArrangeScene () 
 	{
-		// Create GridBagLayout object and constraints
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		
-		// Set panel configurations
-		this.setLayout(gridBag);
 		
 		// Create images and add icons
 		// Create images and add icons
@@ -171,6 +168,16 @@ public class ArrangeScene extends Scene{
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+
+		//clear out if it previously had stuff
+		removeAll();
+		// Create GridBagLayout object and constraints
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Set panel configurations
+		this.setLayout(gridBag);
+
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
 		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
@@ -224,8 +231,8 @@ public class ArrangeScene extends Scene{
 		    public void actionPerformed(ActionEvent e) {
 		    	// Remove selected thumb from timeline
 		    	timeline = SceneHandler.singleton.getTimeline();
-		    	System.out.println(selectedThumbnail.getImagePath() + "remove");
-		    	int removeIndex = timeline.thumbnailsList.indexOf(selectedThumbnail);
+		    	//System.out.println(selectedThumbnail.getImagePath() + "remove");
+		    	int removeIndex = timeline.thumbnailsList.indexOf(currentSlide);
 		    	timeline.removeSlide(removeIndex);
 		    	
 		    	// Remove components and repaint 
@@ -251,7 +258,7 @@ public class ArrangeScene extends Scene{
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -274,13 +281,13 @@ public class ArrangeScene extends Scene{
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
-		imagePanel.setLayout(gridBag);
-		imagePanel.setBackground(dark_gray);
+		imagePanel.setLayout(new BorderLayout());
+		imagePanel.setBackground(SliderColor.dark_gray);
 		
 		// Create outer panel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
-		timelinePanelContainer.setBackground(medium_gray);
+		timelinePanelContainer.setBackground(SliderColor.light_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
@@ -296,6 +303,7 @@ public class ArrangeScene extends Scene{
 		timelineScroller.setPreferredSize(new Dimension(200, 250));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
+		/*
 		///////////////////////
 		//Add example image - this is approximately what you should do to set up the display image! :)
 		Thumbnail testThumb = new Thumbnail(getClass().getResource("/core/TransitionImages/crossFade.png"));
@@ -312,6 +320,7 @@ public class ArrangeScene extends Scene{
 		c.fill = GridBagConstraints.BOTH;
 		imagePanel.add(testLabel, c);
 		///////////////////////
+		 */
 		
 		// Set constraints and add options panels
 		c.insets = new Insets(0, 0, 0, 0);
@@ -370,7 +379,7 @@ public class ArrangeScene extends Scene{
 		// Create timeline panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
-		timelinePanel.setBackground(medium_gray);
+		timelinePanel.setBackground(SliderColor.light_gray);
 		PopulateTimeline();
 		
 		// Create audio panel
@@ -482,7 +491,7 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 					int slideIndex = timeline.thumbnailsList.indexOf(buttonThumb);
-					selectedThumbnail = buttonThumb;
+					currentSlide = buttonThumb;
 					
 					if(keeper.isSelected())
 					{
@@ -494,29 +503,11 @@ public class ArrangeScene extends Scene{
 						}
 						
 						// Set border for newly selected button
-						keeper.setSelected(true);
-						keeper.setBorder(new LineBorder(aqua, 3));
-						System.out.println(buttonThumb.getImagePath() + "selected");
+						selectButton(keeper);
+						//System.out.println(buttonThumb.getImagePath() + "selected");
 						
-						///////////////////////
-						//Add example image - this is approximately what you should do to set up the display image! :)
-						//Thumbnail currentThumb = new Thumbnail("src/core/TransitionImages/wipeLeft.png");
-						JLabel testLabel = new JLabel() {
-							  @Override
-							  public void paintComponent(Graphics g) {
-								  buttonThumb.drawFill(g, this);
-								  //example 1 of drawing the image associated with a transition
-								  //g.drawImage(TransitionType.WIPE_RIGHT.getImage().getImage(), 0, 200, this);
-								  }
-							  };
-						
-						c.weightx = 0.01;
-						c.fill = GridBagConstraints.BOTH;
-						c.anchor = GridBagConstraints.CENTER;
-						imagePanel.removeAll();
-						imagePanel.add(testLabel, c);
-						imagePanel.revalidate();
-						imagePanel.repaint();
+						showCurrentSlide();
+						//imagePanel.repaint();
 					}
 				}
 				});
@@ -539,6 +530,60 @@ public class ArrangeScene extends Scene{
 				timelinePanel.add(transButtons[i], c);
 			}
 		}
+		
+		//show the first slide
+		if (timeline.thumbnailsList.getSize() > 0)
+		{
+			currentSlide = timeline.thumbnailsList.getThumbnail(0);
+			selectButton(thumbButtons[0]);
+			showCurrentSlide();
+		}
+		else {//empty slideshow
+			imagePanel.removeAll();
+			imagePanel.add(new JLabel(), BorderLayout.CENTER);
+			revalidate();
+		}
+	}
+	
+	/**
+	 * selects the supplied button and draws a box around it
+	 * @param b button to select
+	 */
+	private static void selectButton(JToggleButton b)
+	{
+		b.setSelected(true);
+		b.setBorder(new LineBorder(SliderColor.aqua, 3));
+	}
+	
+	/**
+	 * creates a JLabel with the current slide thumbnail on it
+	 * @return JLabel of the current slide
+	 * 
+	 * @author Timothy Couch
+	 */
+	private JLabel createSlideLabel()
+	{
+		JLabel label = new JLabel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				currentSlide.drawFill(g, this);
+			}
+		};
+		label.setBorder(BorderFactory.createEmptyBorder());
+		return label;
+	}
+	
+	/**
+	 * updates the slideThumb and slidePanel to the slide at currentSlideIndex
+	 * 
+	 * @Timothy Couch
+	 */
+	private void showCurrentSlide()
+	{
+		//update the view
+		imagePanel.removeAll();
+		imagePanel.add(createSlideLabel(), BorderLayout.CENTER);
+		revalidate();
 	}
 	
 	/**

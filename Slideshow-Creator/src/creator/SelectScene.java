@@ -94,17 +94,8 @@ public class SelectScene extends Scene
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedDeselectAll;
 	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(41, 41, 41);
-	
-	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(0, 0, 0);
-	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
-	
-	/** Create custom aqua color */
-	private Color aqua = new Color(132, 200, 202);
 
 	/**
 	 * SelectScene() - sets up selection scene with GUI stuff
@@ -193,7 +184,7 @@ public class SelectScene extends Scene
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -221,7 +212,7 @@ public class SelectScene extends Scene
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
-		imagePanelContainer.setBackground(dark_gray);
+		imagePanelContainer.setBackground(SliderColor.dark_gray);
 		
 		// Set up image panel constraints
 		c.insets = new Insets(44, 44, 44, 44);
@@ -233,7 +224,7 @@ public class SelectScene extends Scene
 		
 		// Set scroll pane configurations
 		imageScroller = new JScrollPane(imagePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		imageScroller.getVerticalScrollBar().setBackground(light_gray);
+		imageScroller.getVerticalScrollBar().setBackground(SliderColor.light_gray);
 		imageScroller.setBorder(BorderFactory.createEmptyBorder());
 		imageScroller.getVerticalScrollBar().setUnitIncrement(25);
 		
@@ -270,7 +261,7 @@ public class SelectScene extends Scene
 		// Create image panel with new images
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new GridBagLayout());
-		imagePanel.setBackground(dark_gray);
+		imagePanel.setBackground(SliderColor.dark_gray);
 		ShowImages();
 		
 		// add to outer panel that houses the image panel for layout and whitespace
@@ -285,6 +276,7 @@ public class SelectScene extends Scene
 	 * GoToDirectoryScene() - changes scene to directory
 	 *
 	 * @author Fernando Palacios
+	 * @author Timothy Couch
      */
 	public void GoToDirectoryScene()
 	{
@@ -328,7 +320,7 @@ public class SelectScene extends Scene
 			//if thumbnail is in the timeline, keep it highlighted
 			if (slideIndex >= 0)
 			{
-				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setBorder(new LineBorder(SliderColor.aqua, 3));
 				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));			
 			}
 			else//thumbnail not on timeline, remove highlight
@@ -396,7 +388,7 @@ public class SelectScene extends Scene
 					else//thumbnail not on timeline, add it
 					{
 						timeline.addSlide(buttonThumb);
-						keeper.setBorder(new LineBorder(aqua, 3));
+						keeper.setBorder(new LineBorder(SliderColor.aqua, 3));
 						keeper.setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 					}
 				}
@@ -470,7 +462,7 @@ public class SelectScene extends Scene
 			if (slideIndex < 0)
 			{
 				timeline.addSlide(buttonThumb);
-				thumbButtons[i].setBorder(new LineBorder(aqua, 3));
+				thumbButtons[i].setBorder(new LineBorder(SliderColor.aqua, 3));
 				thumbButtons[i].setIcon(new ImageIcon(ImageHover(buttonThumb.getImageThumb())));
 			}
 		}

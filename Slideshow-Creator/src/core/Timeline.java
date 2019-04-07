@@ -41,8 +41,8 @@ public class Timeline
     {
         thumbnailsList = new ThumbnailsList();
         transitionsList = new TransitionsList();
+        timelineSettings = new Settings(false, false, false, 5);
         audioPlayer = new AudioPlayer();
-        timelineSettings = new Settings(false, false, false, "", 1);
         
         /*
         //testAudio
