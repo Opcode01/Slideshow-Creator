@@ -10,6 +10,7 @@ import pkgImageTransitions.Transitions.*;
 
 public class Transition {
 
+	/** The type of transition */
 	private TransitionType type;
 	public void setTransitionType(TransitionType t) {
 		type = t;
@@ -59,8 +60,15 @@ public class Transition {
 		return transitionLength;
 	}
 	
-	//The actual transition implementation provided by Dr.Coleman
+	/** The actual transition implementation provided by Dr.Coleman */
 	private ColemanTransition transition;
+	
+	/** thread to run the transition on */
+	private Thread transitionThread;
+	
+	public Thread getTransitionThread() {
+		return transitionThread;
+	}
 	
 	/**
 	 * Transition() - default constructor for Transition class
@@ -83,9 +91,51 @@ public class Transition {
 	 * @param nextImg - the image transitioning to
 	 * 
 	 * @author austinvickers
+	 * @author Timothy Couch
 	 */
 	public void PlayTransition(JPanel display, Image prevImg, Image nextImg ) {
-		transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+		if (!isRunning())
+		{
+			transitionThread = new Thread() {
+				@Override
+				public void run()
+				{
+					transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+				};
+			};
+			transitionThread.start();
+		}
+		else System.out.println("Transition already running! Not playing transition!");
+	}
+	
+	/**
+	 * whether this transition is currently playing a transition
+	 * 
+	 * @author Timothy Couch
+	 */
+	public boolean isRunning()
+	{
+		return transitionThread != null && transitionThread.isAlive();
+	}
+	
+	/**
+	 * Stop the transition while it is running
+	 * 
+	 * @author Timothy Couch
+	 */
+	public void stopTransition()
+	{
+		if (isRunning())
+		{
+			try {
+				System.out.println("Joining");
+				transition.abort();
+				transitionThread.join();
+				System.out.println("Done waiting");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

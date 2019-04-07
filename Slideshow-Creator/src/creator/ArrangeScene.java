@@ -93,26 +93,11 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
-	/** Create custom aqua color */
-	private static Color aqua = new Color(132, 200, 202);
-	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(31, 31, 31);
-	
-	/** Create custom dark_gray color */
-	private Color dark_gray = new Color(0, 0, 0);
-	
-	/** Create custom medium_gray color */
-	private Color medium_gray = new Color(41, 41, 41);
-	
-	/** Create custom white color */
-	private Color white = new Color(255, 255, 255);
-	
 	/**selected thumbnail on the timeline */
 	private Thumbnail selectedThumbnail;
 	
 	/** Create audio text field - will be put on timeline panel later */
-	private JTextField audioText;	
+	private JTextField audioText;
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
@@ -258,7 +243,7 @@ public class ArrangeScene extends Scene{
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(light_gray);
+		optionsPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -301,12 +286,12 @@ public class ArrangeScene extends Scene{
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new BorderLayout());
-		imagePanel.setBackground(dark_gray);
+		imagePanel.setBackground(SliderColor.dark_gray);
 		
 		// Create outer panel that houses the timeline panel for layout and whitespace
 		timelinePanelContainer = new JPanel();
 		timelinePanelContainer.setLayout(gridBag);
-		timelinePanelContainer.setBackground(medium_gray);
+		timelinePanelContainer.setBackground(SliderColor.light_gray);
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
@@ -398,7 +383,7 @@ public class ArrangeScene extends Scene{
 		// Create image panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
-		timelinePanel.setBackground(medium_gray);
+		timelinePanel.setBackground(SliderColor.light_gray);
 		ShowImages();
 		
 		// Add to outer panel that houses the timeline panel with formatting
@@ -553,12 +538,21 @@ public class ArrangeScene extends Scene{
 			selectButton(thumbButtons[0]);
 			showCurrentSlide();
 		}
+		else {//empty slideshow
+			imagePanel.removeAll();
+			imagePanel.add(new JLabel(), BorderLayout.CENTER);
+			revalidate();
+		}
 	}
 	
+	/**
+	 * selects the supplied button and draws a box around it
+	 * @param b button to select
+	 */
 	private static void selectButton(JToggleButton b)
 	{
 		b.setSelected(true);
-		b.setBorder(new LineBorder(aqua, 3));
+		b.setBorder(new LineBorder(SliderColor.aqua, 3));
 	}
 	
 	/**

@@ -19,6 +19,10 @@ public abstract class Scene extends JPanel
 	 * images
 	 */
 	private boolean initialized = false;
+	
+	public boolean isInitialized() {
+		return initialized;
+	}
 
 	public Scene()
 	{

@@ -55,9 +55,6 @@ public class FileSelectExplorer extends Scene {
 	
 	/** Highlighted select existing file custom button image */
 	private ImageIcon highlightedSelectExisting;
-	
-	/** Create custom color */
-	private Color dark_gray = new Color(71, 70, 70);
 
 	/**
 	 * DirectoryExplorer() - sets up directory explorer with GUI stuff
@@ -122,7 +119,7 @@ public class FileSelectExplorer extends Scene {
 		// Set panel configurations
 		bgPanel = new JPanel();
 		bgPanel.setLayout(gridBag);
-		bgPanel.setBackground(dark_gray);
+		bgPanel.setBackground(SliderColor.beige_gray);
 		
 		// Set constraints and add directory button
 		c.gridx = 0;

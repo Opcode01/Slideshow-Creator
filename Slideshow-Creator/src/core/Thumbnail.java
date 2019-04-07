@@ -14,6 +14,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -169,6 +170,46 @@ public class Thumbnail
     }
     
     /**
+     * resizes image to fit the size of the specified container in letterbox style
+     * @param container container to fit into
+     * @param image image to resize
+     * @return resized image in size of container
+     */
+    public static Image resizeImageContainer(Container container, Image image) {
+        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), container.getWidth(), container.getHeight());
+        return toBufferedImage(image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT));
+    }
+    
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     * 
+     * @author Sri Harsha Chilakapati https://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+     * All credits to Sri Harsha Chilakapati and editors
+     */
+    public static BufferedImage toBufferedImage(Image img)
+    {
+        if (img instanceof BufferedImage)
+        {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
+
+    
+    /**
      * drawFill - draws the thumbnail image into the specified graphics in the container
      * @param g graphics to draw into (JLabel paintComponent method argument)
      * @param container the container in which to draw this image
@@ -185,6 +226,42 @@ public class Thumbnail
 	  
 	  //draw image
 	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+    }
+
+    
+    /**
+     * drawImageFill - draws the specified image into the specified graphics in the container
+     * @param displayImage image to draw
+     * @param g graphics to draw into (JLabel paintComponent method argument)
+     * @param container the container in which to draw the image
+     * @return the result of g.drawImage (false if still in process of drawing, true otherwise)
+     * 
+     * @author Timothy Couch
+     */
+    public static boolean drawImageFill(Image displayImage, Graphics g, Container container)
+    {	  
+	  //calculate position and size to draw image with proper aspect ratio
+	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
+	  
+	  //draw image
+	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+    }
+    
+    /**
+     * clone aka duplicate the given image
+     * @param image the image to clone
+     * @return new image
+     * 
+     * @author Timothy Couch
+     * Most credits to Levster at https://stackoverflow.com/questions/8864275/how-to-clone-image
+     */
+    public static Image cloneImage(Image image) {
+		BufferedImage imageCopy = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = imageCopy.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		
+		return imageCopy;
     }
     
     /**

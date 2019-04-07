@@ -149,6 +149,7 @@ public class SceneHandler {
 			        JOptionPane.YES_NO_OPTION);
 
 			    if (confirmed == JOptionPane.YES_OPTION) {
+			    	restartProgram();
 			      mainFrame.dispose();
 			      System.exit(1);
 			    }
@@ -241,5 +242,7 @@ public class SceneHandler {
 			Scene scene = scenesIt.next().getValue();
 			scene.destroy();
 		}
+		timeline = null;
+		System.gc();
 	}
 }
