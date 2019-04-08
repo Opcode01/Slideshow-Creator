@@ -136,7 +136,7 @@ public class PlayScene extends Scene {
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		this.setLayout(gridBag);
-		setBackground(SliderColor.medium_gray);
+		setBackground(SliderColor.beige_gray);
 		
 		// Set slide panel configurations
 		slideThumb = getSlide(currentSlideIndex);
@@ -158,7 +158,7 @@ public class PlayScene extends Scene {
 		// Set options panel configurations
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
-		optionsPanel.setBackground(SliderColor.medium_gray);
+		optionsPanel.setBackground(SliderColor.beige_gray);
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Create exit button
@@ -188,7 +188,7 @@ public class PlayScene extends Scene {
 		//Manual controls panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(gridBag);
-		controlPanel.setBackground(SliderColor.medium_gray);
+		controlPanel.setBackground(SliderColor.beige_gray);
 		
 		//use left and right buttons if the timeline advances manually
 		if (timeline.timelineSettings.isManual)
