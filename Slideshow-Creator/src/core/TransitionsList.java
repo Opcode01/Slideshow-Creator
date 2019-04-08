@@ -61,6 +61,7 @@ public class TransitionsList
      */
     public Transition getTransition(int transitionIndex)
     {
+    	
         return transitions.get(transitionIndex);
     }
 
@@ -80,7 +81,7 @@ public class TransitionsList
      * addTransition will append given Transition object to transitions arrayList
      * Overloaded to add transition at certain index
      * 
-     * @param transition transition object to be added to end of transitions list
+     * @param transition transition object to be added to transitions list at specified index
      * @param index to add transition to 
      * 
      * @author Joe Hoang
@@ -100,7 +101,16 @@ public class TransitionsList
      */
     public void removeTransition(Transition transition)
     {
-        transitions.remove(transition);
+    	try
+    	{
+	    	if(transitions.size() != 0)
+	    	{	
+	    		transitions.remove(transition);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot remove from empty list");
+    	}
     }
 
     /**

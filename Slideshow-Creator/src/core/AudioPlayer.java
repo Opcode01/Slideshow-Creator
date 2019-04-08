@@ -95,7 +95,16 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
     public void removeAudio(Audio audio)
     {
-        audioList.remove(audio);
+    	try
+    	{
+	    	if(audioList.size() != 0)
+	    	{
+	    		audioList.remove(audio);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("No audio tracks to remove");
+    	}
     }
 
     /**

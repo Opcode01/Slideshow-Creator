@@ -61,7 +61,15 @@ public class ThumbnailsList
      */
     public Thumbnail getThumbnail(int thumbnailIndex)
     {
-        return thumbnails.get(thumbnailIndex);
+    	try
+    	{
+    		return thumbnails.get(thumbnailIndex);
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot get thumbnail:" + e.getMessage());
+    		return null;
+    	}
+        
     }
     
 
@@ -81,7 +89,7 @@ public class ThumbnailsList
      * addThumbnail will append given Thumbnail object to thumbnails arrayList
      * overloaded to allow adding at specified index
      * 
-     * @param thumbnail thumbnail object to be added to end of thumbnails list
+     * @param thumbnail thumbnail object to be added thumbnails list at specified index
      * @param index specific to be added to
      * @author Joe Hoang
      */
@@ -99,7 +107,16 @@ public class ThumbnailsList
      */
     public void removeThumbnail(Thumbnail thumbnail)
     {
-        thumbnails.remove(thumbnail);
+    	try
+    	{
+	    	if(thumbnails.size() != 0)
+	    	{
+	    		thumbnails.remove(thumbnail);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot remove from empty list.");
+    	}
     }
 
     /**
