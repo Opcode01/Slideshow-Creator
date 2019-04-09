@@ -1,4 +1,5 @@
 [Bb]uild
+*.sl
 
 .metadata
 bin/
