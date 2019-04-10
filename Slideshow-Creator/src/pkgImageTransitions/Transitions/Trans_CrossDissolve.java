@@ -47,13 +47,9 @@ public class Trans_CrossDissolve extends ColemanTransition
 		// Set up the initial fade data
 		// Create a rescale filter op 
 		float alphaInc = .2f;//1 / numIterations;//0.20f;
-		float[] scales = { 1.0f, 1.0f, 1.0f, alphaInc};
-		float[] offsets = new float[4];
-		RescaleOp rop = new RescaleOp(scales, offsets, null);
-		//filter image B to be transparent
-		BufferedImage transparentB = rop.filter(ImageB_ARGB, null);
+		float imageBAlpha = alphaInc;
 
-        // Draw the scaled current image if necessary
+        // Draw the scaled current image
 		Thumbnail.drawImageFill(ImageA, gPan, imgPanel);
 
 		// Draw image A -- appears we need to do this fade longer
@@ -64,6 +60,13 @@ public class Trans_CrossDissolve extends ColemanTransition
 				break;
 			// Draw B over A. Note: Can't do the first draw directly into the screen panel
 			//	because that drawImage only works with BufferedImages as the destination.
+			
+			//set up transparent image
+			float[] scales = { 1.0f, 1.0f, 1.0f, imageBAlpha};
+			float[] offsets = new float[4];
+			RescaleOp rop = new RescaleOp(scales, offsets, null);
+			//filter image B to be transparent
+			BufferedImage transparentB = rop.filter(ImageB_ARGB, null);
 			
 			//draw the transparent image over and over again
 			Thumbnail.drawImageFill(transparentB, gPan, imgPanel);
@@ -83,6 +86,8 @@ public class Trans_CrossDissolve extends ColemanTransition
 			{
 			    Thread.currentThread().interrupt();
 			}
+			
+			imageBAlpha += alphaInc;
 		}	
 		if (!isAborting())
 		{
