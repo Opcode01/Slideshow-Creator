@@ -7,6 +7,7 @@ import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_CrossDissolve extends ColemanTransition
@@ -45,13 +46,15 @@ public class Trans_CrossDissolve extends ColemanTransition
 		ImageB_ARGB.getGraphics().drawImage(ImageB, 0, 0, null);
 		// Set up the initial fade data
 		// Create a rescale filter op 
-		float alphaInc = 0.20f;
+		float alphaInc = .2f;//1 / numIterations;//0.20f;
 		float[] scales = { 1.0f, 1.0f, 1.0f, alphaInc};
 		float[] offsets = new float[4];
 		RescaleOp rop = new RescaleOp(scales, offsets, null);
+		//filter image B to be transparent
+		BufferedImage transparentB = rop.filter(ImageB_ARGB, null);
 
         // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
+		Thumbnail.drawImageFill(ImageA, gPan, imgPanel);
 
 		// Draw image A -- appears we need to do this fade longer
 		// Each time we redraw ImageB_ARGB over ImageA we add just a bit more
@@ -61,10 +64,17 @@ public class Trans_CrossDissolve extends ColemanTransition
 				break;
 			// Draw B over A. Note: Can't do the first draw directly into the screen panel
 			//	because that drawImage only works with BufferedImages as the destination.
-			gA.drawImage(ImageB_ARGB, rop, 0, 0); // Draw portion of ImageB into ImageA
-			gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
-			// Note: Can not pause here like we do in the other transitions because
-			//     cross dissolve takes longer than a simple blit draw
+			
+			//draw the transparent image over and over again
+			Thumbnail.drawImageFill(transparentB, gPan, imgPanel);
+			
+			//gA.drawImage(ImageB_ARGB, rop, 0, 0); // Draw portion of ImageB into ImageA
+			
+			
+			
+			//gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
+			
+			//pause for a bit
 			try 
 			{
 			    Thread.sleep((int) (timeInc * .9));
