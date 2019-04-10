@@ -60,6 +60,9 @@ public class ArrangeScene extends Scene{
 	/** Deselect all button */
 	private JButton removeCurrentButton;
 	
+	/**Export Slider file button*/
+	private JButton exportButton;
+	
 	/** Create audio button */
 	private JButton audioButton;
 	
@@ -71,6 +74,9 @@ public class ArrangeScene extends Scene{
 	
 	/** Settings custom button image */
 	private ImageIcon settings;
+	
+	/** export slider file button*/
+	private ImageIcon export;
 	
 	/** Remove current custom button image */
 	private ImageIcon removeCurrent;
@@ -89,6 +95,8 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted select all custom button image */
 	private ImageIcon highlightedSettings;
+	
+	private ImageIcon highlightedExport;
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
@@ -110,10 +118,12 @@ public class ArrangeScene extends Scene{
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		export = new ImageIcon(getClass().getResource("/creator/Images/exportButton.png"));
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+		highlightedExport = new ImageIcon(getClass().getResource("/creator/Images/highlightedExportButton.png"));
 
 		//clear out if it previously had stuff
 		removeAll();
@@ -184,6 +194,21 @@ public class ArrangeScene extends Scene{
 		    	timelinePanel.removeAll();
 		    	ShowImages();
 		    	revalidate();
+		    }
+		});
+		
+		// Create export button
+		exportButton = new JButton(export);
+		exportButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		exportButton.setToolTipText("Export Project");
+		exportButton.setBorder(BorderFactory.createEmptyBorder());
+		exportButton.setContentAreaFilled(false);
+		exportButton.setFocusable(false);
+		exportButton.setRolloverIcon(highlightedExport);
+		exportButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	TimelineParser.ExportTimeline("export");
+		    	
 		    }
 		});
 ////////////////////////////////////////////////////////////////////////
@@ -259,10 +284,16 @@ public class ArrangeScene extends Scene{
 		optionsPanel.add(settingsButton, c);
 		
 		// Set constraints and add remove current button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
+		
+		// Set constraints and add export file button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(exportButton, c);
 		
 /////////////////////////////////////////
 /*
