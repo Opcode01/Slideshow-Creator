@@ -61,6 +61,9 @@ public class SelectScene extends Scene
 	/** Select all button */
 	private JButton selectAllButton;
 	
+	/**export slider file button*/
+	private JButton exportButton;
+	
 	/** List of all thumbnail thumbButtons to be shown on the image panel */
 	private JButton[] thumbButtons;
 	
@@ -75,6 +78,9 @@ public class SelectScene extends Scene
 	
 	/** Arrange custom button image */
 	private ImageIcon arrange;
+	
+	/**Export slider button image*/
+	private ImageIcon export;
 	
 	/** Select all custom button image */
 	private ImageIcon selectAll;
@@ -93,6 +99,9 @@ public class SelectScene extends Scene
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedDeselectAll;
+	
+	/**Highlighted export button image*/
+	private ImageIcon highlightedExport;
 	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
@@ -117,10 +126,12 @@ public class SelectScene extends Scene
 		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
 		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
 		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
+		export = new ImageIcon(getClass().getResource("/creator/Images/exportButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
 		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
 		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
+		highlightedExport = new ImageIcon(getClass().getResource("/creator/Images/highlightedExportButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);
@@ -181,6 +192,21 @@ public class SelectScene extends Scene
 		    }
 		});
 		
+		// Create export button
+		exportButton = new JButton(export);
+		exportButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		exportButton.setToolTipText("Export Project");
+		exportButton.setBorder(BorderFactory.createEmptyBorder());
+		exportButton.setContentAreaFilled(false);
+		exportButton.setFocusable(false);
+		exportButton.setRolloverIcon(highlightedExport);
+		exportButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	TimelineParser.ExportTimeline("export");
+		    	
+		    }
+		});
+		
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
@@ -204,11 +230,17 @@ public class SelectScene extends Scene
 		optionsPanel.add(selectAllButton, c);
 		
 		// Set constraints and add deselect all button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(deselectAllButton, c);
 		
+		// Set constraints and add deselect all button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(exportButton, c);
+				
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
@@ -298,7 +330,7 @@ public class SelectScene extends Scene
 		SceneHandler.singleton.GetSceneInstanceByType(SceneType.ARRANGE).initialize();
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
 		
-		TimelineParser.ExportTimeline("test");
+		//TimelineParser.ExportTimeline("test");
 	}
 	
     /**

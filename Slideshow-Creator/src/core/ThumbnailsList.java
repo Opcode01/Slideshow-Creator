@@ -130,10 +130,16 @@ public class ThumbnailsList
      */
     public void swapThumbnails(int indexThumbnail1, int indexThumbnail2)
     {
+    	try
+    	{
+    		Thumbnail tempThumbnail = thumbnails.get(indexThumbnail1);
+            thumbnails.set(indexThumbnail1, thumbnails.get(indexThumbnail2));
+            thumbnails.set(indexThumbnail2, tempThumbnail);
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot swap thumbails" + e.getMessage());
+    	}
         
-        Thumbnail tempThumbnail = thumbnails.get(indexThumbnail1);
-        thumbnails.set(indexThumbnail1, thumbnails.get(indexThumbnail2));
-        thumbnails.set(indexThumbnail2, tempThumbnail);
     }
 
     /**
@@ -147,17 +153,25 @@ public class ThumbnailsList
      */
     public int swapForward(Thumbnail thumbnail)
     {
-        int indexThumbnail1 = thumbnails.indexOf(thumbnail);
-        int indexThumbnail2 = indexThumbnail1 + 1;
-        if(indexThumbnail2 != thumbnails.size())
-        {
-            swapThumbnails(indexThumbnail1, indexThumbnail2);
-            return indexThumbnail2;
-        }
-        else
-        {
-            return -1; 
-        }
+    	try
+    	{
+    		int indexThumbnail1 = thumbnails.indexOf(thumbnail);
+            int indexThumbnail2 = indexThumbnail1 + 1;
+            if(indexThumbnail2 != thumbnails.size())
+            {
+                swapThumbnails(indexThumbnail1, indexThumbnail2);
+                return indexThumbnail2;
+            }
+            else
+            {
+                return -1; 
+            }
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot swap thumbails at given indices" + e.getMessage());
+    		return -1;
+    	}
+        
     }
 
      /**
@@ -171,17 +185,25 @@ public class ThumbnailsList
      */
     public int swapBackward(Thumbnail thumbnail)
     {
-        int indexThumbnail1 = thumbnails.indexOf(thumbnail);
-        int indexThumbnail2 = indexThumbnail1 - 1;
-        if(indexThumbnail2 != -1)
-        {
-            swapThumbnails(indexThumbnail1, indexThumbnail2);
-            return indexThumbnail2;
-        }
-        else
-        {
-            return -1; 
-        }
+    	try
+    	{
+    		int indexThumbnail1 = thumbnails.indexOf(thumbnail);
+            int indexThumbnail2 = indexThumbnail1 - 1;
+            if(indexThumbnail2 != -1)
+            {
+                swapThumbnails(indexThumbnail1, indexThumbnail2);
+                return indexThumbnail2;
+            }
+            else
+            {
+                return -1; 
+            }
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot swap thumbails at given indices" + e.getMessage());
+    		return -1;
+    	}
+        
     }
 
     /**
