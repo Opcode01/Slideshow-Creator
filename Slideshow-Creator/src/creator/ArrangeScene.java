@@ -702,11 +702,11 @@ public class ArrangeScene extends Scene{
 		    audioConstraints.gridx = ++audioxCounter;
 		}
 		
-		if(timeline.audioPlayer.getSize() == (0)) {
-			audioConstraints.insets = new Insets(0, 5, 0, 0);
+		/*if(timeline.audioPlayer.getSize() == 0) {
+			//audioConstraints.insets = new Insets(0, 5, 0, 0);
 		} else
 			audioConstraints.insets = new Insets(0, 0, 0, 0);
-		
+		*/
 	    // Re-add audio button to end of panel
 	    audioPanel.add(audioButton, audioConstraints);
 	}
