@@ -679,7 +679,8 @@ public class ArrangeScene extends Scene{
 			playButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-					player.playAudioClipAtIndex(0);
+					int index = player.indexOf(audioTrack);
+					player.playAudioClipAtIndex(index);
 			    }
 			});
 			
@@ -700,6 +701,11 @@ public class ArrangeScene extends Scene{
 		    audioPanel.add(playButton, audioConstraints);
 		    audioConstraints.gridx = ++audioxCounter;
 		}
+		
+		if(timeline.audioPlayer.getSize() == (0)) {
+			audioConstraints.insets = new Insets(0, 5, 0, 0);
+		} else
+			audioConstraints.insets = new Insets(0, 0, 0, 0);
 		
 	    // Re-add audio button to end of panel
 	    audioPanel.add(audioButton, audioConstraints);
