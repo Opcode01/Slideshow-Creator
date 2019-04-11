@@ -2,9 +2,7 @@ package pkgImageTransitions.Transitions;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
@@ -37,57 +35,51 @@ public class Trans_CrossDissolve extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics2D gA = ImageA.createGraphics();
 		
-		int numIterations = 15;
-		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / numIterations;
+		int numIterations = 15; //how many times to redraw
+		int timeInc = (int)(time * 1000) / numIterations; // Milliseconds to pause each step
 		
 		//create an image A the size of the container
 		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Thumbnail.drawImageFillImage(ImageA, contImageA);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
 		
 		//create an image B the size of the container with solid background
 		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
 		
-		//make image b transparent
-		float alphaInc = 1.0f / numIterations;
-		/*float[] scales = { 1.0f, 1.0f, 1.0f, alphaInc};
-		float[] offsets = new float[4];
-		RescaleOp rop = new RescaleOp(scales, offsets, null);
-		rop.filter(contImageB, contImageB);*/
-		for (int i = 0; i < contImageB.getWidth(); i++) {
-            for (int j = 0; j < contImageB.getHeight(); j++) {                    
-                Color pixColor = new Color(contImageB.getRGB(i, j), true);
-                
-                if (pixColor.getAlpha() > 0) {
-                	pixColor = new Color(pixColor.getRed(), pixColor.getGreen(), pixColor.getBlue(), (int) (pixColor.getAlpha() * alphaInc));
-                	contImageB.setRGB(i, j, pixColor.getRGB());
-                }
-            }
+		//holds the original alpha values of contImageB
+		float[] contImageBAlphas = new float[contImageB.getWidth() * contImageB.getHeight()];
+		for (int i = 0; i < contImageB.getWidth() * contImageB.getHeight(); i++) {
+			Color pixColor = new Color(contImageB.getRGB(i % contImageB.getWidth(), (int) (i / contImageB.getWidth())), true);
+        	contImageBAlphas[i] = pixColor.getAlpha();
         }
 
-        // Draw the scaled current image
-		gPan.drawImage(contImageA, 0, 0, imgPanel);
-		//Thumbnail.drawImageFill(contImageA, gPan, imgPanel);
-		
-		// Draw image A -- appears we need to do this fade longer
-		// Each time we redraw ImageB_ARGB over ImageA we add just a bit more
-		Graphics2D contImageAGraphics = contImageA.createGraphics();
+		//draw transparent B onto A over and over again and repaint A
+		float alphaInc = 1.0f / numIterations;//amount to increase B's alpha each step
+		float bAlpha = alphaInc;//compounding amount of alpha for B
 		for(int i=0; i < numIterations; i++)
 		{
 			if (isAborting())
 				break;
-			// Draw B over A. Note: Can't do the first draw directly into the screen panel
-			//	because that drawImage only works with BufferedImages as the destination.
 			
-			//draw the transparent image B onto image A to make it thicker and thicker each loop
-			contImageAGraphics.drawImage(contImageB, 0, 0, null);
-			System.out.println("Drawing " + i);
+			//make image b more transparent
+			for (int h = 0; h < contImageB.getWidth(); h++) {
+	            for (int j = 0; j < contImageB.getHeight(); j++) {                    
+	                Color pixColor = new Color(contImageB.getRGB(h, j), true);
+	                
+	                if (pixColor.getAlpha() > 0) {
+	                	pixColor = new Color(pixColor.getRed(), pixColor.getGreen(), pixColor.getBlue(), (int) (contImageBAlphas[h + j * contImageB.getWidth()] * bAlpha));
+	                	contImageB.setRGB(h, j, pixColor.getRGB());
+	                }
+	            }
+	        }
+			bAlpha += alphaInc;//increment image B's alpha over time
 			
 			//draw A onto the screen
 			gPan.drawImage(contImageA, 0, 0, imgPanel);
+			
+			//draw the transparent image B onto the screen darker every loop
+			gPan.drawImage(contImageB, 0, 0, null);
 			
 			//pause for a bit
 			try 
