@@ -90,11 +90,6 @@ public class Trans_CrossDissolve extends ColemanTransition
 			{
 			    Thread.currentThread().interrupt();
 			}
-		}	
-		if (!isAborting())
-		{
-			// one final draw to the panel to be sure it's all there
-			Thumbnail.drawImageFill(ImageB, gPan, imgPanel);
 		}
 	}
 	
