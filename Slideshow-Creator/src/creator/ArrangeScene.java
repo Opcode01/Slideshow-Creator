@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -13,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,6 +45,9 @@ public class ArrangeScene extends Scene{
 	
 	private Thumbnail currentSlide;
 	
+	/** Create audio panel */
+	private JPanel audioPanel;
+	
 	/** Create container for timeline panel */
 	private JPanel timelinePanelContainer;
 	
@@ -50,6 +56,9 @@ public class ArrangeScene extends Scene{
 	
 	/** Timeline panel constraints */
 	private GridBagConstraints timelinePanelConstraints;
+	
+		/** Timeline panel constraints */
+	private GridBagConstraints audioConstraints;
 	
 	/** Back button */
 	private JButton backButton;
@@ -66,8 +75,20 @@ public class ArrangeScene extends Scene{
 	/** Create audio button */
 	private JButton audioButton;
 	
-	//TESTING PURPOSES ONLY 3/29/19
-	//private JButton playButton;
+	/** Create audio play button */
+	private JButton playButton;
+	
+	/** Selected thumbnail on the timeline */
+	private Thumbnail selectedThumbnail;
+	
+	/** Audio file */
+	private File audioFile;
+	
+	/** Total length of audio */
+	private float audioTimelineDuration;
+	
+	/** Create timeline object */
+	private Timeline timeline;
 	
 	/** Back custom button image */
 	private ImageIcon back;
@@ -84,11 +105,17 @@ public class ArrangeScene extends Scene{
 	/** Icon for adding an audio track */
 	private ImageIcon audio;
 	
-	/** Highlighted Icon for adding an audio track */
-	private ImageIcon highlightedAudio;
+	/** Icon for adding an audio /change/ track */
+	private ImageIcon audioChange;
 	
-	//TESTING PURPOSES ONLY 3/29/19
-	//private ImageIcon play;
+	/** Remove audio custom button image */
+	private ImageIcon removeAudio;
+	
+	/** Play audio custom button image */
+	private ImageIcon play;
+	
+	/** Play audio change custom button image */
+	private ImageIcon playChange;
 	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
@@ -101,25 +128,52 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
-	/**selected thumbnail on the timeline */
-	private Thumbnail selectedThumbnail;
+	/** Highlighted audio custom button image */
+	private ImageIcon highlightedAudio;
 	
-	/** Create audio text field - will be put on timeline panel later */
-	private JTextField audioText;
+	/** Highlighted remove audio custom button image */
+	private ImageIcon highlightedRemoveAudio;
+	
+	/** Highlighted audio change custom button image */
+	private ImageIcon highlightedAudioChange;
+	
+	/** Highlighted audio play change custom button image */
+	private ImageIcon highlightedPlayChange;
+	
+	/** Highlighted audio play custom button image */
+	private ImageIcon highlightedPlay;
+	
+	/** Create custom aqua color */
+	private Color aqua = new Color(132, 200, 202);
+	
+	/** Create custom light gray color */
+	private Color light_gray = new Color(31, 31, 31);
+	
+	/** Create custom dark_gray color */
+	private Color dark_gray = new Color(0, 0, 0);
+	
+	/** Create custom medium_gray color */
+	private Color medium_gray = new Color(41, 41, 41);
 	
 	/**
 	 * ArrangeScene() - sets up arrange with GUI stuff
 	 *
 	 * @author Fernando Palacios
 	 */
-	public ArrangeScene () {
+	public ArrangeScene () 
+	{
 		
+		// Create images and add icons
 		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
 		export = new ImageIcon(getClass().getResource("/creator/Images/exportButton.png"));
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
+		audioChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangeButton.png"));
+		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/removeAudioButton.png"));
+		play = new ImageIcon(getClass().getResource("/creator/Images/audioPlayButton.png"));
+		playChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangePlayButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
@@ -135,9 +189,10 @@ public class ArrangeScene extends Scene{
 		this.setLayout(gridBag);
 
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
-		
-		//TESTING PURPOSES ONLY 3/29/19
-		//play = new ImageIcon(getClass().getResource("/core/ButtonImages/Play.jpg"));
+		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
+		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
+		highlightedPlay = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioPlayButton.png"));
+		highlightedPlayChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangePlayButton.png"));
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -185,14 +240,14 @@ public class ArrangeScene extends Scene{
 		removeCurrentButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	// Remove selected thumb from timeline
-		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	timeline = SceneHandler.singleton.getTimeline();
 		    	//System.out.println(selectedThumbnail.getImagePath() + "remove");
 		    	int removeIndex = timeline.thumbnailsList.indexOf(currentSlide);
 		    	timeline.removeSlide(removeIndex);
 		    	
 		    	// Remove components and repaint 
 		    	timelinePanel.removeAll();
-		    	ShowImages();
+		    	PopulateTimeline();
 		    	revalidate();
 		    }
 		});
@@ -211,16 +266,7 @@ public class ArrangeScene extends Scene{
 		    	
 		    }
 		});
-////////////////////////////////////////////////////////////////////////
-/**
-* 	TESTING PURPOSES ONLY! - Eventually these buttons will be implemented
-* 	for real once the audio timeline is done
-* 
-* 	@author austinvickers
-* 	@date 3/31/19
-*
-		
-		//TODO: Put this where its supposed to be
+
 		//Create audio button - temporary until audio timeline GUI is done
 		audioButton = new JButton(audio);
 		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -230,41 +276,11 @@ public class ArrangeScene extends Scene{
 		audioButton.setRolloverIcon(highlightedAudio);
 		audioButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	SelectAudio(audioText);
+		    	SelectAudio();
 		    }
 		});
-
-		//TODO: Put this where its supposed to be
-		// Create text field for audio
-		audioText = new JTextField(13);
-		audioText.setBackground(light_gray);
-		Border audioBorder = BorderFactory.createLineBorder(white, 1);
-		audioText.setBorder(audioBorder);
-		audioText.setForeground(white);
-		audioText.setEditable(false);	
-*/		
-////////////////////////////////////////////////////////////////////////
-/**
- *  TESTING PURPOSES ONLY - Just to make sure file loading and playing actually works
- *  Eventually, we may want a play button on each clip so that the user can preview their
- *  sound clips in the creator.
- *  
- * 	@author austinvickers
- *  @date 3/29/19
- *
-		playButton = new JButton(play);
-		playButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-				player.playAudioClipAtIndex(0);
-				
-			}
-		});
-*/	
-////////////////////////////////////////////////////////////////////////	
 		
+
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
@@ -294,26 +310,7 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 4;
 		optionsPanel.add(exportButton, c);
-		
-/////////////////////////////////////////
-/*
-* 	TESTING ONLY 3/29/19 - austinvickers
-*
-		// TODO: Put this where its supposed to be
-		// Set constraints and add audio button
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 4;
-		optionsPanel.add(audioButton, c);
-		
-
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = 5;
-		optionsPanel.add(playButton, c);
-*/		
-/////////////////////////////////////////
-		
+	
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new BorderLayout());
@@ -326,15 +323,16 @@ public class ArrangeScene extends Scene{
 		
 		// Set up timeline panel constraints
 		timelinePanelConstraints = (GridBagConstraints) c.clone();
+		audioConstraints = new GridBagConstraints();
 		
 		// Set up blank timeline panel
-		setupTimelinePanel(false);
+		SetupTimelinePanel(false);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
-		timelineScroller.setPreferredSize(new Dimension(200, 235));
+		timelineScroller.setPreferredSize(new Dimension(200, 250));
 		timelineScroller.getHorizontalScrollBar().setUnitIncrement(25);
 		
 		/*
@@ -352,7 +350,6 @@ public class ArrangeScene extends Scene{
 		
 		c.weightx = 0.01;
 		c.fill = GridBagConstraints.BOTH;
-		//c.anchor = GridBagConstraints.CENTER;
 		imagePanel.add(testLabel, c);
 		///////////////////////
 		 */
@@ -397,11 +394,11 @@ public class ArrangeScene extends Scene{
     {
 		super.initialize();
 
-		setupTimelinePanel(true);
+		SetupTimelinePanel(true);
     }
 	
     /**
-     * setupTimelinePanel() - opens the images and sets up the scene for use
+     * SetupTimelinePanel() - opens the images and sets up the scene for use
      * 
      * @param revalidate - calls revalidate if boolean is set to true otherwise not
 	 * 
@@ -409,66 +406,56 @@ public class ArrangeScene extends Scene{
 	 * @author Joseph Hoang
 	 * @author Fernando Palacios
      */
-	public void setupTimelinePanel(boolean revalidate)
+	public void SetupTimelinePanel(boolean revalidate)
 	{		
-		// Create image panel with new images
+		// Create timeline panel with new images
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
 		timelinePanel.setBackground(SliderColor.light_gray);
-		ShowImages();
+		PopulateTimeline();
 		
-		// Add to outer panel that houses the timeline panel with formatting
+		// Create audio panel
+		audioPanel = new JPanel();
+		audioPanel.setLayout(new GridBagLayout());
+		audioPanel.setBackground(medium_gray);
+		PopulateAudio();
+		
+		// Make sure timeline panel container is blank by removing all
 		timelinePanelContainer.removeAll();
-		timelinePanelConstraints.weighty = 1;
+		
+		// Add timeline to outer panel
+		timelinePanelConstraints.weighty = 0;
 		timelinePanelConstraints.weightx = 1;
 		timelinePanelConstraints.gridx = 0;
 		timelinePanelConstraints.gridy = 0;
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
+		
+		// Add audio to outer panel
+		timelinePanelConstraints.weighty = 1;
+		timelinePanelConstraints.gridx = 0;
+		timelinePanelConstraints.gridy = 1;
+		timelinePanelContainer.add(audioPanel, timelinePanelConstraints);
 
 		if (revalidate) {
 			this.revalidate();
 		}
 	}
 	
-	/**
-	 * SelectAudio() - brings up dialogue box to select audio
-	 * 
-	 * @author Fernando Palacios
-	 */
-	public void SelectAudio(JTextField display) {
-		
-    	JFileChooser chooser = new JFileChooser();
-    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
-    	
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
-        
-        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-        
-    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
-    	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    File audioFile = chooser.getSelectedFile();
-        	player.addAudio(new Audio(audioFile));
-        	display.setText(audioFile.getName());
-    	}
-    
-	}
-	
     /**
-     * ShowImages() - creates thumbnail icons to display in scrollpane
+     * PopulateTimeline() - creates thumbnail icons to display in scrollpane
      * 
      * @author Fernando Palacios
 	 * @author Timothy Couch
 	 * @author Joseph Hoang
      */
-	private void ShowImages()
+	private void PopulateTimeline()
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
 		int gridyCounter = 0; //layout counter y
 		
 		// Get instance of timeline and create button lists for thumb and transitions
-		Timeline timeline = SceneHandler.singleton.getTimeline();
+		timeline = SceneHandler.singleton.getTimeline();
 		JToggleButton[] thumbButtons = new JToggleButton[timeline.thumbnailsList.getSize()];
 		JButton[] transButtons = new JButton[timeline.transitionsList.getSize()];
 		
@@ -490,9 +477,11 @@ public class ArrangeScene extends Scene{
 			
 			// Create transition button and configurations
 			transButtons[i] = new JButton(new ImageIcon(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage()));
+			JButton keeperTrans = transButtons [i];
 			transButtons[i].setPreferredSize(new Dimension(100, 75));
 			transButtons[i].setRolloverEnabled(true);
 			transButtons[i].setRolloverIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
+			transButtons[i].setPressedIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
 			transButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			transButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			transButtons[i].setFocusable(false);
@@ -514,6 +503,8 @@ public class ArrangeScene extends Scene{
 							index
 							);
 					parent.setEnabled(false);
+					keeperTrans.setIcon(new ImageIcon(TransHover(SceneHandler.singleton.transitionImages.get(buttonTrans.getTransitionType()).getImage())));
+
 				}
 			});
 			
@@ -523,6 +514,8 @@ public class ArrangeScene extends Scene{
 			thumbButtons[i].setPreferredSize(new Dimension(290, 170));
 			thumbButtons[i].setRolloverEnabled(true);
 			thumbButtons[i].setRolloverIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
+			thumbButtons[i].setPressedIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
+			thumbButtons[i].setSelectedIcon(new ImageIcon(ImageHover(buttonThumb.getImageTimeline())));
 			thumbButtons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			thumbButtons[i].setBorder(BorderFactory.createEmptyBorder());
 			thumbButtons[i].setFocusable(false);
@@ -559,7 +552,15 @@ public class ArrangeScene extends Scene{
 			c.gridy = gridyCounter;
 			c.fill = GridBagConstraints.NONE;
 			c.insets = new Insets(0, 0, 0, 0);
-			timelinePanel.add(transButtons[i], c);
+			
+			if(timeline.transitionsList.getSize() == (i + 1))
+			{
+				c.insets = new Insets(0, 0, 0, 20);
+				timelinePanel.add(transButtons[i], c);
+			} else {
+				c.insets = new Insets(0, 0, 0, 0);
+				timelinePanel.add(transButtons[i], c);
+			}
 		}
 		
 		//show the first slide
@@ -617,34 +618,204 @@ public class ArrangeScene extends Scene{
 		revalidate();
 	}
 	
-    /**
-     * TransHover() - darkens the image so that it adds a hovered effect
+	/**
+     * PopulateAudio() - populates audio display with add audio button to allow adding of audio
      * 
-     * @param thumbnail - the thumbnail image that needs to be processed
+     * @author Fernando Palacios
+     */
+	public void PopulateAudio()
+	{
+		// Get instance of timeline
+		timeline = SceneHandler.singleton.getTimeline();
+		Settings s = timeline.timelineSettings;
+		
+		// Reset audio timeline duration 
+		audioTimelineDuration = 0;
+		
+		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
+	    float thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
+	    float transitionTotalLength = ((100) * timeline.transitionsList.getSize()) + 20;
+	    float secondsToPixels = (float) (((290.0 + 40.0) + (100.0)) / (float) (s.slideDuration));
+	    float extraAudioLength = 27 * 2;
+	    float extraLastAudioLength = 27 * 3;
+	    
+	    // Set counter for grid x
+	    int audioxCounter = 0;
+	    
+	    // Set constraints
+	    audioConstraints.gridx = audioxCounter;
+	    audioConstraints.gridy = 0;
+	    
+		//Change icon of add audioButton
+		if(timeline.audioPlayer.getSize() > 0) {
+			audioButton.setIcon(audioChange);
+			audioButton.setRolloverIcon(highlightedAudioChange);
+		} else {
+			audioButton.setIcon(audio);
+			audioButton.setRolloverIcon(highlightedAudio);
+		}
+	    
+		for(int i = 0; i < timeline.audioPlayer.getSize(); i++)
+		{
+		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
+		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
+		    
+		    System.out.println(audioTrack.getAudioLength());
+		    System.out.println(secondsToPixels);
+		    System.out.println(thumbnailTotalLength + transitionTotalLength);
+		    System.out.println(audioTrackSize);
+		    
+		    // Add each track size to the total duration of the audio
+		    audioTimelineDuration += audioTrackSize;
+		    
+		    if(audioTimelineDuration >= thumbnailTotalLength + transitionTotalLength)
+		    	audioTrackSize = (int) ((thumbnailTotalLength + transitionTotalLength) - (audioTimelineDuration - audioTrackSize));
+		    
+			if(timeline.audioPlayer.getSize() == (i + 1)) {
+				audioTrackSize -= (extraLastAudioLength);
+			} else {
+				audioTrackSize -= (extraAudioLength);
+			}
+			
+			System.out.println(audioTrackSize);
+		    
+		    // Create text field for audio
+			JTextField audioText = new JTextField();
+			audioText.setBackground(aqua);
+			audioText.setBorder(BorderFactory.createEmptyBorder());
+			audioText.setForeground(dark_gray);
+	        audioText.setEditable(false);
+		    audioText.setText(audioTrack.getAudioName());
+		    audioText.setPreferredSize(new Dimension(audioTrackSize, 20));
+		    
+		    // CReate remove audio button
+		    JButton removeAudioButton = new JButton(removeAudio);
+		    removeAudioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			removeAudioButton.setBorder(BorderFactory.createEmptyBorder());
+			removeAudioButton.setContentAreaFilled(false);
+			removeAudioButton.setFocusable(false);
+			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
+			removeAudioButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+			    	RemoveAudio(audioTrack);
+			    }
+			});
+			
+		    // CReate remove audio button
+		    JButton playButton = new JButton(play);
+		    playButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			playButton.setBorder(BorderFactory.createEmptyBorder());
+			playButton.setContentAreaFilled(false);
+			playButton.setFocusable(false);
+			playButton.setRolloverIcon(highlightedPlay);
+			playButton.addActionListener(new ActionListener() {
+			    public void actionPerformed(ActionEvent e) {
+					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+					player.playAudioClipAtIndex(0);
+			    }
+			});
+			
+			if(timeline.audioPlayer.getSize() == (i + 1)) {
+				playButton.setIcon(playChange);
+				playButton.setRolloverIcon(highlightedPlayChange);
+			}
+		    
+			// Add audio remove button to audio panel
+		    audioPanel.add(removeAudioButton, audioConstraints);
+		    audioConstraints.gridx = ++audioxCounter;
+		    
+		    // Add audio track to audio panel
+		    audioPanel.add(audioText, audioConstraints);
+		    audioConstraints.gridx = ++audioxCounter;
+		    
+		    // Add audio track to audio panel
+		    audioPanel.add(playButton, audioConstraints);
+		    audioConstraints.gridx = ++audioxCounter;
+		}
+		
+	    // Re-add audio button to end of panel
+	    audioPanel.add(audioButton, audioConstraints);
+	}
+	
+	/**
+	 * SelectAudio() - brings up dialogue box to select audio
 	 * 
 	 * @author Fernando Palacios
-     */
-    private Image TransHover(Image thumbnail) {
-        Image img = thumbnail;
-
-        BufferedImage buffered = new BufferedImage(img.getWidth(null),
-        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        buffered.getGraphics().drawImage(img, 0, 0, null);
-
-        for (int i = 0; i < buffered.getWidth(); i++) {
-            for (int j = 0; j < buffered.getHeight(); j++) {                    
-                int rgb = buffered.getRGB(i, j);
-                int alpha = (rgb >> 24) & 0x000000FF;
-                Color c = new Color(rgb);
-                if (alpha != 0) {
-                	c = new Color(254, 250, 238);
-                    buffered.setRGB(i, j, c.getRGB());
-                }
-            }
-        } 
-        return buffered;
-    }
+	 */
+	public void SelectAudio() {
+		
+		// Get instance of timeline
+		timeline = SceneHandler.singleton.getTimeline();
+				
+		// Calculate values for thumbnail and transition pixel width along with ratio of pixels per second
+		int thumbnailTotalLength = (290 + 40) * timeline.thumbnailsList.getSize();
+		int transitionTotalLength = (100) * timeline.transitionsList.getSize();
+		
+		//If we have more audio than the length of the slides:
+	    if(audioTimelineDuration >= thumbnailTotalLength + transitionTotalLength) {
+	    	
+	    	// Open warning pane in the center of our workspace
+	    	JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 190));
+	    	parent.setEnabled(false);
+	    	return;
+	    }
+				
+    	JFileChooser chooser = new JFileChooser();
+    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
+    	
+        chooser.setAcceptAllFileFilterUsed(false);
+        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF"}));
         
+        AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+        
+    	int returnVal = chooser.showDialog(ArrangeScene.this, "Open Audio");
+    	if(returnVal == JFileChooser.APPROVE_OPTION) {
+    		
+    	    audioFile = chooser.getSelectedFile();
+    	    Audio a = new Audio(audioFile);
+			player.addAudio(a);
+			audioPanel.removeAll();
+			PopulateAudio();
+			revalidate();
+    	    	
+    	}
+    	
+	}
+	
+	/**
+	 * RemoveAudio() - removes visual audio textfield and audio from audioList
+	 * 
+	 * @author Fernando Palacios
+	 */
+	private void RemoveAudio(Audio track)
+	{
+    	// Remove selected thumb from timeline
+    	timeline = SceneHandler.singleton.getTimeline();
+    	int removeIndex = timeline.audioPlayer.indexOf(track);
+    	timeline.audioPlayer.removeAudioAtIndex(removeIndex);
+    	
+    	// Remove components and repaint 
+    	audioPanel.removeAll();
+    	PopulateAudio();
+    	revalidate();
+	}
+	
+	/**
+	 * GoToSelectScene() - changes scene to selection
+	 *
+	 * @author Fernando Palacios
+     */
+	public void GoToSelectScene()
+	{
+		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+		SelectScene select = (SelectScene) SceneHandler.singleton.GetSceneInstanceByType(SceneType.SELECTION);
+		select.UpdateSelected();
+	} 
 	
     /**
      * ImageHover() - darkens the image so that it adds a hovered effect
@@ -677,17 +848,33 @@ public class ArrangeScene extends Scene{
         } 
         return buffered;
     }
-	
-	/**
-	 * GoToSelectScene() - changes scene to selection
-	 *
+    
+    /**
+     * TransHover() - darkens the image so that it adds a hovered effect
+     * 
+     * @param thumbnail - the thumbnail image that needs to be processed
+	 * 
 	 * @author Fernando Palacios
      */
-	public void GoToSelectScene()
-	{
-		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
-		SelectScene select = (SelectScene) SceneHandler.singleton.GetSceneInstanceByType(SceneType.SELECTION);
-		select.UpdateSelected();
-	}
+    private Image TransHover(Image thumbnail) {
+        Image img = thumbnail;
+
+        BufferedImage buffered = new BufferedImage(img.getWidth(null),
+        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        buffered.getGraphics().drawImage(img, 0, 0, null);
+
+        for (int i = 0; i < buffered.getWidth(); i++) {
+            for (int j = 0; j < buffered.getHeight(); j++) {                    
+                int rgb = buffered.getRGB(i, j);
+                int alpha = (rgb >> 24) & 0x000000FF;
+                Color c = new Color(rgb);
+                if (alpha != 0) {
+                	c = new Color(217, 202, 192);
+                    buffered.setRGB(i, j, c.getRGB());
+                }
+            }
+        } 
+        return buffered;
+    }
 
 }

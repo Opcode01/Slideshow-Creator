@@ -190,6 +190,10 @@ public class SettingsPane extends FloatingPane
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	UpdateProjectSettings();
+		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    	scene.SetupTimelinePanel(true);
+		    	scene.repaint();
+		    	scene.revalidate();
 		    	ClosePane();
 		    }
 		});
@@ -462,7 +466,7 @@ public class SettingsPane extends FloatingPane
 			audioFilePath = "none";
 		}
 		
-		int slideTime = 1;
+		int slideTime = 30;
 		try {
 			slideTime = Integer.parseInt(durationText.getText());
 		}catch(NumberFormatException e) {
