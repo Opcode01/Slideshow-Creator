@@ -39,6 +39,9 @@ public class PlayScene extends Scene {
 	/** panel showing the current slide */
 	private JPanel slidePanel;
 	
+	/** bottom panel with controls on it */
+	private JPanel optionsPanel;
+	
 	private static final SlideDir autoDir = SlideDir.RIGHT;
 	
 	/** button that controls play and pause on auto slideshow */
@@ -156,7 +159,7 @@ public class PlayScene extends Scene {
 		this.add(slidePanel, c);
 		
 		// Set options panel configurations
-		JPanel optionsPanel = new JPanel();
+		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
 		optionsPanel.setBackground(SliderColor.beige_gray);
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -494,6 +497,10 @@ public class PlayScene extends Scene {
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
+		
+		//repaint the bar to make sure it doesn't get overwritten by resized window during transition
+		repaint();
+		optionsPanel.repaint();
 	}
 	
 	/**
@@ -510,16 +517,9 @@ public class PlayScene extends Scene {
 		
 		Transition transition = getTransition(currentTransitionIndex);
 		
-		slidePanel.removeAll();
-		JPanel transitionPanel = new JPanel();
-		slidePanel.add(transitionPanel, BorderLayout.CENTER);
-		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
-		transitionPanel.setBackground(SliderColor.dark_gray);
-		revalidate();
-		
 		setManualButtonIcons();
 		
-		transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
+		transition.PlayTransition(slidePanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
 	}
 	
 	/**
