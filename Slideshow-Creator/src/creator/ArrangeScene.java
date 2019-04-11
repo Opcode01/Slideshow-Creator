@@ -11,7 +11,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -68,6 +67,12 @@ public class ArrangeScene extends Scene{
 	/** Remove current custom button image */
 	private ImageIcon removeCurrent;
 	
+	/** Move thumbnail right custom button image */
+	private ImageIcon swapRight;
+	
+	/** Move thumbnail left custom button image */
+	private ImageIcon swapLeft;
+	
 	/** Highlighted back custom button image */
 	private ImageIcon highlightedBack;
 	
@@ -76,6 +81,12 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
+	
+	/** Move thumbnail right highlighted custom button image */
+	private ImageIcon highlightedSwapRight;
+	
+	/** Move thumbnail left highlighted custom button image */
+	private ImageIcon highlightedSwapLeft;
 	
 	/** Create custom aqua color */
 	private Color aqua = new Color(132, 200, 202);
@@ -109,9 +120,14 @@ public class ArrangeScene extends Scene{
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		swapRight = new ImageIcon(getClass().getResource("/creator/Images/swapRightButton.png"));
+		swapLeft = new ImageIcon(getClass().getResource("/creator/Images/swapLeftButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+		highlightedSwapRight = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapRightButton.png"));
+		highlightedSwapLeft = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapLeftButton.png"));
+		
 		
 		// Create back button
 		backButton = new JButton(back);
@@ -171,13 +187,13 @@ public class ArrangeScene extends Scene{
 		    }
 		});
 
-		swapForwardButton = new JButton("FWD");
+		swapForwardButton = new JButton(swapRight);
 		swapForwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		swapForwardButton.setToolTipText("Swap selected thumbnail forward");
-		//swapForwardButton.setBorder(BorderFactory.createEmptyBorder());
-		//swapForwardButton.setContentAreaFilled(false);
+		swapForwardButton.setBorder(BorderFactory.createEmptyBorder());
+		swapForwardButton.setContentAreaFilled(false);
 		swapForwardButton.setFocusable(false);
-		//swapForwardButton.setRolloverIcon(highlightedRemoveCurrent);
+		swapForwardButton.setRolloverIcon(highlightedSwapRight);
 		swapForwardButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	// Swap selected thumbnail forward
@@ -193,13 +209,13 @@ public class ArrangeScene extends Scene{
 		    }
 		});
 		
-		swapBackwardButton = new JButton("BCK");
+		swapBackwardButton = new JButton(swapLeft);
 		swapBackwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		swapBackwardButton.setToolTipText("Swap selected thumbnail backward");
-		//swapBackwardButton.setBorder(BorderFactory.createEmptyBorder());
-		//swapBackwardButton.setContentAreaFilled(false);
+		swapBackwardButton.setBorder(BorderFactory.createEmptyBorder());
+		swapBackwardButton.setContentAreaFilled(false);
 		swapBackwardButton.setFocusable(false);
-		//swapBackwardButton.setRolloverIcon(highlightedRemoveCurrent);
+		swapBackwardButton.setRolloverIcon(highlightedSwapLeft);
 		swapBackwardButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	// Swap selected thumbnail forward
