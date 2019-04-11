@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.SliderColor;
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeUp extends ColemanTransition
@@ -27,7 +29,6 @@ public class Trans_WipeUp extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics gA = ImageA.getGraphics();
 		
 		// Dimension holders
 		int bY1, bY2;		// Dimensions for imageA
@@ -37,6 +38,15 @@ public class Trans_WipeUp extends ColemanTransition
 		int timeInc;				// Milliseconds to pause each time
 		timeInc = (int)(time * 1000) / numIterations;
 		
+		//create an image A the size of the container
+		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
+		Graphics gA = contImageA.getGraphics();
+		
+		//create an image B the size of the container with solid background
+		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
+		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
 		incY = imgHeight / numIterations;		// Do 1/20 each time to start
@@ -45,16 +55,14 @@ public class Trans_WipeUp extends ColemanTransition
 		bY1 = imgHeight - incY;
 		bY2 = imgHeight;
 
-        // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
-
 		// Draw image A
 		for(int i=0; i<numIterations; i++)
 		{
 			if (isAborting())
 				break;
 			// Draw part of B into A
-			gPan.drawImage(ImageB, 0, bY1, imgWidth, bY2, 0, bY1, imgWidth, bY2, null); // Draw portion of ImageB into ImageA
+			gA.drawImage(contImageB, 0, bY1, imgWidth, bY2, 0, bY1, imgWidth, bY2, null); // Draw portion of ImageB into ImageA
+			gPan.drawImage(contImageA, 0, 0, imgPanel);
 			bY2 = bY1;
 			bY1 -= incY;  // Take a bigger section next time
 			// Pause a bit
@@ -66,13 +74,6 @@ public class Trans_WipeUp extends ColemanTransition
 			{
 			    Thread.currentThread().interrupt();
 			} 
-		}
-		if (!isAborting())
-		{
-			// Move m_NextImage into m_CurrentImage for next time -  May not need this
-			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-			// And one final draw to the panel to be sure it's all there
-			gPan.drawImage(ImageA, 0,0, imgPanel);
 		}
 	}
 	

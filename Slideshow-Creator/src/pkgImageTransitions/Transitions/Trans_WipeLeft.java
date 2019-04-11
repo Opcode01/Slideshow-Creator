@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.SliderColor;
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeLeft extends ColemanTransition
@@ -31,7 +33,6 @@ public class Trans_WipeLeft extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics gA = ImageA.getGraphics();
 		
 		// Dimension holders
 		int bX1, bX2;		// Dimensions for imageB
@@ -45,22 +46,30 @@ public class Trans_WipeLeft extends ColemanTransition
 		imgHeight = imgPanel.getHeight();
 		incX = imgWidth / numIterations;		// Do 1/numIterations each time
 		
+		//create an image A the size of the container
+		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
+		Graphics gA = contImageA.getGraphics();
+		
+		//create an image B the size of the container with solid background
+		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
+		
 		// Initialize the dimensions for section of ImageB to draw into ImageA
 		bX1 = imgWidth - incX;
 		bX2 = incX;
-
-        // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
-
+		
 		// Draw image A
 		for(int i=0; i<numIterations; i++)
 		{
 			if (isAborting())
 				break;
 			// Draw part of B over A on the screen
-			gPan.drawImage(ImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
+			gA.drawImage(contImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
+			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
 			bX2 = bX1;
 			bX1 -= incX;  // Move another section to the left of the previous section
+			
 			// Pause a bit so we can actually see the transition
 			try 
 			{
