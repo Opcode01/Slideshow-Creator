@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeDown extends ColemanTransition
@@ -56,9 +55,7 @@ public class Trans_WipeDown extends ColemanTransition
 				break;
 			// Draw part of B into A
 			gA.drawImage(ImageB, 0, bY1, imgWidth, bY2, 0, bY1, imgWidth, bY2, null); // Draw portion of ImageB into ImageA
-			
-			Thumbnail.drawImageFill(ImageA, gPan, imgPanel);
-			//gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
+			gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
 			bY1 = bY2;
 			bY2 += incY;  // Take a bigger section next time
 			// Pause a bit

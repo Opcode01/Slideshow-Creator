@@ -34,8 +34,5 @@ public final class SliderColor {
 	
 	/** Create custom white color */
 	public static final Color white = new Color(255, 255, 255);
-	
-	/** Create transparent color */
-	public static final Color clear = new Color(0, 0, 0, 0);
 
 }
