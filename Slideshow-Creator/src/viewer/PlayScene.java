@@ -148,9 +148,7 @@ public class PlayScene extends Scene {
 		//set up layered pane with slide and transition panels
 		layeredPane = new JLayeredPane();
 		layeredPane.setBorder(BorderFactory.createEmptyBorder());
-		layeredPane.setOpaque(true);
 		layeredPane.setBackground(SliderColor.dark_gray);
-		layeredPane.setLayout(new BorderLayout());
 		
 		// Set slide panel configurations
 		slideThumb = getSlide(currentSlideIndex);
@@ -165,18 +163,11 @@ public class PlayScene extends Scene {
 		transitionPanel.setLayout(new BorderLayout());
 		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
 		transitionPanel.setBackground(SliderColor.clear);
-		JLabel label = new JLabel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				getSlide(0).drawFill(g, this);
-			}
-		};
-		label.setBorder(BorderFactory.createEmptyBorder());
-		transitionPanel.add(label, BorderLayout.CENTER);
-
+		
 		//add slidePanel behind transition panel
-		layeredPane.add(transitionPanel, BorderLayout.CENTER);
-		layeredPane.add(slidePanel, BorderLayout.CENTER);
+		layeredPane.add(new JLabel("Hey"), 0);
+		//layeredPane.add(transitionPanel, 1);
+		//layeredPane.add(slidePanel, 2);
 		
 		// Set constraints and add layered pane
 		c.fill = GridBagConstraints.BOTH;
@@ -543,13 +534,7 @@ public class PlayScene extends Scene {
 		Transition transition = getTransition(currentTransitionIndex);
 		
 		slidePanel.removeAll();
-		JPanel transitionPanel = new JPanel() {
-			@Override
-			public void paint(Graphics g)
-			{
-				slideThumb.drawFill(g, this);
-			}
-		};
+		JPanel transitionPanel = new JPanel();
 		slidePanel.add(transitionPanel, BorderLayout.CENTER);
 		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
 		transitionPanel.setBackground(SliderColor.dark_gray);
@@ -625,7 +610,6 @@ public class PlayScene extends Scene {
 						if (!getTransition(currentTransitionIndex).isRunning())
 						{
 							slideTimer.cancel();
-							revalidate();
 							//if the slideshow will advance (otherwise, it doesn't loop and is at the end)
 							if (getNextSlideIndex(dir) != currentSlideIndex)
 							{
