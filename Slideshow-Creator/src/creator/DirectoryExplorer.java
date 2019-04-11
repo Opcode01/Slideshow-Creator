@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -23,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -205,7 +207,7 @@ public class DirectoryExplorer extends Scene {
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    File slFile = chooser.getSelectedFile();
     		GoToSelectScene(slFile);
-    	}
+    	}	
 	}
 	
 	/**
