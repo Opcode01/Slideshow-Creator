@@ -118,6 +118,18 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	Audio a = audioList.get(index);
     	removeAudio(a);
     }
+    
+    /**
+     * removeAudioAtIndex will remove an Audio object from the list at the given index
+     * 
+     * @param index
+     * @author austinvickers
+     */
+    
+    public void removeAudioAtIndex(int index) {
+    	Audio a = audioList.get(index);
+    	removeAudio(a);
+    }
 
     /**
      * swapAudio will swap value of two objects in ArrayList

@@ -113,7 +113,7 @@ public class ArrangeScene extends Scene{
 	
 	/** Play audio custom button image */
 	private ImageIcon play;
-	
+  
 	/** Play audio change custom button image */
 	private ImageIcon playChange;
 	
@@ -139,7 +139,7 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted audio play change custom button image */
 	private ImageIcon highlightedPlayChange;
-	
+
 	/** Highlighted audio play custom button image */
 	private ImageIcon highlightedPlay;
 	
@@ -268,6 +268,7 @@ public class ArrangeScene extends Scene{
 		});
 
 		//Create audio button - temporary until audio timeline GUI is done
+	   // Create audio button
 		audioButton = new JButton(audio);
 		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		audioButton.setBorder(BorderFactory.createEmptyBorder());
@@ -310,7 +311,7 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 4;
 		optionsPanel.add(exportButton, c);
-	
+
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new BorderLayout());
