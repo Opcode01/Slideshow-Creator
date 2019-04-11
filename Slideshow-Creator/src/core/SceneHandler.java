@@ -60,11 +60,18 @@ public class SceneHandler {
 	 */
 	public void setDirectory(File file)
 	{
-		timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
-		directory = timeline.getDirectory();
-		
-		System.out.println("Dir: " + directory);
-		System.out.println("File: " + file.getAbsolutePath());
+		try
+		{
+			timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
+			directory = timeline.getDirectory();
+			
+			//System.out.println("Dir: " + directory);
+			//System.out.println("File: " + file.getAbsolutePath());
+		}
+		catch(Exception e)
+		{
+			System.out.println("Invalid file given. Cannot import:" + e.getMessage());
+		}
 	}
 
 	public String getDirectory()
