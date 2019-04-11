@@ -245,7 +245,7 @@ public class Thumbnail
 	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
 	  
 	  //draw image
-	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], new Color(0, 0, 0, 0), container);
+	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], SliderColor.clear, container);
     }
     
     /**

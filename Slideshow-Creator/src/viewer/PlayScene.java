@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -36,8 +37,14 @@ import core.*;
 
 public class PlayScene extends Scene {
 	
+	/** layered panel containing the slide panel and the transition panel on top of it */
+	private JLayeredPane layeredPane;
+	
 	/** panel showing the current slide */
 	private JPanel slidePanel;
+	
+	/** panel over the slidePanel showing the transitioning image */
+	private JPanel transitionPanel;
 	
 	private static final SlideDir autoDir = SlideDir.RIGHT;
 	
@@ -138,22 +145,38 @@ public class PlayScene extends Scene {
 		this.setLayout(gridBag);
 		setBackground(SliderColor.beige_gray);
 		
+		//set up layered pane with slide and transition panels
+		layeredPane = new JLayeredPane();
+		layeredPane.setBorder(BorderFactory.createEmptyBorder());
+		layeredPane.setBackground(SliderColor.dark_gray);
+		
 		// Set slide panel configurations
 		slideThumb = getSlide(currentSlideIndex);
 		slidePanel = new JPanel();
 		slidePanel.setLayout(new BorderLayout());
 		slidePanel.setBorder(BorderFactory.createEmptyBorder());
-		slidePanel.setBackground(SliderColor.dark_gray);
+		slidePanel.setBackground(SliderColor.clear);
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		
-		// Set constraints and add slide panel
+		//set up transition panel
+		transitionPanel = new JPanel();
+		transitionPanel.setLayout(new BorderLayout());
+		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
+		transitionPanel.setBackground(SliderColor.clear);
+		
+		//add slidePanel behind transition panel
+		layeredPane.add(new JLabel("Hey"), 0);
+		//layeredPane.add(transitionPanel, 1);
+		//layeredPane.add(slidePanel, 2);
+		
+		// Set constraints and add layered pane
 		c.fill = GridBagConstraints.BOTH;
 		c.anchor = GridBagConstraints.CENTER;
 		c.weightx = 1;
 		c.weighty = 1;
 		c.gridx = 0;
 		c.gridy = 0;
-		this.add(slidePanel, c);
+		this.add(layeredPane, c);
 		
 		// Set options panel configurations
 		JPanel optionsPanel = new JPanel();
