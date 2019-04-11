@@ -162,15 +162,13 @@ public class TransitionPane extends FloatingPane {
 	private Transition transition;
 	
 	// add the following variables after connecting backend: Timeline t, int index, 
-	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size, Timeline t, int index){
+	TransitionPane(JFrame parent, String title, Coord2 position, Dimension size, int index){
 		
 		//Call the parent constructor
 		super(parent, title, position, size);
 		
+		Timeline t = SceneHandler.singleton.getTimeline();
 		transition = t.transitionsList.getTransition(index);
-		
-		//**TO DO: Place this in appropriate spot so that the initial settings of the transition are displayed in button highlights
-		//LoadTransitionSettings();
 		
 		// Create GridBagLayout object and constraints
 		GridBagLayout gridBag = new GridBagLayout();
@@ -226,6 +224,8 @@ public class TransitionPane extends FloatingPane {
 		cancelButton.setRolloverIcon(highlightedCancel);
 		cancelButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    	scene.SetupTimelinePanel(true);
 		    	ClosePane();
 		    }
 		});
@@ -468,6 +468,9 @@ public class TransitionPane extends FloatingPane {
 		
 		// Set settings into floating pane
 		getContentPane().add(transitionGui, BorderLayout.CENTER);
+		
+		// Load Transition settings in from transition
+		LoadTransitionSettings();
 	}
 	
     /**
@@ -489,7 +492,7 @@ public class TransitionPane extends FloatingPane {
                 int alpha = (rgb >> 24) & 0x000000FF;
                 Color c = new Color(rgb);
                 if (alpha != 0) {
-                    c = new Color(228, 199, 193);
+                    c = new Color(217, 202, 192);
                     buffered.setRGB(i, j, c.getRGB());
                 }
             }
@@ -511,21 +514,21 @@ public class TransitionPane extends FloatingPane {
 		if(crossButton.isSelected()) {
 			type = TransitionType.CROSS_DISSOLVE;
 		}else if(leftButton.isSelected()) {
-			type = TransitionType.CROSS_DISSOLVE;
+			type = TransitionType.WIPE_LEFT;
 		}else if(rightButton.isSelected()) {
-			type = TransitionType.CROSS_DISSOLVE;
+			type = TransitionType.WIPE_RIGHT;
 		}else if(upButton.isSelected()) {
-			type = TransitionType.CROSS_DISSOLVE;
+			type = TransitionType.WIPE_UP;
 		}else if(downButton.isSelected()) {
-			type = TransitionType.CROSS_DISSOLVE;
+			type = TransitionType.WIPE_DOWN;
 		}
 		
 		if(slowButton.isSelected()) {
-			transition.setTransitionLength(5);
+			speed = 5;
 		}else if(mediumButton.isSelected()) {
-			transition.setTransitionLength(3);
+			speed = 3;
 		}else if(fastButton.isSelected()) {
-			transition.setTransitionLength(1);
+			speed = 1;
 		}
 		
 		if(changeAllCheck.isSelected())
@@ -535,6 +538,10 @@ public class TransitionPane extends FloatingPane {
 			transition.setTransitionType(type);
 			transition.setTransitionLength(speed);
 		}
+		
+		// Tell arrange scene to revalidate its buttons
+		ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		scene.SetupTimelinePanel(true);
 	}
 	
     /**
@@ -548,7 +555,7 @@ public class TransitionPane extends FloatingPane {
 			crossButton.setSelected(true);
 		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
 			rightButton.setSelected(true);
-		}else if(transition.getTransitionType() == TransitionType.WIPE_RIGHT) {
+		}else if(transition.getTransitionType() == TransitionType.WIPE_LEFT) {
 			leftButton.setSelected(true);
 		}else if(transition.getTransitionType() == TransitionType.WIPE_UP) {
 			upButton.setSelected(true);

@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -63,8 +64,20 @@ public class TimelineParser
 			transitions.add(transition);
 		}
 		
+		JSONArray audioList = new JSONArray();
+		AudioPlayer audioPlayer = output.audioPlayer;
+		for (Audio a : audioPlayer.getAudioList())
+		{
+			JSONObject audio = new JSONObject();
+			audio.put("path", a.getAudioPath());
+			audio.put("index", audioPlayer.indexOf(a));
+			audioList.add(audio);
+			
+		}
+		
 		out.put("thumbnails", thumbnails);
 		out.put("transitions", transitions);
+		out.put("audio", audioList);
 		
 		try
 		{
@@ -125,14 +138,25 @@ public class TimelineParser
 				importedTimeline.transitionsList.addTransition(newTrans, (int) index);
 			}
 			
+			JSONArray audioList = (JSONArray) in.get("audio");
+			//Iterator<JSONObject> transition = transitions.iterator();
+			for(int i = 0; i < audioList.size(); i++)
+			{
+				JSONObject audio = (JSONObject) audioList.get(i);
+				long index = (Long) audio.get("index");
+				String path = (String) audio.get("path");
+				File audioFile = new File(path);
+				Audio newAudio = new Audio(audioFile);
+				importedTimeline.audioPlayer.addAudio(newAudio, (int) index);
+			}
+			
 			boolean loopingSlides = (boolean) in.get("isLoopingSlides");
 			boolean isManual = (boolean) in.get("isManual");
 			boolean isLoopingAudio = (boolean) in.get("isLoopingAudio");
 			long slideDuration = (Long) in.get("slideDuration");
 			Settings importedSettings = new Settings(loopingSlides, 
 													isLoopingAudio, 
-													isManual, 
-													"", 
+													isManual,
 													(int)slideDuration);
 			
 			importedTimeline.setDirectory((String) in.get("parentDir"));

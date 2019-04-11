@@ -36,8 +36,9 @@ public class Trans_CrossDissolve extends ColemanTransition
 		Graphics gPan = imgPanel.getGraphics();
 		Graphics2D gA = ImageA.createGraphics();
 		
+		int numIterations = 15;
 		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / 40;
+		timeInc = (int)(time * 1000) / numIterations;
 		// Create a BufferedImage ARGB to hold the image to overlay
 		BufferedImage ImageB_ARGB = new BufferedImage(ImageB.getWidth(), ImageB.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		// Draw ImageB into ImageB_ARGB
@@ -54,19 +55,32 @@ public class Trans_CrossDissolve extends ColemanTransition
 
 		// Draw image A -- appears we need to do this fade longer
 		// Each time we redraw ImageB_ARGB over ImageA we add just a bit more
-		for(int i=0; i<15; i++)
+		for(int i=0; i < numIterations; i++)
 		{
+			if (isAborting())
+				break;
 			// Draw B over A. Note: Can't do the first draw directly into the screen panel
 			//	because that drawImage only works with BufferedImages as the destination.
 			gA.drawImage(ImageB_ARGB, rop, 0, 0); // Draw portion of ImageB into ImageA
 			gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
 			// Note: Can not pause here like we do in the other transitions because
 			//     cross dissolve takes longer than a simple blit draw
+			try 
+			{
+			    Thread.sleep((int) (timeInc * .9));
+			} 
+			catch(InterruptedException ex) 
+			{
+			    Thread.currentThread().interrupt();
+			}
 		}	
-		// Move m_NextImage into m_CurrentImage for next time -  May not need this
-		ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-		// And one final draw to the panel to be sure it's all there
-		gPan.drawImage(ImageA, 0,0, imgPanel); 
+		if (!isAborting())
+		{
+			// Move m_NextImage into m_CurrentImage for next time -  May not need this
+			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
+			// And one final draw to the panel to be sure it's all there
+			gPan.drawImage(ImageA, 0,0, imgPanel); 
+		}
 	}
 	
 }

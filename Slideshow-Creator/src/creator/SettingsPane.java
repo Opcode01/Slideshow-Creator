@@ -146,12 +146,6 @@ public class SettingsPane extends FloatingPane
 	/** Highlighted selected checkbox custom button image */
 	private ImageIcon highlightedSelectedCheckbox;
 	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(31, 31, 31);
-	
-	/** Create custom white color */
-	private Color white = new Color(255, 255, 255);
-	
 	/** Create common font for application usage */
 	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 12);
 	
@@ -184,7 +178,7 @@ public class SettingsPane extends FloatingPane
 		//Construct original panel container and configurations
 		JPanel settingsGui = new JPanel();
 		settingsGui.setLayout(gridBag);
-		settingsGui.setBackground(light_gray);
+		settingsGui.setBackground(SliderColor.medium_gray);
 		
 		// Create save button
 		saveButton = new JButton(save);
@@ -196,6 +190,10 @@ public class SettingsPane extends FloatingPane
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	UpdateProjectSettings();
+		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    	scene.SetupTimelinePanel(true);
+		    	scene.repaint();
+		    	scene.revalidate();
 		    	ClosePane();
 		    }
 		});
@@ -256,42 +254,41 @@ public class SettingsPane extends FloatingPane
 		// Configure type label
 		typeLabel = new JLabel("Type");
 		typeLabel.setFont(commonFont);
-		typeLabel.setForeground(white);
+		typeLabel.setForeground(SliderColor.white);
 		
 		// Configure audio label
 		audioLabel = new JLabel("Audio");
 		audioLabel.setFont(commonFont);
-		audioLabel.setForeground(white);
-		
+		audioLabel.setForeground(SliderColor.white);
 		// Configure duration label
 		durationLabel = new JLabel("Slide Duration");
 		durationLabel.setFont(commonFont);
-		durationLabel.setForeground(white);
+		durationLabel.setForeground(SliderColor.white);
 		
 		// Configure audio loop label
 		audioLoopLabel = new JLabel("Loop Audio");
 		audioLoopLabel.setFont(commonFont);
-		audioLoopLabel.setForeground(white);
+		audioLoopLabel.setForeground(SliderColor.white);
 		
 		// Configure audio loop label
 		slideshowLoopLabel = new JLabel("Loop Slideshow");
 		slideshowLoopLabel.setFont(commonFont);
-		slideshowLoopLabel.setForeground(white);
+		slideshowLoopLabel.setForeground(SliderColor.white);
 		
 		// Create text field for audio
 		audioText = new JTextField(13);
-		audioText.setBackground(light_gray);
-		Border audioBorder = BorderFactory.createLineBorder(white, 1);
+		audioText.setBackground(SliderColor.medium_gray);
+		Border audioBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
 		audioText.setBorder(audioBorder);
-		audioText.setForeground(white);
+		audioText.setForeground(SliderColor.white);
         audioText.setEditable(false);
         
         // Create text field for duration
 		durationText = new JTextField(13);
-		durationText.setBackground(light_gray);
-		Border durationBorder = BorderFactory.createLineBorder(white, 1);
+		durationText.setBackground(SliderColor.medium_gray);
+		Border durationBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
 		durationText.setBorder(durationBorder);
-		durationText.setForeground(white);
+		durationText.setForeground(SliderColor.white);
         
         // Create audio loop check box
         audioLoopCheck = new JCheckBox(checkbox);
@@ -299,7 +296,7 @@ public class SettingsPane extends FloatingPane
         audioLoopCheck.setRolloverIcon(highlightedCheckbox);
         audioLoopCheck.setPressedIcon(highlightedCheckbox);
         audioLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
-        audioLoopCheck.setBackground(light_gray);
+        audioLoopCheck.setBackground(SliderColor.medium_gray);
         
         // Create slideshow loop checkbox
         slideshowLoopCheck = new JCheckBox(checkbox);
@@ -307,12 +304,15 @@ public class SettingsPane extends FloatingPane
         slideshowLoopCheck.setRolloverIcon(highlightedCheckbox);
         slideshowLoopCheck.setPressedIcon(highlightedCheckbox);
         slideshowLoopCheck.setRolloverSelectedIcon(highlightedSelectedCheckbox);
-        slideshowLoopCheck.setBackground(light_gray);
+        slideshowLoopCheck.setBackground(SliderColor.medium_gray);
         
 		// Set settings panel configurations
 		settingsPanel = new JPanel();
 		settingsPanel.setLayout(gridBag);
-		settingsPanel.setBackground(light_gray);
+		settingsPanel.setBackground(SliderColor.medium_gray);
+		
+		// Update Settings items with current values
+		LoadSettingsFromTimeline();
 		
 		// Set constraints and add header label
 		c.gridx = 0;
@@ -396,7 +396,7 @@ public class SettingsPane extends FloatingPane
 		// Set options panel configurations
 		confirmationPanel = new JPanel();
 		confirmationPanel.setLayout(gridBag);
-		confirmationPanel.setBackground(light_gray);
+		confirmationPanel.setBackground(SliderColor.medium_gray);
 		
 		// Set constraints and add back button
 		c.gridx = 0;
@@ -466,14 +466,32 @@ public class SettingsPane extends FloatingPane
 			audioFilePath = "none";
 		}
 		
-		int slideTime = 1;
+		int slideTime = 30;
 		try {
 			slideTime = Integer.parseInt(durationText.getText());
 		}catch(NumberFormatException e) {
 			System.out.println("Slide duration not a valid integer - using default value of 1.");
 		}
 		
-		Settings s = new Settings(loopSlides, loopAudio, isManual, audioFilePath, slideTime);
+		Settings s = new Settings(loopSlides, loopAudio, isManual, slideTime);
 		t.UpdateProjectSettings(s);
+	}
+	
+	private void LoadSettingsFromTimeline() {
+		Timeline t = SceneHandler.singleton.getTimeline();
+		Settings s = t.timelineSettings;
+		
+		//Defaults are all off and auto selected - we need to set these accordingly
+		if(s.isLoopingSlides) {
+			slideshowLoopCheck.setSelected(true);
+		}
+		if(s.isLoopingAudio) {
+			audioLoopCheck.setSelected(true);
+		}
+		if(s.isManual) {
+			autoButton.setSelected(false);
+			manualButton.setSelected(true);
+		}
+		durationText.setText(Integer.toString(s.slideDuration));	
 	}
 }

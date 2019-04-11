@@ -17,7 +17,19 @@ import javax.swing.JPanel;
 // Last Modified by Austin Vickers - March 2019
 //==========================================================================================
 public class ColemanTransition
-{	
+{
+	private boolean aborting = false;
+	
+	public synchronized void abort()
+	{
+		aborting = true;
+	}
+	
+	public synchronized boolean isAborting()
+	{
+		return aborting;
+	}
+	
 	//--------------------------------------------------------
 	/** Default constructor */
 	//--------------------------------------------------------
