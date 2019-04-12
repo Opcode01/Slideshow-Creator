@@ -1,3 +1,13 @@
+/**
+ * AppType.java
+ * Enumerates what kind of app is being launched
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 4/11/19
+ */
+
 package core;
 
 /**

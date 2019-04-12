@@ -1,3 +1,15 @@
+/**
+ * Trans_WipeRight.java
+ * Wipes from left to right from one image to another
+ * Original Author: R Coleman
+ * Modified by Timothy Couch
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 4/11/19
+ */
+
 package pkgImageTransitions.Transitions;
 
 import java.awt.Graphics;
