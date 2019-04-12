@@ -23,9 +23,9 @@ import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeDown extends ColemanTransition
 {
-	
-	/** How many time to fade between the images. Updates on the fly based on machine performance */
-	protected static int numIterations = 50;
+
+	/** How many time to fade between the images per second. Updates on the fly based on machine performance */
+	protected static int fps = 50;
 	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
@@ -49,9 +49,10 @@ public class Trans_WipeDown extends ColemanTransition
 		int bY1, bY2;		// Dimensions for imageA
 		int imgWidth, imgHeight;
 		int incY;					// Y increment each time
-		
-		int timeSecs = (int) (time * 1000);
-		int timeInc = timeSecs / numIterations; // Milliseconds to pause each step
+
+		int numIterations = (int) (fps * time);
+		int timeMillis = (int) (time * 1000);
+		int timeInc = timeMillis / numIterations; // Milliseconds to pause each step
 		
 		//create an image A the size of the container
 		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -103,11 +104,12 @@ public class Trans_WipeDown extends ColemanTransition
 			//adjust number of iterations to get a proper transition for next time
 			avgElapsedTime /= numIterations;
 			
-			int prevNumIterations = numIterations;
+			int prevFps = fps;
+
+			//set fps to how many frames of the average elapsed time will fit into one second
+			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			
-			numIterations = Math.min(Math.max(Math.round(timeSecs / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
-			
-			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevNumIterations: " + prevNumIterations + " numIterations: " + numIterations);
+			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 
