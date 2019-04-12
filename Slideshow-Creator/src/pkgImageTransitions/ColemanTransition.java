@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 //==========================================================================================
 public class ColemanTransition
 {
+	/** whether or not the thread is trying to stop right now */
 	private boolean aborting = false;
 	
 	public synchronized void abort()

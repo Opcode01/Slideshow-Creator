@@ -12,6 +12,10 @@ import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeLeft extends ColemanTransition
 {
+	
+	/** How many time to fade between the images. Updates on the fly based on machine performance */
+	protected static int numIterations = 50;
+	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
 	// Args:  
@@ -38,9 +42,9 @@ public class Trans_WipeLeft extends ColemanTransition
 		int bX1, bX2;		// Dimensions for imageB
 		int imgWidth, imgHeight;
 		int incX;					// X increment each time
-		int numIterations = 50;		// Number of iterations in the sweep
-		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / numIterations;
+		
+		int timeSecs = (int) (time * 1000);
+		int timeInc = timeSecs / numIterations; // Milliseconds to pause each step
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
@@ -60,10 +64,14 @@ public class Trans_WipeLeft extends ColemanTransition
 		bX2 = incX;
 		
 		// Draw image A
+		int avgElapsedTime = 0;//how much time each fade step takes on average
 		for(int i=0; i<numIterations; i++)
 		{
 			if (isAborting())
 				break;
+			
+			long startTime = System.currentTimeMillis();
+			
 			// Draw part of B over A on the screen
 			gA.drawImage(contImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
 			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
@@ -73,19 +81,26 @@ public class Trans_WipeLeft extends ColemanTransition
 			// Pause a bit so we can actually see the transition
 			try 
 			{
-			    Thread.sleep(timeInc);                 
+				int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+				avgElapsedTime += elapsedTime;
+			    Thread.sleep(Math.max(timeInc - elapsedTime, 0));
 			} 
 			catch(InterruptedException ex) 
 			{
 			    Thread.currentThread().interrupt();
 			}
 		}
+		
 		if (!isAborting())
 		{
-			// Move m_NextImage into m_CurrentImage for next time -  May not need this
-			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-			// And one final draw to the panel to be sure it's all there
-			gPan.drawImage(ImageA, 0,0, imgPanel);
+			//adjust number of iterations to get a proper transition for next time
+			avgElapsedTime /= numIterations;
+			
+			int prevNumIterations = numIterations;
+			
+			numIterations = Math.min(Math.max(Math.round(timeSecs / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			
+			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevNumIterations: " + prevNumIterations + " numIterations: " + numIterations);
 		}
 	}
 
