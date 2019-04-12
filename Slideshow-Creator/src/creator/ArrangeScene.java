@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -53,6 +52,7 @@ public class ArrangeScene extends Scene{
 	/** Create timeline panel */
 	private JPanel timelinePanel;
 	
+	/** Selected thumbnail on the timeline */
 	private Thumbnail currentSlide;
 	
 	/** Create audio panel */
@@ -73,21 +73,24 @@ public class ArrangeScene extends Scene{
 	/** Back button */
 	private JButton backButton;
 	
-	/** Select all button */
+	/** Settings button */
 	private JButton settingsButton;
 	
-	/** Deselect all button */
+	/** Remove current button */
 	private JButton removeCurrentButton;
 	
+	/** Swap thumbnail forward button */
+	private JButton swapForwardButton;
+	
+	/** Swap thumbnail backward button */
+	private JButton swapBackwardButton;
+
 	/** Create audio button */
 	private JButton audioButton;
 	
 	/** Create audio play button */
 	private JButton playButton;
-	
-	/** Selected thumbnail on the timeline */
-	private Thumbnail selectedThumbnail;
-	
+		
 	/** Audio file */
 	private File audioFile;
 	
@@ -106,6 +109,12 @@ public class ArrangeScene extends Scene{
 	/** Remove current custom button image */
 	private ImageIcon removeCurrent;
 	
+	/** Move thumbnail right custom button image */
+	private ImageIcon swapRight;
+	
+	/** Move thumbnail left custom button image */
+	private ImageIcon swapLeft;
+
 	/** Icon for adding an audio track */
 	private ImageIcon audio;
 	
@@ -130,6 +139,12 @@ public class ArrangeScene extends Scene{
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
 	
+	/** Move thumbnail right highlighted custom button image */
+	private ImageIcon highlightedSwapRight;
+	
+	/** Move thumbnail left highlighted custom button image */
+	private ImageIcon highlightedSwapLeft;
+
 	/** Highlighted audio custom button image */
 	private ImageIcon highlightedAudio;
 	
@@ -166,19 +181,27 @@ public class ArrangeScene extends Scene{
 	{
 		
 		// Create images and add icons
-		// Create images and add icons
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		swapRight = new ImageIcon(getClass().getResource("/creator/Images/swapRightButton.png"));
+		swapLeft = new ImageIcon(getClass().getResource("/creator/Images/swapLeftButton.png"));
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		audioChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangeButton.png"));
 		removeAudio = new ImageIcon(getClass().getResource("/creator/Images/removeAudioButton.png"));
 		play = new ImageIcon(getClass().getResource("/creator/Images/audioPlayButton.png"));
-		playChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangePlayButton.png"));
+		playChange = new ImageIcon(getClass().getResource("/creator/Images/audioChangePlayButton.png"));		
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
-
+		highlightedSwapRight = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapRightButton.png"));
+		highlightedSwapLeft = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapLeftButton.png"));
+		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
+		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
+		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
+		highlightedPlay = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioPlayButton.png"));
+		highlightedPlayChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangePlayButton.png"));
+		
 		//clear out if it previously had stuff
 		removeAll();
 		// Create GridBagLayout object and constraints
@@ -187,13 +210,7 @@ public class ArrangeScene extends Scene{
 		
 		// Set panel configurations
 		this.setLayout(gridBag);
-
-		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
-		highlightedAudioChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangeButton.png"));
-		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
-		highlightedPlay = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioPlayButton.png"));
-		highlightedPlayChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangePlayButton.png"));
-		
+	
 		// Create back button
 		backButton = new JButton(back);
 		backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -247,10 +264,55 @@ public class ArrangeScene extends Scene{
 		    	
 		    	// Remove components and repaint 
 		    	timelinePanel.removeAll();
-		    	PopulateTimeline();
+		    	PopulateTimeline(false);
 		    	revalidate();
 		    }
 		});
+
+		swapForwardButton = new JButton(swapRight);
+		swapForwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		swapForwardButton.setToolTipText("Swap selected thumbnail forward");
+		swapForwardButton.setBorder(BorderFactory.createEmptyBorder());
+		swapForwardButton.setContentAreaFilled(false);
+		swapForwardButton.setFocusable(false);
+		swapForwardButton.setRolloverIcon(highlightedSwapRight);
+		swapForwardButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	// Swap selected thumbnail forward
+		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	if(currentSlide != null) {
+			    	timeline.thumbnailsList.swapForward(currentSlide);
+		    	}
+		    	
+		    	// Remove components and repaint 
+		    	timelinePanel.removeAll();
+		    	PopulateTimeline(true);
+		    	revalidate();
+		    }
+		});
+		
+		swapBackwardButton = new JButton(swapLeft);
+		swapBackwardButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		swapBackwardButton.setToolTipText("Swap selected thumbnail backward");
+		swapBackwardButton.setBorder(BorderFactory.createEmptyBorder());
+		swapBackwardButton.setContentAreaFilled(false);
+		swapBackwardButton.setFocusable(false);
+		swapBackwardButton.setRolloverIcon(highlightedSwapLeft);
+		swapBackwardButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	// Swap selected thumbnail forward
+		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	if(currentSlide != null) {
+			    	timeline.thumbnailsList.swapBackward(currentSlide);
+		    	}
+		    	
+		    	// Remove components and repaint 
+		    	timelinePanel.removeAll();
+		    	PopulateTimeline(true);
+		    	revalidate();
+		    }
+		});
+		
 		
 	    // Create audio button
 		audioButton = new JButton(audio);
@@ -284,10 +346,22 @@ public class ArrangeScene extends Scene{
 		optionsPanel.add(settingsButton, c);
 		
 		// Set constraints and add remove current button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
+		
+		// Set constraints and add swap forward button
+		c.weighty = 0;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(swapForwardButton, c);
+		
+		// Set constraints and add swap backward button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 5;
+		optionsPanel.add(swapBackwardButton, c);
 		
 		// Set image panel configurations
 		imagePanel = new JPanel();
@@ -390,7 +464,7 @@ public class ArrangeScene extends Scene{
 		timelinePanel = new JPanel();
 		timelinePanel.setLayout(new GridBagLayout());
 		timelinePanel.setBackground(SliderColor.light_gray);
-		PopulateTimeline();
+		PopulateTimeline(revalidate);
 		
 		// Create audio panel
 		audioPanel = new JPanel();
@@ -426,7 +500,7 @@ public class ArrangeScene extends Scene{
 	 * @author Timothy Couch
 	 * @author Joseph Hoang
      */
-	private void PopulateTimeline()
+	private void PopulateTimeline(boolean keepCurrentSelected)
 	{
 		int i = 0; //counter for buttons
 		int gridxCounter = 0; //layout counter x
@@ -541,11 +615,18 @@ public class ArrangeScene extends Scene{
 			}
 		}
 		
+		
 		//show the first slide
 		if (timeline.thumbnailsList.getSize() > 0)
 		{
-			currentSlide = timeline.thumbnailsList.getThumbnail(0);
-			selectButton(thumbButtons[0]);
+			if(keepCurrentSelected && currentSlide != null) {
+				int index = timeline.thumbnailsList.indexOf(currentSlide);
+				selectButton(thumbButtons[index]);
+			}
+			else {
+				currentSlide = timeline.thumbnailsList.getThumbnail(0);
+				selectButton(thumbButtons[0]);
+			}		
 			showCurrentSlide();
 		}
 		else {//empty slideshow
@@ -738,7 +819,14 @@ public class ArrangeScene extends Scene{
 	    			parent.getX() + parent.getSize().width/2,
 	    			parent.getY() + parent.getSize().height/2
 	    			);
-	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 190));
+	    	WarningPane p = new WarningPane(
+	    			parent,
+	    			"Warning - Audio too long",
+	    			"Your audio extends past the length of the slideshow. Please remove an audio track,"+
+	    			" add some more slides, or increase the duration of your slides in the Settings.", 
+	    			point, 
+	    			new Dimension(400, 190));
+	    	
 	    	parent.setEnabled(false);
 	    	return;
 	    }

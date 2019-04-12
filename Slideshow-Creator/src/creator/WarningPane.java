@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import core.Coord2;
 import core.FloatingPane;
@@ -40,10 +41,7 @@ public class WarningPane extends FloatingPane{
 	private JLabel warningHeader;
 	
 	/** Create text label */
-	private JLabel warningText;
-	
-	/** Create second text label */
-	private JLabel warningNextText;
+	private JTextArea textArea;
 	
 	/** Highlighted auto custom button image */
 	private ImageIcon warning;
@@ -61,10 +59,10 @@ public class WarningPane extends FloatingPane{
 	private Color white = new Color(255, 255, 255);
 	
 	/** Create common font for application usage */
-	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 10);
+	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 12);
 
 	
-	public WarningPane(JFrame parent, String title, Coord2 position, Dimension size) {
+	public WarningPane(JFrame parent, String title, String text, Coord2 position, Dimension size) {
 		
 		super(parent, title, position, size);
 		
@@ -84,13 +82,17 @@ public class WarningPane extends FloatingPane{
 		
 		warningHeader = new JLabel(warning);
 		
-		warningText = new JLabel("Your audio tracks extend past the length of your slideshow.");
-		warningText.setFont(commonFont);
-		warningText.setForeground(white);
 		
-		warningNextText = new JLabel("Remove some audio, add more slides, or change the slide duration in Settings.");
-		warningNextText.setFont(commonFont);
-		warningNextText.setForeground(white);
+		//I changed this so WarningPane is now extensible to any text
+		textArea = new JTextArea();
+		textArea.setPreferredSize(new Dimension(350, 50));
+        textArea.setText(text);
+        textArea.setFont(commonFont);
+        textArea.setEditable(false);
+        textArea.setForeground(white);
+        textArea.setBackground(light_gray);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
 		
 		// Create save button
 		okButton = new JButton(ok);
@@ -114,14 +116,10 @@ public class WarningPane extends FloatingPane{
 		c.gridx = 0;
 		c.gridy = 1;
 		c.insets = new Insets(0, 0, 0, 0);
-		warningGui.add(warningText, c);
+		warningGui.add(textArea, c);
 		
 		c.gridx = 0;
 		c.gridy = 2;
-		warningGui.add(warningNextText, c);
-		
-		c.gridx = 0;
-		c.gridy = 3;
 		c.insets = new Insets(25, 0, 20, 0);
 		warningGui.add(okButton, c);
 		
