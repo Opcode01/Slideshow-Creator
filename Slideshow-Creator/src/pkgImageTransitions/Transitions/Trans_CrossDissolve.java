@@ -15,7 +15,7 @@ public class Trans_CrossDissolve extends ColemanTransition
 {
 	
 	/** How many time to fade between the images. Updates on the fly based on machine performance */
-	protected static int numIterations = 15;
+	protected static int numIterations = 10;
 	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
