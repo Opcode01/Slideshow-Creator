@@ -104,18 +104,19 @@ public class Transition {
 	 * @author Timothy Couch
 	 */
 	public void PlayTransition(JPanel display, Image prevImg, Image nextImg ) {
-		if (!isRunning())
-		{
-			transitionThread = new Thread() {
-				@Override
-				public void run()
-				{
-					transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+		if (transitionLength > 0)
+			if (!isRunning())
+			{
+				transitionThread = new Thread() {
+					@Override
+					public void run()
+					{
+						transition.DrawImageTransition(display, (BufferedImage)prevImg, (BufferedImage)nextImg, transitionLength);
+					};
 				};
-			};
-			transitionThread.start();
-		}
-		else System.out.println("Transition already running! Not playing transition!");
+				transitionThread.start();
+			}
+			else System.out.println("Transition already running! Not playing transition!");
 	}
 	
 	/**

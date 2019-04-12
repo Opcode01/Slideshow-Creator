@@ -51,9 +51,7 @@ public class Trans_WipeLeft extends ColemanTransition
 		Graphics gPan = imgPanel.getGraphics();
 		
 		// Dimension holders
-		int bX1, bX2;		// Dimensions for imageB
 		int imgWidth, imgHeight;
-		int incX;					// X increment each time
 
 		int numIterations = (int) (fps * time);
 		int timeMillis = (int) (time * 1000);
@@ -61,7 +59,6 @@ public class Trans_WipeLeft extends ColemanTransition
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
-		incX = imgWidth / numIterations;		// Do 1/numIterations each time
 		
 		//create an image A the size of the container
 		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -72,10 +69,6 @@ public class Trans_WipeLeft extends ColemanTransition
 		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
 		
-		// Initialize the dimensions for section of ImageB to draw into ImageA
-		bX1 = imgWidth - incX;
-		bX2 = incX;
-		
 		// Draw image A
 		int avgElapsedTime = 0;//how much time each fade step takes on average
 		for(int i=0; i<numIterations; i++)
@@ -85,11 +78,12 @@ public class Trans_WipeLeft extends ColemanTransition
 			
 			long startTime = System.currentTimeMillis();
 			
+			int startDraw = (int) ((float) imgWidth / numIterations * (numIterations - i - 1));
+			int endDraw = (int) ((float) imgWidth / numIterations * (numIterations - i));
+			
 			// Draw part of B over A on the screen
-			gA.drawImage(contImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
+			gA.drawImage(contImageB, startDraw, 0, endDraw, imgHeight, startDraw, 0, endDraw, imgHeight, null); // Draw portion of ImageB into ImageA
 			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
-			bX2 = bX1;
-			bX1 -= incX;  // Move another section to the left of the previous section
 			
 			// Pause a bit so we can actually see the transition
 			try 
@@ -114,7 +108,7 @@ public class Trans_WipeLeft extends ColemanTransition
 			//set fps to how many frames of the average elapsed time will fit into one second
 			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			
-			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 

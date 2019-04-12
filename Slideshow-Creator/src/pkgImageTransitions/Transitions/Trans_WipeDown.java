@@ -46,9 +46,7 @@ public class Trans_WipeDown extends ColemanTransition
 		Graphics gPan = imgPanel.getGraphics();
 		
 		// Dimension holders
-		int bY1, bY2;		// Dimensions for imageA
 		int imgWidth, imgHeight;
-		int incY;					// Y increment each time
 
 		int numIterations = (int) (fps * time);
 		int timeMillis = (int) (time * 1000);
@@ -65,11 +63,6 @@ public class Trans_WipeDown extends ColemanTransition
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
-		incY = imgHeight / numIterations;		// Do 1/20 each time to start
-		
-		// Initialize the dimensions for section of ImageB to draw into ImageA
-		bY1 = 0;
-		bY2 = incY;
 
 		// Draw image A
 		int avgElapsedTime = 0;//how much time each fade step takes on average
@@ -80,11 +73,12 @@ public class Trans_WipeDown extends ColemanTransition
 			
 			long startTime = System.currentTimeMillis();
 			
+			int startDraw = (int) ((float) imgHeight / numIterations * i);
+			int endDraw = (int) ((float) imgHeight / numIterations * (i + 1));
+			
 			// Draw part of B into A
-			gA.drawImage(contImageB, 0, bY1, imgWidth, bY2, 0, bY1, imgWidth, bY2, null); // Draw portion of ImageB into ImageA
+			gA.drawImage(contImageB, 0, startDraw, imgWidth, endDraw, 0, startDraw, imgWidth, endDraw, null); // Draw portion of ImageB into ImageA
 			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
-			bY1 = bY2;
-			bY2 += incY;  // Take a bigger section next time
 			
 			// Pause a bit
 			try 
@@ -109,7 +103,7 @@ public class Trans_WipeDown extends ColemanTransition
 			//set fps to how many frames of the average elapsed time will fit into one second
 			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			
-			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 

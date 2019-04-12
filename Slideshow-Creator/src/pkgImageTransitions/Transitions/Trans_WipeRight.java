@@ -46,9 +46,7 @@ public class Trans_WipeRight extends ColemanTransition
 		Graphics gPan = imgPanel.getGraphics();
 		
 		// Dimension holders
-		int bX1, bX2;		// Dimensions for imageB
 		int imgWidth, imgHeight;
-		int incX;					// X increment each time
 
 		int numIterations = (int) (fps * time);
 		int timeMillis = (int) (time * 1000);
@@ -56,7 +54,6 @@ public class Trans_WipeRight extends ColemanTransition
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
-		incX = imgWidth / numIterations;		// Do 1/20 each time to start
 		
 		//create an image A the size of the container
 		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -66,10 +63,6 @@ public class Trans_WipeRight extends ColemanTransition
 		//create an image B the size of the container with solid background
 		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
-		
-		// Initialize the dimensions for section of ImageB to draw into ImageA
-		bX1 = 0;
-		bX2 = incX;
 
 		// Draw image A
 		int avgElapsedTime = 0;//how much time each fade step takes on average
@@ -80,11 +73,12 @@ public class Trans_WipeRight extends ColemanTransition
 			
 			long startTime = System.currentTimeMillis();
 			
+			int startDraw = (int) ((float) imgWidth / numIterations * i);
+			int endDraw = (int) ((float) imgWidth / numIterations * (i + 1));
+			
 			// Draw part of B into A
-			gA.drawImage(contImageB, bX1, 0, bX2, imgHeight, bX1, 0, bX2, imgHeight, null); // Draw portion of ImageB into ImageA
+			gA.drawImage(contImageB, startDraw, 0, endDraw, imgHeight, startDraw, 0, endDraw, imgHeight, null); // Draw portion of ImageB into ImageA
 			gPan.drawImage(contImageA, 0, 0, imgPanel);
-			bX1 = bX2;
-			bX2 += incX;  // Take a bigger section next time
 			
 			// Pause a bit
 			try 
@@ -109,7 +103,7 @@ public class Trans_WipeRight extends ColemanTransition
 			//set fps to how many frames of the average elapsed time will fit into one second
 			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			
-			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 
