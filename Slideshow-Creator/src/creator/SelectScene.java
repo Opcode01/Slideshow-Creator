@@ -20,16 +20,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import core.*;
 
@@ -202,8 +205,32 @@ public class SelectScene extends Scene
 		exportButton.setRolloverIcon(highlightedExport);
 		exportButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	TimelineParser.ExportTimeline("export");
-		    	
+		    	JFileChooser chooser = new JFileChooser();
+		    	chooser.setDialogTitle("Save File");
+				chooser.setCurrentDirectory(new File("."));//start at this directory
+				chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+				int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
+		    	if(returnVal == JFileChooser.APPROVE_OPTION) 
+		    	{
+		    		try
+		    		{
+			    	    File slFile = chooser.getSelectedFile();
+			    	    if(slFile.exists() || new File(chooser.getSelectedFile() + ".sl").exists())
+			    	    {
+			    	    	int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to override existing file?", "Confirm",
+	    	    		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+	    	    		    if (confirmation == JOptionPane.YES_OPTION) 
+	    	    		    {
+	    	    		      TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
+	    	    		    }
+			    	    }
+			    	    else
+			    	    {
+			    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
+			    	    }
+		    		} catch (FileNotFoundException fnfe) {
+		    		}
+		    	}
 		    }
 		});
 		
