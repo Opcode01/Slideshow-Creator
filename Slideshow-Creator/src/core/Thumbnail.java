@@ -163,10 +163,16 @@ public class Thumbnail
      * 
      * @author Timothy Couch
      */
-    private Image resizeImageThumb(Image image)
+    private Image resizeImageThumb(Image image) throws NullPointerException
     {
-        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
-        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
+    	try
+    	{
+	        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
+	        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
+    	} catch (NullPointerException npe)
+    	{
+    		throw npe;
+    	}
     }
     
     /**
