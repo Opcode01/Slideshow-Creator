@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.json.simple.parser.ParseException;
+
 public class SceneHandler {
 	
 	/**
@@ -58,19 +60,28 @@ public class SceneHandler {
 	 * set directory based on the file supplied
 	 * @param file the file to parse and make a timeline from
 	 */
-	public void setDirectory(File file)
+	public void setDirectory(File file) throws Exception, NullPointerException, ParseException
 	{
 		try
 		{
 			timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
-			directory = timeline.getDirectory();
+			if(timeline != null)
+			{
+				directory = timeline.getDirectory();
+			}
 			
 			//System.out.println("Dir: " + directory);
 			//System.out.println("File: " + file.getAbsolutePath());
+		}catch (ParseException pe) {
+			System.out.println("Invalid file given. Cannot import:" + pe.getMessage());
+			throw pe;
+		}catch (NullPointerException npe){
+			System.out.println("Invalid file given. Cannot import:" + npe.getMessage());
+			throw npe;
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			System.out.println("Invalid file given. Cannot import:" + e.getMessage());
+			throw e;
 		}
 	}
 
