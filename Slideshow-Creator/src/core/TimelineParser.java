@@ -102,6 +102,32 @@ public class TimelineParser
 	}
 	
 	/**
+	 * 
+	 * @param JSONPath path to slider file to be read in
+	 * @return boolean value based on whether the file can be read by parser or not
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * 
+	 * Validates if file is JSON by attempting to parsing it. If a parse exception is thrown,
+	 * the function will return false.
+	 * 
+	 * @author Joe Hoang
+	 */
+	public static boolean isJSONValid(String JSONPath) throws FileNotFoundException, IOException 
+	{
+		JSONParser parser = new JSONParser();
+		try
+		{
+			Object input = parser.parse(new FileReader(JSONPath));
+			return true; 
+			
+		} catch (ParseException pe)
+		{
+			System.out.println("No valid JSON");
+			return false;
+		}
+	}
+	/**
 	 * given path to JSON file, import a timeline with saved settings
 	 * @param JSONpath to JSON file
 	 * @return instance of timeline
@@ -114,79 +140,87 @@ public class TimelineParser
 		JSONParser parser = new JSONParser();
 		try 
 		{
+			if(isJSONValid(JSONpath))
+			{
 			Object input = parser.parse(new FileReader(JSONpath));
 			
 			JSONObject in = (JSONObject) input;
 			
-			if(new File((String) in.get("parentDir")).isDirectory())
-			{
-				JSONArray thumbnails = (JSONArray) in.get("thumbnails");
-				System.out.println(thumbnails.size());
-				for(int i = 0; i < thumbnails.size(); i++)
+				if(new File((String) in.get("parentDir")).isDirectory())
 				{
-					JSONObject tbl = (JSONObject) thumbnails.get(i);
-					//JSON exports as long with type cast error
-					//grab as long then cast to int 
-					long index = (Long) tbl.get("index");
-					String path = (String) tbl.get("path");
-					System.out.println(index);
-					System.out.println(path);
-					Thumbnail newThumb = new Thumbnail(path);
-					importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index);
-				}
-				
-				JSONArray transitions = (JSONArray) in.get("transitions");
-				//Iterator<JSONObject> transition = transitions.iterator();
-				for(int i = 0; i < transitions.size(); i++)
-				{
-					JSONObject tsn = (JSONObject) transitions.get(i);
-					long index = (Long) tsn.get("index");
-					double length = (double) tsn.get("length");
-					TransitionType type = TransitionType.valueOf(tsn.get("type").toString());
-					Transition newTrans = new Transition(type, length);
-					importedTimeline.transitionsList.addTransition(newTrans, (int) index);
-				}
-				
-				JSONArray audioList = (JSONArray) in.get("audio");
-				//Iterator<JSONObject> transition = transitions.iterator();
-				for(int i = 0; i < audioList.size(); i++)
-				{
-					JSONObject audio = (JSONObject) audioList.get(i);
-					long index = (Long) audio.get("index");
-					String path = (String) audio.get("path");
-					File audioFile = new File(path);
-					Audio newAudio = new Audio(audioFile);
-					importedTimeline.audioPlayer.addAudio(newAudio, (int) index);
-				}
-				
-				boolean loopingSlides = (boolean) in.get("isLoopingSlides");
-				boolean isManual = (boolean) in.get("isManual");
-				boolean isLoopingAudio = (boolean) in.get("isLoopingAudio");
-				long slideDuration = (Long) in.get("slideDuration");
-				Settings importedSettings = new Settings(loopingSlides, 
-														isLoopingAudio, 
-														isManual,
-														(int)slideDuration);
-				
-				importedTimeline.setDirectory((String) in.get("parentDir"));
-				
-				importedTimeline.timelineSettings = importedSettings;
-				
-				if (importedTimeline != null)
-				{
-					System.out.println("Timeline Imported:");
-					//test values
-					for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
+					JSONArray thumbnails = (JSONArray) in.get("thumbnails");
+					System.out.println(thumbnails.size());
+					for(int i = 0; i < thumbnails.size(); i++)
 					{
-						System.out.println(t.getImagePath());
-						System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
+						JSONObject tbl = (JSONObject) thumbnails.get(i);
+						//JSON exports as long with type cast error
+						//grab as long then cast to int 
+						long index = (Long) tbl.get("index");
+						String path = (String) tbl.get("path");
+						System.out.println(index);
+						System.out.println(path);
+						Thumbnail newThumb = new Thumbnail(path);
+						importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index);
 					}
+					
+					JSONArray transitions = (JSONArray) in.get("transitions");
+					//Iterator<JSONObject> transition = transitions.iterator();
+					for(int i = 0; i < transitions.size(); i++)
+					{
+						JSONObject tsn = (JSONObject) transitions.get(i);
+						long index = (Long) tsn.get("index");
+						double length = (double) tsn.get("length");
+						TransitionType type = TransitionType.valueOf(tsn.get("type").toString());
+						Transition newTrans = new Transition(type, length);
+						importedTimeline.transitionsList.addTransition(newTrans, (int) index);
+					}
+					
+					JSONArray audioList = (JSONArray) in.get("audio");
+					//Iterator<JSONObject> transition = transitions.iterator();
+					for(int i = 0; i < audioList.size(); i++)
+					{
+						JSONObject audio = (JSONObject) audioList.get(i);
+						long index = (Long) audio.get("index");
+						String path = (String) audio.get("path");
+						File audioFile = new File(path);
+						Audio newAudio = new Audio(audioFile);
+						importedTimeline.audioPlayer.addAudio(newAudio, (int) index);
+					}
+					
+					boolean loopingSlides = (boolean) in.get("isLoopingSlides");
+					boolean isManual = (boolean) in.get("isManual");
+					boolean isLoopingAudio = (boolean) in.get("isLoopingAudio");
+					long slideDuration = (Long) in.get("slideDuration");
+					Settings importedSettings = new Settings(loopingSlides, 
+															isLoopingAudio, 
+															isManual,
+															(int)slideDuration);
+					
+					importedTimeline.setDirectory((String) in.get("parentDir"));
+					
+					importedTimeline.timelineSettings = importedSettings;
+					
+					if (importedTimeline != null)
+					{
+						System.out.println("Timeline Imported:");
+						//test values
+						for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
+						{
+							System.out.println(t.getImagePath());
+							System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
+						}
+					}
+					else System.out.println("Error: Timeline not imported!");
+					
+					return importedTimeline;
+					
+				}//end if 
+				else
+				{
+					System.out.println("Slider file cannot be loaded. Filepaths do not exist.");
+					return null;
 				}
-				else System.out.println("Error: Timeline not imported!");
-				
-				return importedTimeline;
-				
-			}
+			} 
 			else
 			{
 				System.out.println("Cannot load slider file.");
