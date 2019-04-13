@@ -14,6 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import creator.WarningPane;
+
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,6 +24,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import javax.swing.JFrame;
 
 public class TimelineParser 
 {
@@ -33,7 +38,7 @@ public class TimelineParser
 	 * 
 	 * @author Joe Hoang
 	 */
-	public static void ExportTimeline(String slideshowName)
+	public static void ExportTimeline(String slideshowPath) throws FileNotFoundException
 	{
 		try
 		{
@@ -81,21 +86,19 @@ public class TimelineParser
 			out.put("transitions", transitions);
 			out.put("audio", audioList);
 		
-			FileWriter file = new FileWriter(new File(SceneHandler.singleton.getDirectory(),slideshowName + ".sl"), false);
+			FileWriter file = new FileWriter(slideshowPath + ".sl", false);
 			file.write(out.toJSONString());
 			file.flush();
 			file.close();
+		} catch (FileNotFoundException fnfe) {
+		// TODO Auto-generated catch block
+		//fnfe.printStackTrace();
+			throw fnfe;
+		} catch (IOException e) {
+			//e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Timeline Export Error:" + e.getMessage());
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Timline Export Error:" + e.getMessage());
-		}
-		
-		
 	}
 	
 	/**
@@ -105,7 +108,7 @@ public class TimelineParser
 	 * 
 	 * @author Joe Hoang 
 	 */
-	public static Timeline ImportTimeline(String JSONpath) 
+	public static Timeline ImportTimeline(String JSONpath) throws Exception, FileNotFoundException, ParseException, IOException
 	{
 		Timeline importedTimeline = new Timeline();
 		JSONParser parser = new JSONParser();
@@ -168,44 +171,55 @@ public class TimelineParser
 				importedTimeline.setDirectory((String) in.get("parentDir"));
 				
 				importedTimeline.timelineSettings = importedSettings;
+				
+				if (importedTimeline != null)
+				{
+					System.out.println("Timeline Imported:");
+					//test values
+					for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
+					{
+						System.out.println(t.getImagePath());
+						System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
+					}
+				}
+				else System.out.println("Error: Timeline not imported!");
+				
+				return importedTimeline;
+				
 			}
 			else
 			{
 				System.out.println("Cannot load slider file.");
 				return null;
 			}
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException fnfe) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
+			//fnfe.printStackTrace();
+			throw fnfe;
+		} catch (IOException ioe) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} catch (ParseException e) {
+			//ioe.printStackTrace();
+			throw ioe;
+		} catch (ParseException pe) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			//pe.printStackTrace();
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	
+			WarningPane p = new WarningPane(
+	    			parent,
+	    			"Warning - Invalid File Selected",
+	    			"File picked is an invalid file. Slideshow file might be corrupted.",
+	    			point, 
+	    			new Dimension(400, 190));
+			throw pe;
+		}catch (Exception e) {
+			//e.printStackTrace();
+			throw e;
 		}
-		
-		
-		if (importedTimeline != null)
-		{
-			System.out.println("Timeline Imported:");
-			//test values
-			for(Thumbnail t : importedTimeline.thumbnailsList.getThumbnails())
-			{
-				System.out.println(t.getImagePath());
-				System.out.println(importedTimeline.transitionsList.getTransition(0).getTransitionLength());
-			}
-		}
-		else System.out.println("Error: Timeline not imported!");
-		
-		return importedTimeline;
-		
 	}
 
 }
