@@ -44,8 +44,6 @@ import core.*;
 
 public class SettingsPane extends FloatingPane
 {
-	/** Audio file */
-	private File audioFile;
 	
 	/** Create settings panel */
 	private JPanel settingsPanel;
@@ -59,9 +57,6 @@ public class SettingsPane extends FloatingPane
 	/** Create type label */
 	private JLabel typeLabel;
 	
-	/** Create audio label */
-	private JLabel audioLabel;
-	
 	/** Create audio loop label */
 	private JLabel audioLoopLabel;
 	
@@ -70,9 +65,6 @@ public class SettingsPane extends FloatingPane
 	
 	/** Create slideshow duration label */
 	private JLabel durationLabel;
-	
-	/** Create audio text field */
-	private JTextField audioText;
 	
 	/** Create duration text field */
 	private JTextField durationText;
@@ -88,9 +80,6 @@ public class SettingsPane extends FloatingPane
 	
 	/** Create manual button */
 	private JToggleButton manualButton;
-	
-	/** Create audio button */
-	private JButton audioButton;
 	
 	/** Create ok button */
 	private JButton saveButton;
@@ -128,12 +117,6 @@ public class SettingsPane extends FloatingPane
 	/** Highlighted manual custom button image */
 	private ImageIcon highlightedCancel;
 	
-	/** Audio custom button image */
-	private ImageIcon audio;
-	
-	/** Highlighted audio custom button image */
-	private ImageIcon highlightedAudio;
-	
 	/** Checkbox custom button image */
 	private ImageIcon checkbox;
 	
@@ -164,12 +147,10 @@ public class SettingsPane extends FloatingPane
 		cancel = new ImageIcon(getClass().getResource("/creator/Images/cancelButton.png"));
 		auto = new ImageIcon(getClass().getResource("/creator/Images/autoButton.png"));
 		manual = new ImageIcon(getClass().getResource("/creator/Images/manualButton.png"));
-		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
 		highlightedSave = new ImageIcon(getClass().getResource("/creator/Images/highlightedSaveButton.png"));
 		highlightedCancel = new ImageIcon(getClass().getResource("/creator/Images/highlightedCancelButton.png"));
 		highlightedAuto = new ImageIcon(getClass().getResource("/creator/Images/highlightedAutoButton.png"));
 		highlightedManual = new ImageIcon(getClass().getResource("/creator/Images/highlightedManualButton.png"));
-		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
 		checkbox = new ImageIcon(getClass().getResource("/creator/Images/checkbox.png"));
 		selectedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/selectedCheckbox.png"));
 		highlightedCheckbox = new ImageIcon(getClass().getResource("/creator/Images/highlightedCheckbox.png"));
@@ -189,6 +170,22 @@ public class SettingsPane extends FloatingPane
 		saveButton.setRolloverIcon(highlightedSave);
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	Timeline t = SceneHandler.singleton.getTimeline();
+		    	Settings s = t.timelineSettings;
+
+		    	int slideShowDuration = s.slideDuration * t.thumbnailsList.getSize();
+		    	
+		    	if (slideShowDuration > 0) {
+		    		// Open warning pane in the center of our workspace
+		    		JFrame parent = SceneHandler.singleton.getMainFrame();
+		    		Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    		);
+		    		WarningPane p = new WarningPane(parent, "Warning - Duration shorter than audio", point, new Dimension(400, 190), "The slide duration is less than the currently supported audio", "If you continue, audio all audio will be removed.", "Would you like to proceed?");
+		    		parent.setEnabled(false);
+		    	}
+		    	
 		    	UpdateProjectSettings();
 		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
 		    	scene.SetupTimelinePanel(true);
@@ -230,19 +227,6 @@ public class SettingsPane extends FloatingPane
 		manualButton.setRolloverIcon(highlightedManual);
 		manualButton.setSelectedIcon(highlightedManual);
 		
-		// Create audio button
-		audioButton = new JButton(audio);
-		audioButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		audioButton.setBorder(BorderFactory.createEmptyBorder());
-		audioButton.setContentAreaFilled(false);
-		audioButton.setFocusable(false);
-		audioButton.setRolloverIcon(highlightedAudio);
-		audioButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		    	SelectAudio(audioText);
-		    }
-		});
-		
 		// Add auto and manual buttons to type group
 		ButtonGroup typeGroup = new ButtonGroup();
 		typeGroup.add(autoButton);
@@ -256,10 +240,6 @@ public class SettingsPane extends FloatingPane
 		typeLabel.setFont(commonFont);
 		typeLabel.setForeground(SliderColor.white);
 		
-		// Configure audio label
-		audioLabel = new JLabel("Audio");
-		audioLabel.setFont(commonFont);
-		audioLabel.setForeground(SliderColor.white);
 		// Configure duration label
 		durationLabel = new JLabel("Slide Duration");
 		durationLabel.setFont(commonFont);
@@ -274,21 +254,13 @@ public class SettingsPane extends FloatingPane
 		slideshowLoopLabel = new JLabel("Loop Slideshow");
 		slideshowLoopLabel.setFont(commonFont);
 		slideshowLoopLabel.setForeground(SliderColor.white);
-		
-		// Create text field for audio
-		audioText = new JTextField(13);
-		audioText.setBackground(SliderColor.medium_gray);
-		Border audioBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
-		audioText.setBorder(audioBorder);
-		audioText.setForeground(SliderColor.white);
-        audioText.setEditable(false);
         
         // Create text field for duration
 		durationText = new JTextField(13);
 		durationText.setBackground(SliderColor.medium_gray);
-		Border durationBorder = BorderFactory.createLineBorder(SliderColor.white, 1);
-		durationText.setBorder(durationBorder);
+		durationText.setBorder(BorderFactory.createLineBorder(SliderColor.white, 1));
 		durationText.setForeground(SliderColor.white);
+		durationText.setPreferredSize(new Dimension(13, 23));
         
         // Create audio loop check box
         audioLoopCheck = new JCheckBox(checkbox);
@@ -429,26 +401,6 @@ public class SettingsPane extends FloatingPane
 		getContentPane().add(settingsGui, BorderLayout.CENTER);
 	}
 	
-	/**
-	 * SelectAudio() - brings up dialogue box to select audio
-	 * 
-	 * @author Fernando Palacios
-	 */
-	public void SelectAudio(JTextField display) {
-		
-    	JFileChooser chooser = new JFileChooser();
-    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
-    	
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF", "MP3", "MP4" }));
-        
-    	int returnVal = chooser.showDialog(SettingsPane.this, "Open");
-    	if(returnVal == JFileChooser.APPROVE_OPTION) {
-    	    audioFile = chooser.getSelectedFile();
-        	display.setText(audioFile.getName());
-    	}
-	}
-	
 	public void UpdateProjectSettings() {
 		Timeline t = SceneHandler.singleton.getTimeline();
 		
@@ -457,13 +409,6 @@ public class SettingsPane extends FloatingPane
 		boolean isManual = false;			//Default is false - overridden below
 		if(manualButton.isSelected()) {
 			isManual = true;
-		}
-		String audioFilePath;
-		if(audioFile != null) {
-			audioFilePath = audioFile.getAbsolutePath();
-		}
-		else {
-			audioFilePath = "none";
 		}
 		
 		int slideTime = 30;
