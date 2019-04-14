@@ -54,7 +54,7 @@ public class WarningPane extends FloatingPane{
 	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 10);
 
 	
-	public WarningPane(JFrame parent, String title, Coord2 position, Dimension size) {
+	public WarningPane(JFrame parent, String title, Coord2 position, Dimension size, String text, String nextText) {
 		
 		super(parent, title, position, size);
 		
@@ -74,11 +74,11 @@ public class WarningPane extends FloatingPane{
 		
 		warningHeader = new JLabel(warning);
 		
-		warningText = new JLabel("Your audio tracks extend past the length of your slideshow.");
+		warningText = new JLabel(text);
 		warningText.setFont(commonFont);
 		warningText.setForeground(white);
 		
-		warningNextText = new JLabel("Remove some audio, add more slides, or change the slide duration in Settings.");
+		warningNextText = new JLabel(nextText);
 		warningNextText.setFont(commonFont);
 		warningNextText.setForeground(white);
 		

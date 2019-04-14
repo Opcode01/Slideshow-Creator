@@ -702,11 +702,6 @@ public class ArrangeScene extends Scene{
 		    audioConstraints.gridx = ++audioxCounter;
 		}
 		
-		/*if(timeline.audioPlayer.getSize() == 0) {
-			//audioConstraints.insets = new Insets(0, 5, 0, 0);
-		} else
-			audioConstraints.insets = new Insets(0, 0, 0, 0);
-		*/
 	    // Re-add audio button to end of panel
 	    audioPanel.add(audioButton, audioConstraints);
 	}
@@ -734,7 +729,7 @@ public class ArrangeScene extends Scene{
 	    			parent.getX() + parent.getSize().width/2,
 	    			parent.getY() + parent.getSize().height/2
 	    			);
-	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 190));
+	    	WarningPane p = new WarningPane(parent, "Warning - Audio too long", point, new Dimension(400, 190), "Your audio tracks extend past the length of your slideshow.", "Remove some audio, add more slides, or change the slide duration in Settings.");
 	    	parent.setEnabled(false);
 	    	return;
 	    }
