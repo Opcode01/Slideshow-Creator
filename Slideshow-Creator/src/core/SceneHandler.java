@@ -144,8 +144,8 @@ public class SceneHandler {
 		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
-				  //only show quit confirm in creator
-				  if (appType == AppType.CREATOR)
+				  //only show quit confirm in creator and not in directory select scene
+				  if (appType == AppType.CREATOR && GetCurrentScene().getSceneType() != SceneType.DIRECTORY)
 				  {
 					  int confirmed = JOptionPane.showConfirmDialog(null,
 							  "Are you sure you want to exit the program?\n\nAny unsaved changes will be lost.", "Confirm Exit",
@@ -187,6 +187,11 @@ public class SceneHandler {
 		
 		if(!scenes.containsKey(type)) {
 			scenes.put(type, scene);
+			if (scene.getSceneType() == null)
+			{
+				scene.setSceneType(type);
+			}
+			else System.out.println("That scene already has type " + scene.getSceneType().getTitle() + ". This is strange and likely incorrect.");
 		}
 		else {
 			System.out.println("That scene already exists in the context. Use SwitchToScene() to switch to it");
