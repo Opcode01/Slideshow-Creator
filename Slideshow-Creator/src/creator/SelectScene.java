@@ -30,6 +30,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import core.*;
 
@@ -280,9 +281,14 @@ public class SelectScene extends Scene
      */
 	public void GoToDirectoryScene()
 	{
-		//restart program when returning to directory to clear the scene
-		SceneHandler.singleton.restartProgram();
-		SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
+		//prompt to restart program when returning to directory to clear the scene
+		int confirmed = JOptionPane.showConfirmDialog(null,
+				"Are you sure you want to return to the project select scene?\n\nAny unsaved changes will be lost.", "Confirm Close Project",
+				JOptionPane.YES_NO_OPTION);
+		if (confirmed == JOptionPane.YES_OPTION) {
+			SceneHandler.singleton.restartProgram();
+			SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
+		  }
 	}
 	
 	/**
