@@ -340,7 +340,7 @@ public class PlayScene extends Scene {
 			System.out.println("Paused: " + isPaused);
 			
 			//pause audio 
-			//TODO: Implement this
+			timeline.audioPlayer.pauseCurrentAudio();
 		}
 		
 		//just hit pause
@@ -351,7 +351,7 @@ public class PlayScene extends Scene {
 				cancelTimer();
 			
 			//pause audio
-			//TODO: Implement this
+			timeline.audioPlayer.pauseCurrentAudio();
 			
 			//swap gui button to play
 			playPauseButton.setToolTipText("Play Slideshow");
@@ -365,11 +365,13 @@ public class PlayScene extends Scene {
 				scheduleStartTransition(autoDir);
 				
 				//Resume audio
-				//TODO: Implement this
+				timeline.audioPlayer.resumeCurrentAudio();
 				
 			}
 			else//restart because we're at the end
 			{
+				System.out.println("Starting over from beginning");
+				timeline.audioPlayer.FullStop();
 				startSlideshow();
 			}
 			

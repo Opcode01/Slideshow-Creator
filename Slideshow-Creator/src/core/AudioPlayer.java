@@ -14,8 +14,17 @@ public class AudioPlayer implements ThreadOnCompleteListener
     /** Should be set to true if the audio list should loop, or false otherwise*/
     public boolean shouldLoop = false;
     
+    /** Should be set to false if we are in the creator, that way we don't play audio
+     * 	one after another
+     */
+    private boolean shouldNotify = true;
+    
     public AudioPlayer() {
     	audioList = new ArrayList<Audio>();
+    	
+    	if(SceneHandler.singleton.getAppType() == AppType.CREATOR) {
+    		shouldNotify = false;
+    	}
     }
 
     /**
@@ -256,6 +265,25 @@ public class AudioPlayer implements ThreadOnCompleteListener
     }
     
     /**
+     * Pauses the audio at the current index - the one that should be playing
+     * 
+     * @author austinvickers
+     */
+    public void pauseCurrentAudio() {
+    	
+    	if(audioList.get(currentIndex) != null) {
+    		audioList.get(currentIndex).pausePlaying();
+    	}
+    }
+    
+    public void resumeCurrentAudio() {
+    	 
+    	if(audioList.get(currentIndex) != null) {
+    		audioList.get(currentIndex).resumePlaying();
+    	}
+    }
+    
+    /**
      *  Stops all audio clips that are playing at once
      *  
      *  @author austinvickers
@@ -271,6 +299,10 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
 	@Override
 	public void notifyOfThreadComplete(NotifyingThread thread) {
+		
+		if(!shouldNotify) {
+			return;
+		}
 		
 		System.out.println("Audio player was notified");
 		

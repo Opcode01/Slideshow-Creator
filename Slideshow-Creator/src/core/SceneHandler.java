@@ -35,6 +35,10 @@ public class SceneHandler {
 	 */
 	private AppType appType;
 	
+	public AppType getAppType() {
+		return appType;
+	}
+	
 	/**
 	 * timeline - to be created on startup if loading a directory
 	 * 			- to be loaded in by TimelineParser if loading a file

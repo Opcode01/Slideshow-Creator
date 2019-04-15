@@ -110,7 +110,7 @@ public class Audio extends NotifyingThread implements LineListener
 	//   we define them for now just to adapt the code.
     boolean midiEOM = false;
     boolean audioEOM = false;
-    boolean bump = false;
+    boolean isInterrupted = false;
 
     /** Flag if we are paused (for clips only???) */
     boolean m_bPaused = false;	
@@ -159,11 +159,18 @@ public class Audio extends NotifyingThread implements LineListener
 	//---------------------------------------------------
 	// Run function required by the Runnable interface
 	//---------------------------------------------------
-    public void doRun()
+    public void doRun() throws InterruptedException
     {
     	if(!loadAudioFile())
     		return;		// Oops! Couldn't load the file so terminate
     	playAudioFile();
+    	
+        //If the thread was closed because it was interrupted, 
+    	//we don't want it to notify the listeners
+        if(isInterrupted) {
+        	throw new InterruptedException();
+        }
+        
 	}
     
 	//---------------------------------------------------
@@ -280,17 +287,18 @@ public class Audio extends NotifyingThread implements LineListener
     }
     
 	//----------------------------------------------------------------------
-	/** Play the file. */
+	/** Play the file. 
+	 * @throws InterruptedException */
 	//----------------------------------------------------------------------
 	private void playAudioFile()
 	{
-        midiEOM = audioEOM = bump = false;
+        midiEOM = audioEOM = isInterrupted = false;
         if (m_CurrentSound instanceof Sequence || 
         		m_CurrentSound instanceof BufferedInputStream && m_PlayerThread != null) 
         {
         	System.out.println("playAudioFile starting the sequencer.");
             sequencer.start();
-            while (!midiEOM && m_PlayerThread != null && !bump) 
+            while (!midiEOM && m_PlayerThread != null && !isInterrupted) 
             {
                 try 
                 { 
@@ -316,7 +324,7 @@ public class Audio extends NotifyingThread implements LineListener
             } 
             catch (Exception e) 
             { }
-            while ((m_bPaused || clip.isActive()) && m_PlayerThread != null && !bump) 
+            while ((m_bPaused || clip.isActive()) && m_PlayerThread != null && !isInterrupted) 
             {
                 try 
                 { 
@@ -329,10 +337,11 @@ public class Audio extends NotifyingThread implements LineListener
             }
         	System.out.println("playAudioFile is stopping a clip.");
             clip.stop();
-            //clip.close();
+            clip.close();
         }
         //m_CurrentSound = null;
-
+        
+        //At this point if we get here, the thread actually closes
 	}
 	
 	//----------------------------------------------------------------
@@ -384,6 +393,10 @@ public class Audio extends NotifyingThread implements LineListener
             ((Clip) m_CurrentSound).close();
         }
         m_CurrentSound = null;
+        
+        //Need to tell the thread to explicitly stop, by setting some boolean that will
+        //break us out of the while loops in doRun
+        isInterrupted = true;
     }
 	
 	//----------------------------------------------------------------
