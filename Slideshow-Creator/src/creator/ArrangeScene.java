@@ -327,31 +327,51 @@ public class ArrangeScene extends Scene{
 		exportButton.setRolloverIcon(highlightedExport);
 		exportButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	JFileChooser chooser = new JFileChooser();
-		    	chooser.setDialogTitle("Save File");
-				chooser.setCurrentDirectory(new File("."));//start at this directory
-				chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
-				int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
-		    	if(returnVal == JFileChooser.APPROVE_OPTION) 
+		    	
+		    	//if user has loaded in a file or has already saved
+		    	//directory explorer will not prompt
+		    	if(TimelineParser.getHasSavedOnce())
 		    	{
-		    		try
-		    		{
-			    	    File slFile = chooser.getSelectedFile();
-			    	    if(slFile.exists() || new File(chooser.getSelectedFile() + ".sl").exists())
-			    	    {
-			    	    	int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to override existing file?", "Confirm",
-	    	    		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-	    	    		    if (confirmation == JOptionPane.YES_OPTION) 
-	    	    		    {
-	    	    		      TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
-	    	    		    }
-			    	    }
-			    	    else
-			    	    {
-			    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
-			    	    }
-		    		} catch (FileNotFoundException fnfe) {
-		    		}
+		    		try {
+						TimelineParser.ExportTimeline(TimelineParser.getLastDirPath());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    		
+		    	}
+		    	else
+		    	{
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setDialogTitle("Save File");
+					chooser.setCurrentDirectory(new File("."));//start at this directory
+					chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+					int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
+			    	if(returnVal == JFileChooser.APPROVE_OPTION) 
+			    	{
+			    		try
+			    		{
+				    	    File slFile = chooser.getSelectedFile();
+				    	    if(slFile.exists() || new File(chooser.getSelectedFile() + ".sl").exists())
+				    	    {
+				    	    	int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to override existing file?", "Confirm",
+		    	    		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		    	    		    if (confirmation == JOptionPane.YES_OPTION) 
+		    	    		    {
+		    	    		      TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setHasSavedOnce(true);
+		    	    		    }
+				    	    }
+				    	    else
+				    	    {
+				    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
+				    	    	TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+				    	    	TimelineParser.setHasSavedOnce(true);
+				    	    }
+			    		} catch (FileNotFoundException fnfe) {
+			    		}
+			    	}
 		    	}
 		    }
 		});
