@@ -338,6 +338,9 @@ public class PlayScene extends Scene {
 		{
 			isPaused = !isPaused;
 			System.out.println("Paused: " + isPaused);
+			
+			//pause audio 
+			timeline.audioPlayer.pauseCurrentAudio();
 		}
 		
 		//just hit pause
@@ -347,6 +350,9 @@ public class PlayScene extends Scene {
 			if (!isTransitioning())
 				cancelTimer();
 			
+			//pause audio
+			timeline.audioPlayer.pauseCurrentAudio();
+			
 			//swap gui button to play
 			playPauseButton.setToolTipText("Play Slideshow");
 			playPauseButton.setIcon(playIcon);
@@ -355,10 +361,17 @@ public class PlayScene extends Scene {
 		else //just hit play
 		{
 			//play slideshow if not at end
-			if (getNextSlideIndex(autoDir) != currentSlideIndex)
+			if (getNextSlideIndex(autoDir) != currentSlideIndex) {
 				scheduleStartTransition(autoDir);
+				
+				//Resume audio
+				timeline.audioPlayer.resumeCurrentAudio();
+				
+			}
 			else//restart because we're at the end
 			{
+				System.out.println("Starting over from beginning");
+				timeline.audioPlayer.FullStop();
 				startSlideshow();
 			}
 			
@@ -622,6 +635,9 @@ public class PlayScene extends Scene {
 		currentTransitionIndex = -1;
 		showCurrentSlide();
 		
+		//Begin running the audio for the slideshow
+		timeline.audioPlayer.playAudioClipsSequentially(timeline.timelineSettings.isLoopingAudio);
+		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual && timeline.thumbnailsList.getSize() > 0)
 			scheduleStartTransition(autoDir);
@@ -635,6 +651,10 @@ public class PlayScene extends Scene {
 	private synchronized void stopSlideshow()
 	{
 		cancelTimer();
+		
+		//Stop audio
+		if(timeline != null)
+			timeline.audioPlayer.FullStop();
 		
 		if (isInitialized() && currentTransitionIndex >= 0)
 		{

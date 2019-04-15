@@ -434,6 +434,9 @@ public class ArrangeScene extends Scene{
 		SetupTimelinePanel(false);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
+		//Set up audio timeline
+		PopulateAudio();
+		
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());
@@ -772,6 +775,9 @@ public class ArrangeScene extends Scene{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
 		    
+		    //Used when the action listeners need the current index
+		    final int index = i;
+		    
 		    System.out.println(audioTrack.getAudioLength());
 		    System.out.println(secondsToPixels);
 		    System.out.println(thumbnailTotalLength + transitionTotalLength);
@@ -809,11 +815,12 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
+			    	audioTrack.stopPlaying();
 			    	RemoveAudio(audioTrack);
 			    }
 			});
 			
-		    // CReate remove audio button
+		    // Create play audio button
 		    JButton playButton = new JButton(play);
 		    playButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			playButton.setBorder(BorderFactory.createEmptyBorder());
@@ -823,7 +830,8 @@ public class ArrangeScene extends Scene{
 			playButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-					player.playAudioClipAtIndex(0);
+			    	player.FullStop();
+					player.playAudioClipAtIndex(index);
 			    }
 			});
 			

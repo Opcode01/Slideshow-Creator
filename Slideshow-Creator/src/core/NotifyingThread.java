@@ -34,13 +34,15 @@ public abstract class NotifyingThread implements Runnable {
 	@Override
 	public final void run() {
 		try {
-			doRun();
-		} finally {
-			notifyListeners();
-		}
+			doRun();	
+		}catch(InterruptedException ie) {
+			//Do not notify the listeners
+			return;
+		} 
 		
+		notifyListeners();
 	}
 	
-	public abstract void doRun();
+	public abstract void doRun() throws InterruptedException;
 	
 }

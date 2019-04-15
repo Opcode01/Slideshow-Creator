@@ -253,6 +253,7 @@ public class DirectoryExplorer extends Scene {
 			if(SceneHandler.singleton.getTimeline() != null)
 			{
 			    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
+			    SceneHandler.singleton.getTimeline().audioPlayer.PrintAll();
 				SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
 			}
 			else
