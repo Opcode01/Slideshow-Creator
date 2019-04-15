@@ -23,8 +23,17 @@ public class AudioPlayer implements ThreadOnCompleteListener
     /** Should be set to true if the audio list should loop, or false otherwise*/
     public boolean shouldLoop = false;
     
+    /** Should be set to false if we are in the creator, that way we don't play audio
+     * 	one after another
+     */
+    private boolean shouldNotify = true;
+    
     public AudioPlayer() {
     	audioList = new ArrayList<Audio>();
+    	
+    	if(SceneHandler.singleton.getAppType() == AppType.CREATOR) {
+    		shouldNotify = false;
+    	}
     }
 
     /**
@@ -45,6 +54,17 @@ public class AudioPlayer implements ThreadOnCompleteListener
     public ArrayList<Audio> getAudioList()
     {
         return audioList;
+    }
+    
+    /**
+     *  Prints the names of all the audio files in the list
+     * 
+     *  @author austinvickers
+     */
+    public void PrintAll() {
+    	for(Audio a : audioList) {
+    		System.out.println(a.getAudioName());
+    	}
     }
 
     /**
@@ -104,7 +124,16 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
     public void removeAudio(Audio audio)
     {
-        audioList.remove(audio);
+    	try
+    	{
+	    	if(audioList.size() != 0)
+	    	{
+	    		audioList.remove(audio);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("No audio tracks to remove");
+    	}
     }
     
     /**
@@ -118,6 +147,7 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	Audio a = audioList.get(index);
     	removeAudio(a);
     }
+    
 
     /**
      * swapAudio will swap value of two objects in ArrayList
@@ -222,12 +252,67 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	
     	//NotifyOfThreadComplete will get notified when its time to play the next clip
     }
+    
+    /**
+     *  Plays all the audio clips in the list sequentially,
+     *  and also sets the should loop parameter on the class
+     *  
+     *  @param shouldLoop
+     *  @author austinvickers
+     */
+    public void playAudioClipsSequentially(boolean shouldLoop) {
+    	//First reset the counter
+    	currentIndex = 0;
+    	
+    	//Set the loop parameter that notifyOfThreadComplete will use
+    	this.shouldLoop = shouldLoop;
+    	
+    	//Play the first clip
+    	playAudioClipAtIndex(currentIndex);
+    	
+    	//NotifyOfThreadComplete will get notified when its time to play the next clip
+    }
+    
+    /**
+     * Pauses the audio at the current index - the one that should be playing
+     * 
+     * @author austinvickers
+     */
+    public void pauseCurrentAudio() {
+    	
+    	if(audioList.get(currentIndex) != null) {
+    		audioList.get(currentIndex).pausePlaying();
+    	}
+    }
+    
+    public void resumeCurrentAudio() {
+    	 
+    	if(audioList.get(currentIndex) != null) {
+    		audioList.get(currentIndex).resumePlaying();
+    	}
+    }
+    
+    /**
+     *  Stops all audio clips that are playing at once
+     *  
+     *  @author austinvickers
+     */
+    public void FullStop() {
+    	for(Audio a : audioList) {
+    		if(a != null)
+    			a.stopPlaying();
+    	}
+    }
 
     /** This method is called whenever an audio thread finishes 
      *  @author austinvickers
      */
 	@Override
 	public void notifyOfThreadComplete(NotifyingThread thread) {
+		
+		if(!shouldNotify) {
+			return;
+		}
 		
 		System.out.println("Audio player was notified");
 		

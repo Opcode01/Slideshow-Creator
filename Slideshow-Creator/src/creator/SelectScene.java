@@ -20,11 +20,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
@@ -62,6 +64,9 @@ public class SelectScene extends Scene
 	/** Select all button */
 	private JButton selectAllButton;
 	
+	/**export slider file button*/
+	private JButton exportButton;
+	
 	/** List of all thumbnail thumbButtons to be shown on the image panel */
 	private JButton[] thumbButtons;
 	
@@ -76,6 +81,9 @@ public class SelectScene extends Scene
 	
 	/** Arrange custom button image */
 	private ImageIcon arrange;
+	
+	/**Export slider button image*/
+	private ImageIcon export;
 	
 	/** Select all custom button image */
 	private ImageIcon selectAll;
@@ -94,6 +102,9 @@ public class SelectScene extends Scene
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedDeselectAll;
+	
+	/**Highlighted export button image*/
+	private ImageIcon highlightedExport;
 	
 	/** Create ThumbnailsList object to reference */
 	private ThumbnailsList allThumbs;
@@ -118,10 +129,12 @@ public class SelectScene extends Scene
 		arrange = new ImageIcon(getClass().getResource("/creator/Images/arrangeButton.png"));
 		selectAll = new ImageIcon(getClass().getResource("/creator/Images/selectAllButton.png"));
 		deselectAll = new ImageIcon(getClass().getResource("/creator/Images/deselectAllButton.png"));
+		export = new ImageIcon(getClass().getResource("/creator/Images/exportButton.png"));
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedArrange = new ImageIcon(getClass().getResource("/creator/Images/highlightedArrangeButton.png"));
 		highlightedSelectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectAllButton.png"));
 		highlightedDeselectAll = new ImageIcon(getClass().getResource("/creator/Images/highlightedDeselectAllButton.png"));
+		highlightedExport = new ImageIcon(getClass().getResource("/creator/Images/highlightedExportButton.png"));
 		
 		// Set frame configurations
 		this.setLayout(gridBag);
@@ -182,6 +195,67 @@ public class SelectScene extends Scene
 		    }
 		});
 		
+		// Create export button
+		exportButton = new JButton(export);
+		exportButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		exportButton.setToolTipText("Export Project");
+		exportButton.setBorder(BorderFactory.createEmptyBorder());
+		exportButton.setContentAreaFilled(false);
+		exportButton.setFocusable(false);
+		exportButton.setRolloverIcon(highlightedExport);
+		exportButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	//if user has loaded in a file or has already saved
+		    	//directory explorer will not prompt
+		    	if(TimelineParser.getHasSavedOnce())
+		    	{
+		    		try {
+						TimelineParser.ExportTimeline(TimelineParser.getLastDirPath());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    		
+		    	}
+		    	else
+		    	{
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setDialogTitle("Save File");
+					chooser.setCurrentDirectory(new File("."));//start at this directory
+					chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+					int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
+			    	if(returnVal == JFileChooser.APPROVE_OPTION) 
+			    	{
+			    		try
+			    		{
+				    	    File slFile = chooser.getSelectedFile();
+				    	    if(slFile.exists() || new File(chooser.getSelectedFile() + ".sl").exists())
+				    	    {
+				    	    	int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to override existing file?", "Confirm",
+		    	    		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		    	    		    if (confirmation == JOptionPane.YES_OPTION) 
+		    	    		    {
+		    	    		      TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setHasSavedOnce(true);
+		    	    		    }
+				    	    }
+				    	    else
+				    	    {
+				    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
+				    	    	TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+				    	    	TimelineParser.setHasSavedOnce(true);
+				    	    }
+			    		} catch (FileNotFoundException fnfe) 
+			    		{
+			    			
+			    		}
+			    	}
+		    	}
+		    }
+		});
+		
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
@@ -205,11 +279,17 @@ public class SelectScene extends Scene
 		optionsPanel.add(selectAllButton, c);
 		
 		// Set constraints and add deselect all button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(deselectAllButton, c);
 		
+		// Set constraints and add deselect all button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 4;
+		optionsPanel.add(exportButton, c);
+				
 		// Create outerpanel that houses the image panel for layout and whitespace
 		imagePanelContainer = new JPanel();
 		imagePanelContainer.setLayout(gridBag);
@@ -281,14 +361,9 @@ public class SelectScene extends Scene
      */
 	public void GoToDirectoryScene()
 	{
-		//prompt to restart program when returning to directory to clear the scene
-		int confirmed = JOptionPane.showConfirmDialog(null,
-				"Are you sure you want to return to the project select scene?\n\nAny unsaved changes will be lost.", "Confirm Close Project",
-				JOptionPane.YES_NO_OPTION);
-		if (confirmed == JOptionPane.YES_OPTION) {
-			SceneHandler.singleton.restartProgram();
-			SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
-		  }
+		//restart program when returning to directory to clear the scene
+		SceneHandler.singleton.restartProgram();
+		SceneHandler.singleton.SwitchToScene(SceneType.DIRECTORY);
 	}
 	
 	/**
@@ -304,7 +379,7 @@ public class SelectScene extends Scene
 		SceneHandler.singleton.GetSceneInstanceByType(SceneType.ARRANGE).initialize();
 		SceneHandler.singleton.SwitchToScene(SceneType.ARRANGE);
 		
-		TimelineParser.ExportTimeline("test");
+		//TimelineParser.ExportTimeline("test");
 	}
 	
     /**

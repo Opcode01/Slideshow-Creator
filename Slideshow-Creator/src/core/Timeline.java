@@ -44,13 +44,6 @@ public class Timeline
         timelineSettings = new Settings(false, false, false, 5);
         audioPlayer = new AudioPlayer();
         
-        /*
-        //testAudio
-        audioPlayer.addAudio(new Audio("C:\\Users\\jhoan\\Desktop\\Aloe\\VOL III\\Calgary Live.wav"));
-        System.out.println(audioPlayer.getAudio(0).getAudioPath());
-        System.out.println(audioPlayer.getAudio(0).getAudioLength());
-        */
-        
         directory = SceneHandler.singleton.getDirectory();
     }
     

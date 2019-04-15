@@ -25,12 +25,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -78,12 +81,16 @@ public class ArrangeScene extends Scene{
 	
 	/** Remove current button */
 	private JButton removeCurrentButton;
-	
+
+	/**Export Slider file button*/
+	private JButton exportButton;
+
 	/** Swap thumbnail forward button */
 	private JButton swapForwardButton;
 	
 	/** Swap thumbnail backward button */
 	private JButton swapBackwardButton;
+
 
 	/** Create audio button */
 	private JButton audioButton;
@@ -106,6 +113,9 @@ public class ArrangeScene extends Scene{
 	/** Settings custom button image */
 	private ImageIcon settings;
 	
+	/** export slider file button*/
+	private ImageIcon export;
+	
 	/** Remove current custom button image */
 	private ImageIcon removeCurrent;
 	
@@ -126,7 +136,7 @@ public class ArrangeScene extends Scene{
 	
 	/** Play audio custom button image */
 	private ImageIcon play;
-	
+  
 	/** Play audio change custom button image */
 	private ImageIcon playChange;
 	
@@ -135,6 +145,8 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted select all custom button image */
 	private ImageIcon highlightedSettings;
+	
+	private ImageIcon highlightedExport;
 	
 	/** Highlighted deselect all custom button image */
 	private ImageIcon highlightedRemoveCurrent;
@@ -156,7 +168,7 @@ public class ArrangeScene extends Scene{
 	
 	/** Highlighted audio play change custom button image */
 	private ImageIcon highlightedPlayChange;
-	
+
 	/** Highlighted audio play custom button image */
 	private ImageIcon highlightedPlay;
 	
@@ -184,6 +196,7 @@ public class ArrangeScene extends Scene{
 		back = new ImageIcon(getClass().getResource("/creator/Images/backButton.png"));
 		settings = new ImageIcon(getClass().getResource("/creator/Images/settingsButton.png"));
 		removeCurrent = new ImageIcon(getClass().getResource("/creator/Images/removeCurrentButton.png"));
+		export = new ImageIcon(getClass().getResource("/creator/Images/exportButton.png"));
 		swapRight = new ImageIcon(getClass().getResource("/creator/Images/swapRightButton.png"));
 		swapLeft = new ImageIcon(getClass().getResource("/creator/Images/swapLeftButton.png"));
 		audio = new ImageIcon(getClass().getResource("/creator/Images/audioButton.png"));
@@ -194,6 +207,7 @@ public class ArrangeScene extends Scene{
 		highlightedBack = new ImageIcon(getClass().getResource("/creator/Images/highlightedBackButton.png"));
 		highlightedSettings = new ImageIcon(getClass().getResource("/creator/Images/highlightedSettingsButton.png"));
 		highlightedRemoveCurrent = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveCurrentButton.png"));
+		highlightedExport = new ImageIcon(getClass().getResource("/creator/Images/highlightedExportButton.png"));
 		highlightedSwapRight = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapRightButton.png"));
 		highlightedSwapLeft = new ImageIcon(getClass().getResource("/creator/Images/highlightedSwapLeftButton.png"));
 		highlightedAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioButton.png"));
@@ -201,7 +215,7 @@ public class ArrangeScene extends Scene{
 		highlightedRemoveAudio = new ImageIcon(getClass().getResource("/creator/Images/highlightedRemoveAudioButton.png"));
 		highlightedPlay = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioPlayButton.png"));
 		highlightedPlayChange = new ImageIcon(getClass().getResource("/creator/Images/highlightedAudioChangePlayButton.png"));
-		
+
 		//clear out if it previously had stuff
 		removeAll();
 		// Create GridBagLayout object and constraints
@@ -313,6 +327,67 @@ public class ArrangeScene extends Scene{
 		    }
 		});
 		
+		// Create export button
+		exportButton = new JButton(export);
+		exportButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		exportButton.setToolTipText("Export Project");
+		exportButton.setBorder(BorderFactory.createEmptyBorder());
+		exportButton.setContentAreaFilled(false);
+		exportButton.setFocusable(false);
+		exportButton.setRolloverIcon(highlightedExport);
+		exportButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	//if user has loaded in a file or has already saved
+		    	//directory explorer will not prompt
+		    	if(TimelineParser.getHasSavedOnce())
+		    	{
+		    		try {
+						TimelineParser.ExportTimeline(TimelineParser.getLastDirPath());
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    		
+		    	}
+		    	else
+		    	{
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setDialogTitle("Save File");
+					chooser.setCurrentDirectory(new File("."));//start at this directory
+					chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+					int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
+			    	if(returnVal == JFileChooser.APPROVE_OPTION) 
+			    	{
+			    		try
+			    		{
+				    	    File slFile = chooser.getSelectedFile();
+				    	    if(slFile.exists() || new File(chooser.getSelectedFile() + ".sl").exists())
+				    	    {
+				    	    	int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to override existing file?", "Confirm",
+		    	    		    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		    	    		    if (confirmation == JOptionPane.YES_OPTION) 
+		    	    		    {
+		    	    		      TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+		    	    		      TimelineParser.setHasSavedOnce(true);
+		    	    		    }
+				    	    }
+				    	    else
+				    	    {
+				    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
+				    	    	TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
+				    	    	TimelineParser.setHasSavedOnce(true);
+				    	    }
+			    		} catch (FileNotFoundException fnfe) {
+			    		}
+			    	}
+		    	}
+		    }
+		});
+
+		//Create audio button - temporary until audio timeline GUI is done
+	   // Create audio button
 		
 	    // Create audio button
 		audioButton = new JButton(audio);
@@ -327,6 +402,7 @@ public class ArrangeScene extends Scene{
 		    }
 		});
 		
+
 		// Set options panel configurations
 		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
@@ -350,7 +426,7 @@ public class ArrangeScene extends Scene{
 		c.gridx = 0;
 		c.gridy = 3;
 		optionsPanel.add(removeCurrentButton, c);
-		
+
 		// Set constraints and add swap forward button
 		c.weighty = 0;
 		c.gridx = 0;
@@ -358,11 +434,18 @@ public class ArrangeScene extends Scene{
 		optionsPanel.add(swapForwardButton, c);
 		
 		// Set constraints and add swap backward button
-		c.weighty = 1;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 5;
 		optionsPanel.add(swapBackwardButton, c);
-		
+    
+    		
+		// Set constraints and add export file button
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 6;
+		optionsPanel.add(exportButton, c);
+	
 		// Set image panel configurations
 		imagePanel = new JPanel();
 		imagePanel.setLayout(new BorderLayout());
@@ -380,6 +463,9 @@ public class ArrangeScene extends Scene{
 		// Set up blank timeline panel
 		SetupTimelinePanel(false);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
+		
+		//Set up audio timeline
+		PopulateAudio();
 		
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -719,6 +805,9 @@ public class ArrangeScene extends Scene{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
 		    
+		    //Used when the action listeners need the current index
+		    final int index = i;
+		    
 		    System.out.println(audioTrack.getAudioLength());
 		    System.out.println(secondsToPixels);
 		    System.out.println(thumbnailTotalLength + transitionTotalLength);
@@ -756,11 +845,12 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
+			    	audioTrack.stopPlaying();
 			    	RemoveAudio(audioTrack);
 			    }
 			});
 			
-		    // CReate remove audio button
+		    // Create play audio button
 		    JButton playButton = new JButton(play);
 		    playButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			playButton.setBorder(BorderFactory.createEmptyBorder());
@@ -770,7 +860,8 @@ public class ArrangeScene extends Scene{
 			playButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
-					player.playAudioClipAtIndex(0);
+			    	player.FullStop();
+					player.playAudioClipAtIndex(index);
 			    }
 			});
 			
