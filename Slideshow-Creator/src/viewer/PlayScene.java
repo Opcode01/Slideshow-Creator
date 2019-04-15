@@ -653,7 +653,8 @@ public class PlayScene extends Scene {
 		cancelTimer();
 		
 		//Stop audio
-		timeline.audioPlayer.FullStop();
+		if(timeline != null)
+			timeline.audioPlayer.FullStop();
 		
 		if (isInitialized() && currentTransitionIndex >= 0)
 		{

@@ -290,7 +290,8 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
     public void FullStop() {
     	for(Audio a : audioList) {
-    		a.stopPlaying();
+    		if(a != null)
+    			a.stopPlaying();
     	}
     }
 
