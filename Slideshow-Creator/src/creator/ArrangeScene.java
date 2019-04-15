@@ -371,6 +371,9 @@ public class ArrangeScene extends Scene{
 		SetupTimelinePanel(false);
 		timelinePanelContainer.add(timelinePanel, timelinePanelConstraints);
 		
+		//Set up audio timeline
+		PopulateAudio();
+		
 		// Create scroller and set scroll pane configurations
 		timelineScroller = new JScrollPane(timelinePanelContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		timelineScroller.setBorder(BorderFactory.createEmptyBorder());

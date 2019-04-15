@@ -37,6 +37,12 @@ public class AudioPlayer implements ThreadOnCompleteListener
     {
         return audioList;
     }
+    
+    public void PrintAll() {
+    	for(Audio a : audioList) {
+    		System.out.println(a.getAudioName());
+    	}
+    }
 
     /**
      * getAudio will return the Audio object at the specified index 
