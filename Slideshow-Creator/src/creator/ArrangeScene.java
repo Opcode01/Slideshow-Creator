@@ -815,6 +815,7 @@ public class ArrangeScene extends Scene{
 			removeAudioButton.setRolloverIcon(highlightedRemoveAudio);
 			removeAudioButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
+			    	audioTrack.stopPlaying();
 			    	RemoveAudio(audioTrack);
 			    }
 			});
@@ -829,6 +830,7 @@ public class ArrangeScene extends Scene{
 			playButton.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 					AudioPlayer player = SceneHandler.singleton.getTimeline().audioPlayer;
+			    	player.FullStop();
 					player.playAudioClipAtIndex(index);
 			    }
 			});
