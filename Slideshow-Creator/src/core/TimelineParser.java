@@ -29,6 +29,37 @@ import javax.swing.JFrame;
 
 public class TimelineParser 
 {
+	/**saves last file path to save to*/
+	private static String lastDirPath; 
+	
+	/**return the value of lastDirPath*/
+	public static String getLastDirPath()
+	{
+		return lastDirPath;
+	}
+	
+	/**set last dir path*/
+	public static void setLastDirPath(String dirPath)
+	{
+		lastDirPath = dirPath;
+	}
+	
+	/**Has the user chosen a directory already?*/
+	private static boolean hasSavedOnce = false;
+	
+	/**return the value of hasSavedOnce*/
+	public static boolean getHasSavedOnce()
+	{
+		return hasSavedOnce;
+	}
+	
+	/**set has saved once*/
+	public static void setHasSavedOnce(boolean saved)
+	{
+		hasSavedOnce = saved;
+	}
+	
+	private static boolean resetIndexNeeded = false; 
 	
 	/**
 	 * Print out settings and information related 
@@ -123,7 +154,7 @@ public class TimelineParser
 			
 		} catch (ParseException pe)
 		{
-			System.out.println("No valid JSON");
+			System.out.println("Not valid JSON");
 			return false;
 		}
 	}
@@ -134,7 +165,7 @@ public class TimelineParser
 	 * 
 	 * @author Joe Hoang 
 	 */
-	public static Timeline ImportTimeline(String JSONpath) throws Exception, FileNotFoundException, ParseException, IOException
+	public static Timeline ImportTimeline(String JSONpath) throws Exception, NullPointerException, FileNotFoundException, ParseException, IOException
 	{
 		Timeline importedTimeline = new Timeline();
 		JSONParser parser = new JSONParser();
@@ -142,26 +173,12 @@ public class TimelineParser
 		{
 			if(isJSONValid(JSONpath))
 			{
-			Object input = parser.parse(new FileReader(JSONpath));
-			
-			JSONObject in = (JSONObject) input;
+				Object input = parser.parse(new FileReader(JSONpath));
+				
+				JSONObject in = (JSONObject) input;
 			
 				if(new File((String) in.get("parentDir")).isDirectory())
 				{
-					JSONArray thumbnails = (JSONArray) in.get("thumbnails");
-					System.out.println(thumbnails.size());
-					for(int i = 0; i < thumbnails.size(); i++)
-					{
-						JSONObject tbl = (JSONObject) thumbnails.get(i);
-						//JSON exports as long with type cast error
-						//grab as long then cast to int 
-						long index = (Long) tbl.get("index");
-						String path = (String) tbl.get("path");
-						System.out.println(index);
-						System.out.println(path);
-						Thumbnail newThumb = new Thumbnail(path);
-						importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index);
-					}
 					
 					JSONArray transitions = (JSONArray) in.get("transitions");
 					//Iterator<JSONObject> transition = transitions.iterator();
@@ -174,6 +191,54 @@ public class TimelineParser
 						Transition newTrans = new Transition(type, length);
 						importedTimeline.transitionsList.addTransition(newTrans, (int) index);
 					}
+					
+					JSONArray thumbnails = (JSONArray) in.get("thumbnails");
+					System.out.println(thumbnails.size());
+					
+					for(int i = 0; i < thumbnails.size(); i++)
+					{
+						JSONObject tbl = (JSONObject) thumbnails.get(i);
+						//JSON exports as long with type cast error
+						//grab as long then cast to int 
+						long index = (Long) tbl.get("index");
+						String path = (String) tbl.get("path");
+						try
+						{
+							//System.out.println(index);
+							//System.out.println(path);
+							if(new File(path).exists())
+							{
+								Thumbnail newThumb = new Thumbnail(path);
+								importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index);
+							}
+							else
+							{
+								JFrame parent = SceneHandler.singleton.getMainFrame();
+						    	Coord2 point = new Coord2(
+						    			parent.getX() + parent.getSize().width/2,
+						    			parent.getY() + parent.getSize().height/2
+						    			);
+						    	
+								WarningPane p = new WarningPane(
+						    			parent,
+						    			"Warning - Image file missing",
+						    			"Cannot find image: " + path,
+						    			point, 
+						    			new Dimension(400, 190));
+								importedTimeline.transitionsList.removeTransition((int) index);
+								resetIndexNeeded = true;
+						}
+						}catch (IndexOutOfBoundsException iobe) {
+							System.out.println(index);
+							Thumbnail newThumb = new Thumbnail(path);
+							//shift thumbnail down one index
+							importedTimeline.thumbnailsList.addThumbnail(newThumb,(int)index - 1);
+							//importedTimeline.transitionsList.removeTransition((int) index);
+							//System.out.println(importedTimeline.transitionsList.getTransition((int)index -1).getTransitionType());
+							continue;
+						}
+					}
+					
 					
 					JSONArray audioList = (JSONArray) in.get("audio");
 					//Iterator<JSONObject> transition = transitions.iterator();
@@ -200,6 +265,7 @@ public class TimelineParser
 					
 					importedTimeline.timelineSettings = importedSettings;
 					
+					/*
 					if (importedTimeline != null)
 					{
 						System.out.println("Timeline Imported:");
@@ -211,6 +277,18 @@ public class TimelineParser
 						}
 					}
 					else System.out.println("Error: Timeline not imported!");
+					*/
+					
+					//set last directory path to save
+					lastDirPath = JSONpath.replace(".sl", "");
+					hasSavedOnce = true;
+					
+					/*
+					if(resetIndexNeeded)
+					{
+						resetListIndex();
+					}
+					*/
 					
 					return importedTimeline;
 					
@@ -229,11 +307,49 @@ public class TimelineParser
 		} catch (FileNotFoundException fnfe) {
 			// TODO Auto-generated catch block
 			//fnfe.printStackTrace();
-			throw fnfe;
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	
+			WarningPane p = new WarningPane(
+	    			parent,
+	    			"Warning - Invalid File Selected",
+	    			"Files cannot be found.",
+	    			point, 
+	    			new Dimension(400, 190));
+			return null;
+		} catch (NullPointerException npe) {
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	
+			WarningPane p = new WarningPane(
+	    			parent,
+	    			"Warning - Invalid File Selected",
+	    			"File picked is an invalid file. Slideshow file might be corrupted.",
+	    			point, 
+	    			new Dimension(400, 190));
+			return null;
 		} catch (IOException ioe) {
 			// TODO Auto-generated catch block
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+	    	
+			WarningPane p = new WarningPane(
+	    			parent,
+	    			"Warning - Invalid File Selected",
+	    			"IO Exception",
+	    			point, 
+	    			new Dimension(400, 190));
 			//ioe.printStackTrace();
-			throw ioe;
+			return null;
 		} catch (ParseException pe) {
 			// TODO Auto-generated catch block
 			//pe.printStackTrace();
@@ -249,11 +365,26 @@ public class TimelineParser
 	    			"File picked is an invalid file. Slideshow file might be corrupted.",
 	    			point, 
 	    			new Dimension(400, 190));
-			throw pe;
+			return null;
 		}catch (Exception e) {
-			//e.printStackTrace();
-			throw e;
+			e.printStackTrace();
+			return null;
 		}
 	}
+	
+	/**
+	 * Will reset list indices from null input
+	 * 
+	 * @Joe Hoang
+	 
+	public static void resetListIndex()
+	{
+		Timeline fixTimeline = SceneHandler.singleton.getTimeline();
+		for(int i=0; i < fixTimeline.thumbnailsList.getSize(); i++)
+		{
+			
+		}
+	}
+	*/
 
 }

@@ -37,20 +37,6 @@ public class ViewerMain
 			handler.AddScene(SceneType.FILESELECT, new FileSelectExplorer());
 			handler.AddScene(SceneType.PLAY, new PlayScene());
 			handler.SwitchToScene(SceneType.FILESELECT);
-		}catch (ParseException pe) 
-		{
-			JFrame parent = SceneHandler.singleton.getMainFrame();
-	    	Coord2 point = new Coord2(
-	    			parent.getX() + parent.getSize().width/2,
-	    			parent.getY() + parent.getSize().height/2
-	    			);
-	    	
-			WarningPane p = new WarningPane(
-	    			parent,
-	    			"Warning - Invalid File Selected",
-	    			"Slider File cannot be loaded in.",
-	    			point, 
-	    			new Dimension(400, 190));
 		} catch (Exception e) {
 			JFrame parent = SceneHandler.singleton.getMainFrame();
 	    	Coord2 point = new Coord2(

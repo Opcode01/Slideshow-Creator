@@ -171,27 +171,34 @@ public class FileSelectExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void GoToPlayScene(File slFile) throws Exception
+	public void GoToPlayScene(File slFile) throws Exception, NullPointerException
 	{
-		SceneHandler.singleton.setDirectory(slFile);
-		if(SceneHandler.singleton.getTimeline() != null)
+		try
 		{
-			SceneHandler.singleton.SwitchToScene(SceneType.PLAY);
-		}
-		else
-		{
-			JFrame parent = SceneHandler.singleton.getMainFrame();
-	    	Coord2 point = new Coord2(
-	    			parent.getX() + parent.getSize().width/2,
-	    			parent.getY() + parent.getSize().height/2
-	    			);
-	    	
-			WarningPane p = new WarningPane(
-	    			parent,
-	    			"Warning - Invalid File Selected",
-	    			"Slider file cannot be loaded.",
-	    			point, 
-	    			new Dimension(400, 190));
+			SceneHandler.singleton.setDirectory(slFile);
+			if(SceneHandler.singleton.getTimeline() != null)
+			{
+				SceneHandler.singleton.SwitchToScene(SceneType.PLAY);
+			}
+			else
+			{
+				JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	
+				WarningPane p = new WarningPane(
+		    			parent,
+		    			"Warning - Invalid File Selected",
+		    			"Slider file cannot be loaded.",
+		    			point, 
+		    			new Dimension(400, 190));
+			}
+		} catch (NullPointerException npe) {
+			throw npe;
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 	

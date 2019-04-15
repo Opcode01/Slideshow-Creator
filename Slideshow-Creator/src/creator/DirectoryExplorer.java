@@ -258,7 +258,18 @@ public class DirectoryExplorer extends Scene {
 			}
 			else
 			{
-				throw new Exception("File not found Exception.");
+				JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	
+				WarningPane p = new WarningPane(
+		    			parent,
+		    			"Warning - Invalid File Selected",
+		    			"Invalid slider file. Cannot be loaded in.",
+		    			point, 
+		    			new Dimension(400, 190));
 			}
 		} catch (FileNotFoundException fnfe) {
 			//e.printStackTrace();
