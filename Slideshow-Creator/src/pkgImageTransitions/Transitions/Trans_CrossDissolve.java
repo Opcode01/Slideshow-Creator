@@ -1,23 +1,32 @@
+/**
+ * Trans_CrossDissolve.java
+ * Fades between two images
+ * Original Author: R Coleman
+ * Modified by Timothy Couch
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 4/11/19
+ */
+
 package pkgImageTransitions.Transitions;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
+import core.SliderColor;
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_CrossDissolve extends ColemanTransition
 {
-	//---------------------------------------------------
-	// Default constructor
-	//---------------------------------------------------
-	public Trans_CrossDissolve()
-	{
-		
-	}
+
+	/** How many time to fade between the images per second. Updates on the fly based on machine performance */
+	protected static int fps = 10;
 	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
@@ -34,52 +43,73 @@ public class Trans_CrossDissolve extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics2D gA = ImageA.createGraphics();
+
+		int numIterations = (int) (fps * time);
+		int timeMillis = (int) (time * 1000);
+		int timeInc = timeMillis / numIterations; // Milliseconds to pause each step
 		
-		int numIterations = 15;
-		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / numIterations;
-		// Create a BufferedImage ARGB to hold the image to overlay
-		BufferedImage ImageB_ARGB = new BufferedImage(ImageB.getWidth(), ImageB.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		// Draw ImageB into ImageB_ARGB
-		ImageB_ARGB.getGraphics().drawImage(ImageB, 0, 0, null);
-		// Set up the initial fade data
-		// Create a rescale filter op 
-		float alphaInc = 0.20f;
-		float[] scales = { 1.0f, 1.0f, 1.0f, alphaInc};
-		float[] offsets = new float[4];
-		RescaleOp rop = new RescaleOp(scales, offsets, null);
+		//create an image A the size of the container
+		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
+		
+		//create an image B the size of the container with solid background
+		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
 
-        // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
-
-		// Draw image A -- appears we need to do this fade longer
-		// Each time we redraw ImageB_ARGB over ImageA we add just a bit more
+		//draw transparent B onto A over and over again and repaint A
+		float alphaInc = 1.0f / numIterations;//amount to increase B's alpha each step
+		float bAlpha = alphaInc;//compounding amount of alpha for B
+		int avgElapsedTime = 0;//how much time each fade step takes on average
 		for(int i=0; i < numIterations; i++)
 		{
 			if (isAborting())
 				break;
-			// Draw B over A. Note: Can't do the first draw directly into the screen panel
-			//	because that drawImage only works with BufferedImages as the destination.
-			gA.drawImage(ImageB_ARGB, rop, 0, 0); // Draw portion of ImageB into ImageA
-			gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
-			// Note: Can not pause here like we do in the other transitions because
-			//     cross dissolve takes longer than a simple blit draw
+			
+			long startTime = System.currentTimeMillis();
+			
+			//make image b more visible
+			for (int h = 0; h < contImageB.getWidth(); h++) {
+	            for (int j = 0; j < contImageB.getHeight(); j++) {                    
+	                Color pixColor = new Color(contImageB.getRGB(h, j), true);
+	                
+	                if (pixColor.getAlpha() > 0) {
+	                	pixColor = new Color(pixColor.getRed(), pixColor.getGreen(), pixColor.getBlue(), (int) (255 * bAlpha));
+	                	contImageB.setRGB(h, j, pixColor.getRGB());
+	                }
+	            }
+	        }
+			bAlpha += alphaInc;//increment image B's alpha over time
+			
+			//draw A onto the screen
+			gPan.drawImage(contImageA, 0, 0, imgPanel);
+			
+			//draw the transparent image B onto the screen more visible every loop
+			gPan.drawImage(contImageB, 0, 0, null);
+			
+			//pause for a bit
 			try 
 			{
-			    Thread.sleep((int) (timeInc * .9));
+				int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+				avgElapsedTime += elapsedTime;
+			    Thread.sleep(Math.max(timeInc - elapsedTime, 0));
 			} 
 			catch(InterruptedException ex) 
 			{
 			    Thread.currentThread().interrupt();
 			}
-		}	
+		}
+		
 		if (!isAborting())
 		{
-			// Move m_NextImage into m_CurrentImage for next time -  May not need this
-			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-			// And one final draw to the panel to be sure it's all there
-			gPan.drawImage(ImageA, 0,0, imgPanel); 
+			//adjust number of iterations to get a proper transition for next time
+			avgElapsedTime /= numIterations;
+			
+			int prevFps = fps;
+			
+			//set fps to how many frames of the average elapsed time will fit into one second
+			fps = Math.min(Math.max(Math.round(1000 / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 	
