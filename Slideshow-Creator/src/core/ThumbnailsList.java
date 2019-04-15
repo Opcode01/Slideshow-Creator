@@ -118,6 +118,27 @@ public class ThumbnailsList
     		System.out.println("Cannot remove from empty list.");
     	}
     }
+    
+    /**
+     * removeThumbnail will remove given thumbnail object from thumbnails arrayList at specified index
+     * 
+     * @param index at which to remove thumbnail
+     * 
+     * @author Joe Hoang
+     */
+    public void removeThumbnail(int index)
+    {
+    	try
+    	{
+	    	if(thumbnails.size() != 0)
+	    	{
+	    		thumbnails.remove(index);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot remove from empty list.");
+    	}
+    }
 
     /**
      * swapThumbnails will swap value of two objects in ArrayList

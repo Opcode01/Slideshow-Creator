@@ -119,6 +119,28 @@ public class TransitionsList
     		System.out.println("Cannot remove from empty list");
     	}
     }
+    
+    /**
+     * removeTransition will remove given Transition object from Transitions arrayList at specified index
+     * 
+     * @param index at which to remove Transition
+     * 
+     * @author Joe Hoang
+     */
+    public void removeTransition(int index)
+    {
+    	try
+    	{
+	    	if(transitions.size() != 0)
+	    	{
+	    		transitions.remove(index);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("Cannot remove from empty list.");
+    	}
+    }
+
 
     /**
      * swapTransitions will swap value of two objects in ArrayList
