@@ -38,6 +38,11 @@ public class AudioPlayer implements ThreadOnCompleteListener
         return audioList;
     }
     
+    /**
+     *  Prints the names of all the audio files in the list
+     * 
+     *  @author austinvickers
+     */
     public void PrintAll() {
     	for(Audio a : audioList) {
     		System.out.println(a.getAudioName());
@@ -228,6 +233,37 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	playAudioClipAtIndex(currentIndex);
     	
     	//NotifyOfThreadComplete will get notified when its time to play the next clip
+    }
+    
+    /**
+     *  Plays all the audio clips in the list sequentially,
+     *  and also sets the should loop parameter on the class
+     *  
+     *  @param shouldLoop
+     *  @author austinvickers
+     */
+    public void playAudioClipsSequentially(boolean shouldLoop) {
+    	//First reset the counter
+    	currentIndex = 0;
+    	
+    	//Set the loop parameter that notifyOfThreadComplete will use
+    	this.shouldLoop = shouldLoop;
+    	
+    	//Play the first clip
+    	playAudioClipAtIndex(currentIndex);
+    	
+    	//NotifyOfThreadComplete will get notified when its time to play the next clip
+    }
+    
+    /**
+     *  Stops all audio clips that are playing at once
+     *  
+     *  @author austinvickers
+     */
+    public void FullStop() {
+    	for(Audio a : audioList) {
+    		a.stopPlaying();
+    	}
     }
 
     /** This method is called whenever an audio thread finishes 
