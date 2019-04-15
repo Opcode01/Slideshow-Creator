@@ -101,7 +101,16 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
     public void removeAudio(Audio audio)
     {
-        audioList.remove(audio);
+    	try
+    	{
+	    	if(audioList.size() != 0)
+	    	{
+	    		audioList.remove(audio);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e) 
+    	{
+    		System.out.println("No audio tracks to remove");
+    	}
     }
     
     /**
@@ -115,6 +124,7 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	Audio a = audioList.get(index);
     	removeAudio(a);
     }
+    
 
     /**
      * swapAudio will swap value of two objects in ArrayList

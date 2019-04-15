@@ -61,7 +61,15 @@ public class TransitionsList
      */
     public Transition getTransition(int transitionIndex)
     {
-        return transitions.get(transitionIndex);
+    	try
+    	{
+    		return transitions.get(transitionIndex);
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot get transition at specified index");
+    		return null;
+    	}
+        
     }
 
     /**
@@ -80,7 +88,7 @@ public class TransitionsList
      * addTransition will append given Transition object to transitions arrayList
      * Overloaded to add transition at certain index
      * 
-     * @param transition transition object to be added to end of transitions list
+     * @param transition transition object to be added to transitions list at specified index
      * @param index to add transition to 
      * 
      * @author Joe Hoang
@@ -100,7 +108,16 @@ public class TransitionsList
      */
     public void removeTransition(Transition transition)
     {
-        transitions.remove(transition);
+    	try
+    	{
+	    	if(transitions.size() != 0)
+	    	{	
+	    		transitions.remove(transition);
+	    	}
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot remove from empty list");
+    	}
     }
 
     /**
@@ -114,10 +131,16 @@ public class TransitionsList
      */
     public void swapTransitions(int indexTransition1, int indexTransition2)
     {
+    	try
+    	{
+    		Transition tempTransition = transitions.get(indexTransition1);
+            transitions.set(indexTransition1, transitions.get(indexTransition2));
+            transitions.set(indexTransition2, tempTransition);
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot swap transitions with given indices");
+    	}
         
-        Transition tempTransition = transitions.get(indexTransition1);
-        transitions.set(indexTransition1, transitions.get(indexTransition2));
-        transitions.set(indexTransition2, tempTransition);
     }
 
     /**
@@ -131,17 +154,25 @@ public class TransitionsList
      */
     public int swapForward(Transition transition)
     {
-        int indexTransition1 = transitions.indexOf(transition);
-        int indexTransition2 = indexTransition1 + 1;
-        if(indexTransition2 != transitions.size())
-        {
-            swapTransitions(indexTransition1, indexTransition2);
-            return indexTransition2;
-        }
-        else
-        {
-            return -1; 
-        }
+    	try
+    	{
+    		int indexTransition1 = transitions.indexOf(transition);
+            int indexTransition2 = indexTransition1 + 1;
+            if(indexTransition2 != transitions.size())
+            {
+                swapTransitions(indexTransition1, indexTransition2);
+                return indexTransition2;
+            }
+            else
+            {
+                return -1; 
+            }
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot swap transitions with given indices");
+    		return -1;
+    	}
+        
     }
 
      /**
@@ -155,17 +186,25 @@ public class TransitionsList
      */
     public int swapBackward(Transition transition)
     {
-        int indexTransition1 = transitions.indexOf(transition);
-        int indexTransition2 = indexTransition1 - 1;
-        if(indexTransition2 != -1)
-        {
-            swapTransitions(indexTransition1, indexTransition2);
-            return indexTransition2;
-        }
-        else
-        {
-            return -1; 
-        }
+    	try
+    	{
+    		int indexTransition1 = transitions.indexOf(transition);
+            int indexTransition2 = indexTransition1 - 1;
+            if(indexTransition2 != -1)
+            {
+                swapTransitions(indexTransition1, indexTransition2);
+                return indexTransition2;
+            }
+            else
+            {
+                return -1; 
+            }
+    	} catch (ArrayIndexOutOfBoundsException e)
+    	{
+    		System.out.println("Cannot swap transitions with given indices");
+    		return -1;
+    	}
+        
     }
     
     /**

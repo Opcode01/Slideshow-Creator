@@ -21,10 +21,15 @@ public class CreatorMain
 	 */
 	public static void main(String[] args)
 	{
-		SceneHandler handler = new SceneHandler(AppType.CREATOR);
-		handler.AddScene(SceneType.DIRECTORY, new DirectoryExplorer());
-		handler.AddScene(SceneType.SELECTION, new SelectScene());
-		handler.AddScene(SceneType.ARRANGE, new ArrangeScene());
-		handler.SwitchToScene(SceneType.DIRECTORY);
+		try
+		{
+			SceneHandler handler = new SceneHandler(AppType.CREATOR);
+			handler.AddScene(SceneType.DIRECTORY, new DirectoryExplorer());
+			handler.AddScene(SceneType.SELECTION, new SelectScene());
+			handler.AddScene(SceneType.ARRANGE, new ArrangeScene());
+			handler.SwitchToScene(SceneType.DIRECTORY);
+		} catch (Exception e) {
+			System.out.println("Error Caught:" + e.getMessage());
+		}
 	}
 }

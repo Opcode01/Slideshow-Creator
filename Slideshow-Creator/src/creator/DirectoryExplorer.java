@@ -31,6 +31,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class DirectoryExplorer extends Scene {
 	
@@ -76,7 +77,7 @@ public class DirectoryExplorer extends Scene {
 	 * @author Fernando Palacios
 	 * @author austinvickers
 	 */
-	public DirectoryExplorer()
+	public DirectoryExplorer() throws Exception
 	{
 		
 		// Create GridBagLayout object and constraints
@@ -97,15 +98,19 @@ public class DirectoryExplorer extends Scene {
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (IllegalAccessException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (UnsupportedLookAndFeelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		}
 		
 		// Set frame configurations
@@ -134,8 +139,13 @@ public class DirectoryExplorer extends Scene {
 		selectExistingButton.setRolloverIcon(highlightedSelectExisting);
 		selectExistingButton.setPressedIcon(highlightedSelectExisting);
 		selectExistingButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelectFile();
+			public void actionPerformed(ActionEvent e){
+				try {
+					SelectFile();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -199,14 +209,21 @@ public class DirectoryExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void SelectFile() {
+	public void SelectFile() throws Exception
+	{
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File("."));//start at this directory
 		chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
 		int returnVal = chooser.showDialog(DirectoryExplorer.this, "Choose Slideshow File");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    File slFile = chooser.getSelectedFile();
-    		GoToSelectScene(slFile);
+    		try {
+				GoToSelectScene(slFile);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				throw e;
+			}
     	}	
 	}
 	
@@ -228,12 +245,29 @@ public class DirectoryExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void GoToSelectScene(File slFile)
+	public void GoToSelectScene(File slFile) throws Exception, FileNotFoundException
 	{
-		SceneHandler.singleton.setDirectory(slFile);
-	    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
-	    SceneHandler.singleton.getTimeline().audioPlayer.PrintAll();
-		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+		try 
+		{
+			SceneHandler.singleton.setDirectory(slFile);
+			if(SceneHandler.singleton.getTimeline() != null)
+			{
+			    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
+			    SceneHandler.singleton.getTimeline().audioPlayer.PrintAll();
+				SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+			}
+			else
+			{
+				throw new Exception("File not found Exception.");
+			}
+		} catch (FileNotFoundException fnfe) {
+			//e.printStackTrace();
+			throw fnfe;
+		} catch (Exception e) {
+			//e.printStackTrace();
+			throw e;
+		}
+		
 	}
 	
 }
