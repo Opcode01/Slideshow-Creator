@@ -923,7 +923,7 @@ public class ArrangeScene extends Scene{
 	    }
 				
     	JFileChooser chooser = new JFileChooser();
-    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
+    	chooser.setCurrentDirectory(new java.io.File(SceneHandler.singleton.getDirectory())); // start at application current directory
     	
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF"}));
