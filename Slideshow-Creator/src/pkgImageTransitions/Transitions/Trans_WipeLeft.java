@@ -1,3 +1,15 @@
+/**
+ * Trans_WipeLeft.java
+ * Wipes from right to left from one image to another
+ * Original Author: R Coleman
+ * Modified by Timothy Couch
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 4/11/19
+ */
+
 package pkgImageTransitions.Transitions;
 
 import java.awt.Graphics;
@@ -6,10 +18,16 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.SliderColor;
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeLeft extends ColemanTransition
 {
+
+	/** How many time to fade between the images per second. Updates on the fly based on machine performance */
+	protected static int fps = 50;
+	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
 	// Args:  
@@ -31,52 +49,66 @@ public class Trans_WipeLeft extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics gA = ImageA.getGraphics();
 		
 		// Dimension holders
-		int bX1, bX2;		// Dimensions for imageB
 		int imgWidth, imgHeight;
-		int incX;					// X increment each time
-		int numIterations = 50;		// Number of iterations in the sweep
-		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / numIterations;
+
+		int numIterations = (int) (fps * time);
+		int timeMillis = (int) (time * 1000);
+		int timeInc = timeMillis / numIterations; // Milliseconds to pause each step
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
-		incX = imgWidth / numIterations;		// Do 1/numIterations each time
 		
-		// Initialize the dimensions for section of ImageB to draw into ImageA
-		bX1 = imgWidth - incX;
-		bX2 = incX;
-
-        // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
-
+		//create an image A the size of the container
+		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
+		Graphics gA = contImageA.getGraphics();
+		
+		//create an image B the size of the container with solid background
+		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
+		
 		// Draw image A
+		int avgElapsedTime = 0;//how much time each fade step takes on average
 		for(int i=0; i<numIterations; i++)
 		{
 			if (isAborting())
 				break;
+			
+			long startTime = System.currentTimeMillis();
+			
+			int startDraw = (int) ((float) imgWidth / numIterations * (numIterations - i - 1));
+			int endDraw = (int) ((float) imgWidth / numIterations * (numIterations - i));
+			
 			// Draw part of B over A on the screen
-			gPan.drawImage(ImageB, bX1, 0, imgWidth, imgHeight, bX1, 0, imgWidth, imgHeight, null); // Draw portion of ImageB into ImageA
-			bX2 = bX1;
-			bX1 -= incX;  // Move another section to the left of the previous section
+			gA.drawImage(contImageB, startDraw, 0, endDraw, imgHeight, startDraw, 0, endDraw, imgHeight, null); // Draw portion of ImageB into ImageA
+			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
+			
 			// Pause a bit so we can actually see the transition
 			try 
 			{
-			    Thread.sleep(timeInc);                 
+				int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+				avgElapsedTime += elapsedTime;
+			    Thread.sleep(Math.max(timeInc - elapsedTime, 0));
 			} 
 			catch(InterruptedException ex) 
 			{
 			    Thread.currentThread().interrupt();
 			}
 		}
+		
 		if (!isAborting())
 		{
-			// Move m_NextImage into m_CurrentImage for next time -  May not need this
-			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-			// And one final draw to the panel to be sure it's all there
-			gPan.drawImage(ImageA, 0,0, imgPanel);
+			//adjust number of iterations to get a proper transition for next time
+			avgElapsedTime /= numIterations;
+			
+			int prevFps = fps;
+
+			//set fps to how many frames of the average elapsed time will fit into one second
+			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 

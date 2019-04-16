@@ -12,6 +12,7 @@ package viewer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -29,6 +31,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import core.*;
+import creator.WarningPane;
 
 public class FileSelectExplorer extends Scene {
 	
@@ -62,7 +65,7 @@ public class FileSelectExplorer extends Scene {
 	 * @author Fernando Palacios
 	 * @author austinvickers
 	 */
-	public FileSelectExplorer()
+	public FileSelectExplorer() throws Exception
 	{
 		
 		// Create GridBagLayout object and constraints
@@ -105,7 +108,11 @@ public class FileSelectExplorer extends Scene {
 		selectExistingButton.setPressedIcon(highlightedSelectExisting);
 		selectExistingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try{
 				SelectFile();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		
@@ -145,10 +152,12 @@ public class FileSelectExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void SelectFile() {
+	public void SelectFile() throws Exception
+	{
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File("."));//start at this directory
 		chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
+		chooser.setAcceptAllFileFilterUsed(false);
 		int returnVal = chooser.showDialog(FileSelectExplorer.this, "Choose Slideshow File");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    File slFile = chooser.getSelectedFile();
@@ -162,10 +171,35 @@ public class FileSelectExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void GoToPlayScene(File slFile)
+	public void GoToPlayScene(File slFile) throws Exception, NullPointerException
 	{
-		SceneHandler.singleton.setDirectory(slFile);
-		SceneHandler.singleton.SwitchToScene(SceneType.PLAY);
+		try
+		{
+			SceneHandler.singleton.setDirectory(slFile);
+			if(SceneHandler.singleton.getTimeline() != null)
+			{
+				SceneHandler.singleton.SwitchToScene(SceneType.PLAY);
+			}
+			else
+			{
+				JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	
+				WarningPane p = new WarningPane(
+		    			parent,
+		    			"Warning - Invalid File Selected",
+		    			"Slider file cannot be loaded.",
+		    			point, 
+		    			new Dimension(400, 190));
+			}
+		} catch (NullPointerException npe) {
+			throw npe;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 }

@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.json.simple.parser.ParseException;
+
 public class SceneHandler {
 	
 	/**
@@ -32,6 +34,10 @@ public class SceneHandler {
 	 * appType - which program is running
 	 */
 	private AppType appType;
+	
+	public AppType getAppType() {
+		return appType;
+	}
 	
 	/**
 	 * timeline - to be created on startup if loading a directory
@@ -58,13 +64,29 @@ public class SceneHandler {
 	 * set directory based on the file supplied
 	 * @param file the file to parse and make a timeline from
 	 */
-	public void setDirectory(File file)
+	public void setDirectory(File file) throws Exception, NullPointerException, ParseException
 	{
-		timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
-		directory = timeline.getDirectory();
-		
-		System.out.println("Dir: " + directory);
-		System.out.println("File: " + file.getAbsolutePath());
+		try
+		{
+			timeline = TimelineParser.ImportTimeline(file.getAbsolutePath());
+			if(timeline != null)
+			{
+				directory = timeline.getDirectory();
+			}
+			
+			//System.out.println("Dir: " + directory);
+			//System.out.println("File: " + file.getAbsolutePath());
+		}catch (ParseException pe) {
+			System.out.println("Invalid file given. Cannot import:" + pe.getMessage());
+			throw pe;
+		}catch (NullPointerException npe){
+			System.out.println("Invalid file given. Cannot import:" + npe.getMessage());
+			throw npe;
+		}
+		catch(Exception e) {
+			System.out.println("Invalid file given. Cannot import:" + e.getMessage());
+			throw e;
+		}
 	}
 
 	public String getDirectory()
@@ -144,21 +166,35 @@ public class SceneHandler {
 		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
-			    int confirmed = JOptionPane.showConfirmDialog(null, 
-			    	"Are you sure you want to exit the program?\n\nAny unsaved changes will be lost.", "Confirm Exit",
-			        JOptionPane.YES_NO_OPTION);
-
-			    if (confirmed == JOptionPane.YES_OPTION) {
-			    	restartProgram();
-			      mainFrame.dispose();
-			      System.exit(1);
-			    }
+				  //only show quit confirm in creator and not in directory select scene
+				  if (appType == AppType.CREATOR && GetCurrentScene().getSceneType() != SceneType.DIRECTORY)
+				  {
+					  int confirmed = JOptionPane.showConfirmDialog(null,
+							  "Are you sure you want to exit the program?\n\nAny unsaved changes will be lost.", "Confirm Exit",
+							  JOptionPane.YES_NO_OPTION);
+					  if (confirmed == JOptionPane.YES_OPTION) {
+						  exitProgram();
+					  }
+				  }
+				  else exitProgram();
 			  }
 			});
 
 		mainFrame.setVisible(true);
 		
 		return true;
+	}
+	
+	/**
+	 * Exits the program! Woot!
+	 * 
+	 * @author Timothy Couch
+	 * @author Austin Vickers
+	 */
+	public void exitProgram() {
+		  restartProgram();
+	      mainFrame.dispose();
+	      System.exit(1);
 	}
 	
 	/**
@@ -173,6 +209,11 @@ public class SceneHandler {
 		
 		if(!scenes.containsKey(type)) {
 			scenes.put(type, scene);
+			if (scene.getSceneType() == null)
+			{
+				scene.setSceneType(type);
+			}
+			else System.out.println("That scene already has type " + scene.getSceneType().getTitle() + ". This is strange and likely incorrect.");
 		}
 		else {
 			System.out.println("That scene already exists in the context. Use SwitchToScene() to switch to it");

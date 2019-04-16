@@ -39,6 +39,9 @@ public class PlayScene extends Scene {
 	/** panel showing the current slide */
 	private JPanel slidePanel;
 	
+	/** bottom panel with controls on it */
+	private JPanel optionsPanel;
+	
 	private static final SlideDir autoDir = SlideDir.RIGHT;
 	
 	/** button that controls play and pause on auto slideshow */
@@ -156,7 +159,7 @@ public class PlayScene extends Scene {
 		this.add(slidePanel, c);
 		
 		// Set options panel configurations
-		JPanel optionsPanel = new JPanel();
+		optionsPanel = new JPanel();
 		optionsPanel.setLayout(gridBag);
 		optionsPanel.setBackground(SliderColor.beige_gray);
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -338,6 +341,9 @@ public class PlayScene extends Scene {
 		{
 			isPaused = !isPaused;
 			System.out.println("Paused: " + isPaused);
+			
+			//pause audio 
+			timeline.audioPlayer.pauseCurrentAudio();
 		}
 		
 		//just hit pause
@@ -347,6 +353,9 @@ public class PlayScene extends Scene {
 			if (!isTransitioning())
 				cancelTimer();
 			
+			//pause audio
+			timeline.audioPlayer.pauseCurrentAudio();
+			
 			//swap gui button to play
 			playPauseButton.setToolTipText("Play Slideshow");
 			playPauseButton.setIcon(playIcon);
@@ -355,10 +364,17 @@ public class PlayScene extends Scene {
 		else //just hit play
 		{
 			//play slideshow if not at end
-			if (getNextSlideIndex(autoDir) != currentSlideIndex)
+			if (getNextSlideIndex(autoDir) != currentSlideIndex) {
 				scheduleStartTransition(autoDir);
+				
+				//Resume audio
+				timeline.audioPlayer.resumeCurrentAudio();
+				
+			}
 			else//restart because we're at the end
 			{
+				System.out.println("Starting over from beginning");
+				timeline.audioPlayer.FullStop();
 				startSlideshow();
 			}
 			
@@ -494,6 +510,10 @@ public class PlayScene extends Scene {
 		slidePanel.removeAll();
 		slidePanel.add(createSlideLabel(), BorderLayout.CENTER);
 		revalidate();
+		
+		//repaint the bar to make sure it doesn't get overwritten by resized window during transition
+		repaint();
+		optionsPanel.repaint();
 	}
 	
 	/**
@@ -510,16 +530,9 @@ public class PlayScene extends Scene {
 		
 		Transition transition = getTransition(currentTransitionIndex);
 		
-		slidePanel.removeAll();
-		JPanel transitionPanel = new JPanel();
-		slidePanel.add(transitionPanel, BorderLayout.CENTER);
-		transitionPanel.setBorder(BorderFactory.createEmptyBorder());
-		transitionPanel.setBackground(SliderColor.dark_gray);
-		revalidate();
-		
 		setManualButtonIcons();
 		
-		transition.PlayTransition(transitionPanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
+		transition.PlayTransition(slidePanel, Thumbnail.cloneImage(slideThumb.getImageRaw()), Thumbnail.cloneImage(getSlide(getNextSlideIndex(dir)).getImageRaw()));
 	}
 	
 	/**
@@ -531,7 +544,7 @@ public class PlayScene extends Scene {
 	private synchronized void scheduleStartTransition(SlideDir dir) {
 		//run after slide duration if automatic, run immediately if manual
 		int timerLength = !timeline.timelineSettings.isManual ? slideTimes[currentSlideIndex].showSlideDuration : 0;
-		System.out.println("Scheduling start of transition with timer " + timerLength);
+		//System.out.println("Scheduling start of transition with timer " + timerLength);
 		
 		cancelTimer();
 		slideTimer = new Timer();
@@ -541,7 +554,7 @@ public class PlayScene extends Scene {
 					//start transition to next slide
 					@Override
 					public void run() {
-						System.out.println("Starting transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
+						//System.out.println("Starting transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
 						
 						//if there's another slide in that direction, go
 						if (getNextSlideIndex(dir) != currentSlideIndex)
@@ -581,7 +594,7 @@ public class PlayScene extends Scene {
 					@Override
 					public void run() 
 					{
-						System.out.println("Finishing transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
+						//System.out.println("Finishing transition to " + (dir == SlideDir.RIGHT ? "next" : "previous") + " slide! Index: " + currentSlideIndex);
 						
 						//if the transition playing has finished
 						if (!getTransition(currentTransitionIndex).isRunning())
@@ -590,7 +603,7 @@ public class PlayScene extends Scene {
 							//if the slideshow will advance (otherwise, it doesn't loop and is at the end)
 							if (getNextSlideIndex(dir) != currentSlideIndex)
 							{
-								System.out.println("Advancing Slide from " + currentSlideIndex);
+								//System.out.println("Advancing Slide from " + currentSlideIndex);
 								advanceSlide(dir);
 								
 								//start the next slide if auto and not paused
@@ -599,7 +612,7 @@ public class PlayScene extends Scene {
 							}
 							else System.out.println("StartSlide: No more slides available in that direction!");
 						}
-						else System.out.println("Transition not finished! Running timer again");
+						//else System.out.println("Transition not finished! Running timer again");
 					}
 				},
 				slideTimes[currentTransitionIndex].transitionDuration,
@@ -615,12 +628,19 @@ public class PlayScene extends Scene {
 	private synchronized void startSlideshow() {
 		slideTimes = new SlideShowTime[timeline.transitionsList.getSize()];
 		for (int i = 0; i < slideTimes.length; i++)
+		{
 			slideTimes[i] = new SlideShowTime(timeline, i);
+			//update transition lengths if they were cut short for slide length
+			getTransition(i).setTransitionLength(slideTimes[i].transitionDuration / 1000);
+		}
 		
 		//start at the proper values
 		currentSlideIndex = 0;
 		currentTransitionIndex = -1;
 		showCurrentSlide();
+		
+		//Begin running the audio for the slideshow
+		timeline.audioPlayer.playAudioClipsSequentially(timeline.timelineSettings.isLoopingAudio);
 		
 		//begin running the auto slideshow
 		if (!timeline.timelineSettings.isManual && timeline.thumbnailsList.getSize() > 0)
@@ -635,6 +655,10 @@ public class PlayScene extends Scene {
 	private synchronized void stopSlideshow()
 	{
 		cancelTimer();
+		
+		//Stop audio
+		if(timeline != null)
+			timeline.audioPlayer.FullStop();
 		
 		if (isInitialized() && currentTransitionIndex >= 0)
 		{

@@ -10,9 +10,11 @@
 
 package core;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -163,10 +165,16 @@ public class Thumbnail
      * 
      * @author Timothy Couch
      */
-    private Image resizeImageThumb(Image image)
+    private Image resizeImageThumb(Image image) throws NullPointerException
     {
-        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
-        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
+    	try
+    	{
+	        int[] imageDims = getLetterBoxCoords(image.getWidth(null), image.getHeight(null), thumbSize.x, thumbSize.y);
+	        return image.getScaledInstance(imageDims[2], imageDims[3], Image.SCALE_DEFAULT);
+    	} catch (NullPointerException npe)
+    	{
+    		throw npe;
+    	}
     }
     
     /**
@@ -219,13 +227,7 @@ public class Thumbnail
      */
     public boolean drawFill(Graphics g, Container container)
     {
-	  Image displayImage = imageRaw;
-	  
-	  //calculate position and size to draw image with proper aspect ratio
-	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
-	  
-	  //draw image
-	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+    	return drawImageFill(imageRaw, g, container);
     }
 
     
@@ -244,7 +246,49 @@ public class Thumbnail
 	  int[] drawCoords = getLetterBoxCoords(displayImage, container);
 	  
 	  //draw image
-	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], null);
+	  return g.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], SliderColor.clear, container);
+    }
+
+    
+    /**
+     * drawImageFillImage - draws the display image onto the canvas image
+     * @param displayImage image to draw
+     * @param canvasImage the image on which to draw the display image
+     * @param backColor the color to fill the image with initially
+     * @return the result of g.drawImage (false if still in process of drawing, true otherwise)
+     * 
+     * @author Timothy Couch
+     */
+    public static boolean drawImageFillImage(Image displayImage, BufferedImage canvasImage, Color backColor)
+    {	  
+	  //calculate position and size to draw image with proper aspect ratio
+	  int[] drawCoords = getLetterBoxCoords(displayImage.getWidth(null), displayImage.getHeight(null), canvasImage.getWidth(), canvasImage.getHeight());
+	  
+	  Graphics2D canvasGraphics = canvasImage.createGraphics();
+	  
+	  //fill in the image
+	  if (backColor != null)
+	  {
+		  canvasGraphics.setPaint(backColor);
+		  canvasGraphics.fillRect(0, 0, canvasImage.getWidth(), canvasImage.getHeight());
+	  }
+	  
+	  //draw image
+	  return canvasGraphics.drawImage(displayImage, drawCoords[0], drawCoords[1], drawCoords[2], drawCoords[3], SliderColor.clear, null);
+    }
+
+    
+    /**
+     * drawImageFillImage - draws the display image onto the canvas image
+     * @param displayImage image to draw
+     * @param canvasImage the image on which to draw the display image
+     * @return the result of g.drawImage (false if still in process of drawing, true otherwise)
+     * 
+     * @author Timothy Couch
+     */
+    public static boolean drawImageFillImage(Image displayImage, BufferedImage canvasImage)
+    {	  
+	  return drawImageFillImage(displayImage, canvasImage, null);
     }
     
     /**

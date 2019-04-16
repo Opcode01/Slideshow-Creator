@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -23,12 +24,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class DirectoryExplorer extends Scene {
 	
@@ -74,7 +77,7 @@ public class DirectoryExplorer extends Scene {
 	 * @author Fernando Palacios
 	 * @author austinvickers
 	 */
-	public DirectoryExplorer()
+	public DirectoryExplorer() throws Exception
 	{
 		
 		// Create GridBagLayout object and constraints
@@ -95,15 +98,19 @@ public class DirectoryExplorer extends Scene {
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (IllegalAccessException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		} catch (UnsupportedLookAndFeelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			throw e1;
 		}
 		
 		// Set frame configurations
@@ -132,8 +139,13 @@ public class DirectoryExplorer extends Scene {
 		selectExistingButton.setRolloverIcon(highlightedSelectExisting);
 		selectExistingButton.setPressedIcon(highlightedSelectExisting);
 		selectExistingButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelectFile();
+			public void actionPerformed(ActionEvent e){
+				try {
+					SelectFile();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -197,15 +209,22 @@ public class DirectoryExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void SelectFile() {
+	public void SelectFile() throws Exception
+	{
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File("."));//start at this directory
 		chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
 		int returnVal = chooser.showDialog(DirectoryExplorer.this, "Choose Slideshow File");
     	if(returnVal == JFileChooser.APPROVE_OPTION) {
     	    File slFile = chooser.getSelectedFile();
-    		GoToSelectScene(slFile);
-    	}
+    		try {
+				GoToSelectScene(slFile);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				throw e;
+			}
+    	}	
 	}
 	
 	/**
@@ -226,11 +245,40 @@ public class DirectoryExplorer extends Scene {
 	 * 
 	 * @author Timothy Couch
 	 */
-	public void GoToSelectScene(File slFile)
+	public void GoToSelectScene(File slFile) throws Exception, FileNotFoundException
 	{
-		SceneHandler.singleton.setDirectory(slFile);
-	    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
-		SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+		try 
+		{
+			SceneHandler.singleton.setDirectory(slFile);
+			if(SceneHandler.singleton.getTimeline() != null)
+			{
+			    SceneHandler.singleton.getTimeline().timelineSettings.PrintAll();
+			    SceneHandler.singleton.getTimeline().audioPlayer.PrintAll();
+				SceneHandler.singleton.SwitchToScene(SceneType.SELECTION);
+			}
+			else
+			{
+				JFrame parent = SceneHandler.singleton.getMainFrame();
+		    	Coord2 point = new Coord2(
+		    			parent.getX() + parent.getSize().width/2,
+		    			parent.getY() + parent.getSize().height/2
+		    			);
+		    	
+				WarningPane p = new WarningPane(
+		    			parent,
+		    			"Warning - Invalid File Selected",
+		    			"Invalid slider file. Cannot be loaded in.",
+		    			point, 
+		    			new Dimension(400, 190));
+			}
+		} catch (FileNotFoundException fnfe) {
+			//e.printStackTrace();
+			throw fnfe;
+		} catch (Exception e) {
+			//e.printStackTrace();
+			throw e;
+		}
+		
 	}
 	
 }

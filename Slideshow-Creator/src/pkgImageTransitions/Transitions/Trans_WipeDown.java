@@ -1,3 +1,15 @@
+/**
+ * Trans_WipeDown.java
+ * Wipes down from top from one image to another
+ * Original Author: R Coleman
+ * Modified by Timothy Couch
+ * 
+ * Slideshow Creator
+ * Timothy Couch, Joseph Hoang, Fernando Palacios, Austin Vickers
+ * CS 499 Senior Design with Dr. Rick Coleman
+ * 4/11/19
+ */
+
 package pkgImageTransitions.Transitions;
 
 import java.awt.Graphics;
@@ -5,10 +17,15 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.SliderColor;
+import core.Thumbnail;
 import pkgImageTransitions.ColemanTransition;
 
 public class Trans_WipeDown extends ColemanTransition
 {
+
+	/** How many time to fade between the images per second. Updates on the fly based on machine performance */
+	protected static int fps = 50;
 	
 	//---------------------------------------------------
 	/** Perform the transition from one image to another */
@@ -27,53 +44,66 @@ public class Trans_WipeDown extends ColemanTransition
 	public void DrawImageTransition(JPanel imgPanel, BufferedImage ImageA, BufferedImage ImageB, double time)
 	{
 		Graphics gPan = imgPanel.getGraphics();
-		Graphics gA = ImageA.getGraphics();
 		
 		// Dimension holders
-		int bY1, bY2;		// Dimensions for imageA
 		int imgWidth, imgHeight;
-		int incY;					// Y increment each time
-		int numIterations = 50;		// Number of iterations in the sweep
-		int timeInc;				// Milliseconds to pause each time
-		timeInc = (int)(time * 1000) / numIterations;
+
+		int numIterations = (int) (fps * time);
+		int timeMillis = (int) (time * 1000);
+		int timeInc = timeMillis / numIterations; // Milliseconds to pause each step
+		
+		//create an image A the size of the container
+		BufferedImage contImageA = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageA, contImageA, SliderColor.dark_gray);
+		Graphics gA = contImageA.getGraphics();
+		
+		//create an image B the size of the container with solid background
+		BufferedImage contImageB = new BufferedImage(imgPanel.getWidth(), imgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Thumbnail.drawImageFillImage(ImageB, contImageB, SliderColor.dark_gray);
 		
 		imgWidth = imgPanel.getWidth();
 		imgHeight = imgPanel.getHeight();
-		incY = imgHeight / numIterations;		// Do 1/20 each time to start
-		
-		// Initialize the dimensions for section of ImageB to draw into ImageA
-		bY1 = 0;
-		bY2 = incY;
-
-        // Draw the scaled current image if necessary
-		gPan.drawImage(ImageA, 0, 0, imgPanel);
 
 		// Draw image A
+		int avgElapsedTime = 0;//how much time each fade step takes on average
 		for(int i=0; i<numIterations; i++)
 		{
 			if (isAborting())
 				break;
+			
+			long startTime = System.currentTimeMillis();
+			
+			int startDraw = (int) ((float) imgHeight / numIterations * i);
+			int endDraw = (int) ((float) imgHeight / numIterations * (i + 1));
+			
 			// Draw part of B into A
-			gA.drawImage(ImageB, 0, bY1, imgWidth, bY2, 0, bY1, imgWidth, bY2, null); // Draw portion of ImageB into ImageA
-			gPan.drawImage(ImageA, 0,0, imgPanel); // Copy ImageA into panel
-			bY1 = bY2;
-			bY2 += incY;  // Take a bigger section next time
+			gA.drawImage(contImageB, 0, startDraw, imgWidth, endDraw, 0, startDraw, imgWidth, endDraw, null); // Draw portion of ImageB into ImageA
+			gPan.drawImage(contImageA, 0,0, imgPanel); // Copy ImageA into panel
+			
 			// Pause a bit
 			try 
 			{
-			    Thread.sleep(timeInc);                 
+				int elapsedTime = (int) (System.currentTimeMillis() - startTime);
+				avgElapsedTime += elapsedTime;
+			    Thread.sleep(Math.max(timeInc - elapsedTime, 0));
 			} 
 			catch(InterruptedException ex) 
 			{
 			    Thread.currentThread().interrupt();
 			} 
 		}
+		
 		if (!isAborting())
 		{
-			// Move m_NextImage into m_CurrentImage for next time -  May not need this
-			ImageA.getGraphics().drawImage(ImageB, 0, 0, imgPanel);
-			// And one final draw to the panel to be sure it's all there
-			gPan.drawImage(ImageA, 0,0, imgPanel); 
+			//adjust number of iterations to get a proper transition for next time
+			avgElapsedTime /= numIterations;
+			
+			int prevFps = fps;
+
+			//set fps to how many frames of the average elapsed time will fit into one second
+			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			
+			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 

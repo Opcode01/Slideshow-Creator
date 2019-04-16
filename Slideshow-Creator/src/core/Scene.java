@@ -23,6 +23,29 @@ public abstract class Scene extends JPanel
 	public boolean isInitialized() {
 		return initialized;
 	}
+	
+	/**
+	 * what type of scene this scene is. Set only once
+	 */
+	private SceneType sceneType;
+	
+	/**
+	 * sets the scene Type. Can only be set once
+	 * @param sT the SceneType to use
+	 * @return true if properly set scene type. False otherwise
+	 */
+	public boolean setSceneType(SceneType sT) {
+		if (sceneType == null)
+		{
+			sceneType = sT;
+			return true;
+		}
+		return false;
+	}
+	
+	public SceneType getSceneType() {
+		return sceneType;
+	}
 
 	public Scene()
 	{
