@@ -106,7 +106,9 @@ public class Trans_WipeLeft extends ColemanTransition
 			int prevFps = fps;
 
 			//set fps to how many frames of the average elapsed time will fit into one second
-			fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			if (avgElapsedTime != 0)
+				fps = Math.min(Math.max(Math.round(timeMillis / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
+			else fps = 60;//so fast that it didn't even take a full millisecond on average
 			
 			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
