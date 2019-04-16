@@ -108,12 +108,19 @@ public class Audio extends NotifyingThread implements LineListener
 
 	// Some variables from Juke.java.  Not sure if they are really needed but
 	//   we define them for now just to adapt the code.
-    boolean midiEOM = false;
-    boolean audioEOM = false;
-    boolean isInterrupted = false;
+    private boolean midiEOM = false;
+    private boolean audioEOM = false;
+    private boolean isInterrupted = false;
 
     /** Flag if we are paused (for clips only???) */
-    boolean m_bPaused = false;	
+    private boolean m_bPaused = false;	
+    
+    /** Boolean for if the clip is currently playing */
+    private boolean isPlaying = false;
+    
+    public boolean getIsPlaying() {
+    	return isPlaying;
+    }
 
 	//---------------------------------------------------
 	// Default constructor
@@ -145,7 +152,7 @@ public class Audio extends NotifyingThread implements LineListener
 	//Allow the user to start the thread
 	public void Play() {
 		
-		if(!m_PlayerThread.isAlive()) {
+		if(!isPlaying) {
 			m_PlayerThread = new Thread(this);
 			m_PlayerThread.start();
 		}
@@ -161,8 +168,10 @@ public class Audio extends NotifyingThread implements LineListener
 	//---------------------------------------------------
     public void doRun() throws InterruptedException
     {
-    	if(!loadAudioFile())
+    	if(!loadAudioFile()) {
+    		System.out.println("Could not load in audio file");
     		return;		// Oops! Couldn't load the file so terminate
+    	}
     	playAudioFile();
     	
         //If the thread was closed because it was interrupted, 
@@ -293,6 +302,7 @@ public class Audio extends NotifyingThread implements LineListener
 	private void playAudioFile()
 	{
         midiEOM = audioEOM = isInterrupted = false;
+        isPlaying = true;
         if (m_CurrentSound instanceof Sequence || 
         		m_CurrentSound instanceof BufferedInputStream && m_PlayerThread != null) 
         {
@@ -341,7 +351,9 @@ public class Audio extends NotifyingThread implements LineListener
         }
         //m_CurrentSound = null;
         
-        //At this point if we get here, the thread actually closes
+        //At this point if we get here, the should thread actually close
+        isPlaying = false;
+        //System.out.println("Thread should close now");
 	}
 	
 	//----------------------------------------------------------------
@@ -393,6 +405,7 @@ public class Audio extends NotifyingThread implements LineListener
             ((Clip) m_CurrentSound).close();
         }
         m_CurrentSound = null;
+        isPlaying = false;
         
         //Need to tell the thread to explicitly stop, by setting some boolean that will
         //break us out of the while loops in doRun

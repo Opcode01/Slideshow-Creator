@@ -39,7 +39,6 @@ public abstract class NotifyingThread implements Runnable {
 			//Do not notify the listeners
 			return;
 		} 
-		
 		notifyListeners();
 	}
 	
