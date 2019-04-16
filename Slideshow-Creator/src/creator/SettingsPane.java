@@ -170,23 +170,43 @@ public class SettingsPane extends FloatingPane
 		saveButton.setRolloverIcon(highlightedSave);
 		saveButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	UpdateProjectSettings();
+		    	
 		    	Timeline t = SceneHandler.singleton.getTimeline();
 		    	Settings s = t.timelineSettings;
-
-		    	int slideShowDuration = s.slideDuration * t.thumbnailsList.getSize();
+		    	float currentPlayTime = t.audioPlayer.getPlayingLength();
 		    	
-		    	if (slideShowDuration > 0) {
+		    	int slideShowDuration = s.slideDuration * t.thumbnailsList.getSize();
+		    	System.out.println("LENGTH OF AUDIO LIST IS " + t.audioPlayer.getPlayingLength() + "SD IS " + slideShowDuration);
+		    	if (slideShowDuration < t.audioPlayer.getPlayingLength()) {
+		    		
 		    		// Open warning pane in the center of our workspace
 		    		JFrame parent = SceneHandler.singleton.getMainFrame();
 		    		Coord2 point = new Coord2(
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    		);
-		    		WarningPane p = new WarningPane(parent, "Warning - Duration shorter than audio", point, new Dimension(400, 190), "The slide duration is less than the currently supported audio", "If you continue, audio all audio will be removed.", "Would you like to proceed?");
+		    		WarningPane p = new WarningPane(parent, "Warning - Duration shorter than audio", point, new Dimension(400, 190), "The slide duration is less than the currently supported audio", "Audio tracks were removed or clipped to the appropriate size.");
 		    		parent.setEnabled(false);
+		    		
+		    		for(int i = (t.audioPlayer.getSize() - 1); i >= 0; i--) {
+		    			currentPlayTime -= t.audioPlayer.getAudio(i).getAudioLength();
+				    	System.out.println("NUMBER" + i + "LENGTH OF AUDIO LIST IS " + t.audioPlayer.getPlayingLength() + "SD IS " + slideShowDuration);
+				    	System.out.println("NUMBER" + i + "LENGTH OF AUDIO LIST CURRENTTIME IS " + currentPlayTime + "SD IS " + slideShowDuration);
+
+		    			if(currentPlayTime < slideShowDuration) {
+		    		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
+		    		    	scene.SetupTimelinePanel(true);
+		    		    	scene.repaint();
+		    		    	scene.revalidate();
+		    		    	ClosePane();
+		    		    	return;
+		    			}
+		    			t.audioPlayer.removeAudioAtIndex(i);
+			    		System.out.println("REMOVED AUDIO TRACK " + i);
+		    		}
 		    	}
-		    	
-		    	UpdateProjectSettings();
+		    	currentPlayTime = 0;
 		    	ArrangeScene scene = (ArrangeScene)SceneHandler.singleton.GetCurrentScene();
 		    	scene.SetupTimelinePanel(true);
 		    	scene.repaint();

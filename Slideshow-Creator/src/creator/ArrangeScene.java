@@ -628,11 +628,6 @@ public class ArrangeScene extends Scene{
 		    Audio audioTrack = timeline.audioPlayer.getAudio(i);
 		    int audioTrackSize = Math.round(audioTrack.getAudioLength() * secondsToPixels);
 		    
-		    System.out.println(audioTrack.getAudioLength());
-		    System.out.println(secondsToPixels);
-		    System.out.println(thumbnailTotalLength + transitionTotalLength);
-		    System.out.println(audioTrackSize);
-		    
 		    // Add each track size to the total duration of the audio
 		    audioTimelineDuration += audioTrackSize;
 		    
@@ -645,7 +640,7 @@ public class ArrangeScene extends Scene{
 				audioTrackSize -= (extraAudioLength);
 			}
 			
-			System.out.println(audioTrackSize);
+			//System.out.println(audioTrackSize);
 		    
 		    // Create text field for audio
 			JTextField audioText = new JTextField();
