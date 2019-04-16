@@ -354,7 +354,7 @@ public class ArrangeScene extends Scene{
 		    	{
 			    	JFileChooser chooser = new JFileChooser();
 			    	chooser.setDialogTitle("Save File");
-					chooser.setCurrentDirectory(new File("."));//start at this directory
+					chooser.setCurrentDirectory(new File(SceneHandler.singleton.getDirectory()));//start at this directory
 					chooser.setFileFilter(new FileNameExtensionFilter("Slideshow File", "sl"));
 					int returnVal = chooser.showSaveDialog(SceneHandler.singleton.getMainFrame());
 			    	if(returnVal == JFileChooser.APPROVE_OPTION) 
@@ -375,7 +375,7 @@ public class ArrangeScene extends Scene{
 				    	    }
 				    	    else
 				    	    {
-				    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath());
+				    	    	TimelineParser.ExportTimeline(slFile.getAbsolutePath().replace(".sl", ""));
 				    	    	TimelineParser.setLastDirPath(slFile.getAbsolutePath().replace(".sl", ""));
 				    	    	TimelineParser.setHasSavedOnce(true);
 				    	    }
@@ -923,7 +923,7 @@ public class ArrangeScene extends Scene{
 	    }
 				
     	JFileChooser chooser = new JFileChooser();
-    	chooser.setCurrentDirectory(new java.io.File(".")); // start at application current directory
+    	chooser.setCurrentDirectory(new java.io.File(SceneHandler.singleton.getDirectory())); // start at application current directory
     	
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileFilter(new FileNameExtensionFilter("Audio Files", new String[] { "WAV", "AIFF"}));
