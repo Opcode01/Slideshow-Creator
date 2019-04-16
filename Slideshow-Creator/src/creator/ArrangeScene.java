@@ -279,7 +279,9 @@ public class ArrangeScene extends Scene{
 		    	// Remove components and repaint 
 		    	timelinePanel.removeAll();
 		    	PopulateTimeline(false);
+		    	PopulateAudio();
 		    	revalidate();
+		    	repaint();
 		    }
 		});
 
@@ -705,8 +707,9 @@ public class ArrangeScene extends Scene{
 		//show the first slide
 		if (timeline.thumbnailsList.getSize() > 0)
 		{
-			if(keepCurrentSelected && currentSlide != null) {
-				int index = timeline.thumbnailsList.indexOf(currentSlide);
+			int index = timeline.thumbnailsList.indexOf(currentSlide);
+			if(keepCurrentSelected && currentSlide != null && index != -1) {
+				System.out.println(index);
 				selectButton(thumbButtons[index]);
 			}
 			else {
