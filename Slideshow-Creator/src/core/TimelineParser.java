@@ -14,8 +14,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import creator.WarningPane;
-
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -8,7 +8,7 @@
  * 4/11/19
  */
 
-package creator;
+package core;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,10 +28,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import core.Coord2;
-import core.FloatingPane;
-import core.SliderColor;
 
 public class WarningPane extends FloatingPane{
 

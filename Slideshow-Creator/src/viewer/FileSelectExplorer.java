@@ -31,7 +31,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import core.*;
-import creator.WarningPane;
 
 public class FileSelectExplorer extends Scene {
 	

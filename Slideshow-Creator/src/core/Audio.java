@@ -10,9 +10,11 @@
 
 package core;
 
+import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -26,6 +28,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JFrame;
 
 //=============================================================================
 /** Class: Audio
@@ -94,13 +97,33 @@ public class Audio extends NotifyingThread implements LineListener
 		    float frameRate = format.getFrameRate();
 		    audioLength = (audioFileLength / (frameSize * frameRate));
 		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Alert the user
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+			WarningPane w = new WarningPane(
+					parent, 
+					"Audio file not supported", 
+					"This type of file is not supported. Please open this slider file in the creator and add a supported audio track (.WAV or .AIFF)", 
+					point,
+					new Dimension(400,190));
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//Alert the user
+			JFrame parent = SceneHandler.singleton.getMainFrame();
+	    	Coord2 point = new Coord2(
+	    			parent.getX() + parent.getSize().width/2,
+	    			parent.getY() + parent.getSize().height/2
+	    			);
+			WarningPane w = new WarningPane(
+					parent, 
+					"Audio Not Found", 
+					"Audio file not found. Make sure the file exists at the location:  " + m_AudioFile.getAbsolutePath(), 
+					point,
+					new Dimension(400,190));
 		}
-	    
 	}
 	
 	/** File to open and play */
@@ -204,7 +227,7 @@ public class Audio extends NotifyingThread implements LineListener
                 } 
                 catch (Exception e3) 
                 { 
-                	e3.printStackTrace(); 
+                	//e3.printStackTrace(); 
                     m_CurrentSound = null;
                     return false;
                 }
