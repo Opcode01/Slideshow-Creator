@@ -31,6 +31,7 @@ import javax.swing.JTextArea;
 
 import core.Coord2;
 import core.FloatingPane;
+import core.SliderColor;
 
 public class WarningPane extends FloatingPane{
 
@@ -52,12 +53,6 @@ public class WarningPane extends FloatingPane{
 	/** Highlighted ok custom button image */
 	private ImageIcon highlightedOk;
 	
-	/** Create custom light gray color */
-	private Color light_gray = new Color(31, 31, 31);
-	
-	/** Create custom white color */
-	private Color white = new Color(255, 255, 255);
-	
 	/** Create common font for application usage */
 	private Font commonFont = new Font("Arial", Font.LAYOUT_LEFT_TO_RIGHT, 12);
 
@@ -73,7 +68,7 @@ public class WarningPane extends FloatingPane{
 		//Construct original panel container and configurations
 		JPanel warningGui = new JPanel();
 		warningGui.setLayout(gridBag);
-		warningGui.setBackground(light_gray);
+		warningGui.setBackground(SliderColor.beige_gray);
 		
 		// Set images
 		ok = new ImageIcon(getClass().getResource("/creator/Images/okButton.png"));
@@ -89,8 +84,8 @@ public class WarningPane extends FloatingPane{
         textArea.setText(text);
         textArea.setFont(commonFont);
         textArea.setEditable(false);
-        textArea.setForeground(white);
-        textArea.setBackground(light_gray);
+        textArea.setForeground(SliderColor.white);
+        textArea.setBackground(SliderColor.beige_gray);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
 		

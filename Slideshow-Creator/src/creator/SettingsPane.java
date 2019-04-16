@@ -196,7 +196,7 @@ public class SettingsPane extends FloatingPane
 		    			parent.getX() + parent.getSize().width/2,
 		    			parent.getY() + parent.getSize().height/2
 		    		);
-		    		WarningPane p = new WarningPane(parent, "Warning - Duration shorter than audio", point, new Dimension(400, 190), "The slide duration is less than the currently supported audio", "Audio tracks were removed or clipped to the appropriate size.");
+		    		WarningPane p = new WarningPane(parent, "Warning - Duration shorter than audio", "The slide duration is less than the currently supported audio. Audio tracks were removed or clipped to the appropriate size.", point, new Dimension(400, 190));
 		    		parent.setEnabled(false);
 		    		
 		    		for(int i = (t.audioPlayer.getSize() - 1); i >= 0; i--) {

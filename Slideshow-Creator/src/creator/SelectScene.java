@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
@@ -163,6 +164,21 @@ public class SelectScene extends Scene
 		arrangeButton.setRolloverIcon(highlightedArrange);
 		arrangeButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	Timeline timeline = SceneHandler.singleton.getTimeline();
+		    	
+		    	if(timeline.thumbnailsList.getSize() == 0) {
+			    	// Open warning pane in the center of our workspace
+			    	JFrame parent = SceneHandler.singleton.getMainFrame();
+			    	Coord2 point = new Coord2(
+			    			parent.getX() + parent.getSize().width/2,
+			    			parent.getY() + parent.getSize().height/2
+			    			);
+			    	WarningPane p = new WarningPane(parent, "Warning - No selection", "You currently have no images selected. Please select at least one image to continue.", point, new Dimension(400, 190));
+			    	parent.setEnabled(false);
+			    	return;
+		    	}
+		    	
 		    	GoToArrangeScene();
 		    }
 		});
