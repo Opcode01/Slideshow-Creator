@@ -825,7 +825,7 @@ public class ArrangeScene extends Scene{
 				audioTrackSize -= (extraAudioLength);
 			}
 			
-			System.out.println(audioTrackSize);
+			//System.out.println(audioTrackSize);
 		    
 		    // Create text field for audio
 			JTextField audioText = new JTextField();

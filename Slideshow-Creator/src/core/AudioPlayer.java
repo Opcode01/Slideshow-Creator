@@ -20,6 +20,9 @@ public class AudioPlayer implements ThreadOnCompleteListener
     /** Index of the currently playing audio clip */
     private int currentIndex = 0;
     
+    /** Current length of the audio track list */
+    private float playingTime = 0;
+    
     /** Should be set to true if the audio list should loop, or false otherwise*/
     public boolean shouldLoop = false;
     
@@ -44,6 +47,16 @@ public class AudioPlayer implements ThreadOnCompleteListener
     public int getSize()
     {
         return audioList.size();
+    }
+    
+    /**
+     * @return the length(playing seconds) of the tracks together in the list
+     * 
+     * @author Fernando Palacios
+     */
+    public float getPlayingLength()
+    {
+        return playingTime;
     }
 
     /**
@@ -99,6 +112,7 @@ public class AudioPlayer implements ThreadOnCompleteListener
     {
         audioList.add(audio);
         audio.addListener(this);
+        playingTime += audio.getAudioLength();
     }
     
     /**
@@ -134,6 +148,7 @@ public class AudioPlayer implements ThreadOnCompleteListener
     	{
     		System.out.println("No audio tracks to remove");
     	}
+        playingTime -= audio.getAudioLength();
     }
     
     /**
