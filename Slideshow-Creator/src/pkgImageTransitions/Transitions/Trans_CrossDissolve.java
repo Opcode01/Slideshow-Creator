@@ -17,6 +17,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import core.SliderColor;
@@ -78,10 +80,17 @@ public class Trans_CrossDissolve extends ColemanTransition
 			bAlpha += alphaInc;//increment image B's alpha over time
 			
 			//draw A onto the screen
-			gPan.drawImage(contImageA, 0, 0, imgPanel);
+			//gPan.drawImage(contImageA, 0, 0, imgPanel);
+			BufferedImage contImageAStacked = (BufferedImage) Thumbnail.cloneImage(contImageA);
 			
 			//draw the transparent image B onto the screen more visible every loop
-			gPan.drawImage(contImageBFiltered, 0, 0, imgPanel);
+			//gPan.drawImage(contImageBFiltered, 0, 0, imgPanel);
+			contImageAStacked.createGraphics().drawImage(contImageBFiltered, 0, 0, null);
+			
+			imgPanel.removeAll();
+			
+			imgPanel.add(new JLabel(new ImageIcon(contImageAStacked)));
+			imgPanel.revalidate();
 			
 			//pause for a bit
 			try 
