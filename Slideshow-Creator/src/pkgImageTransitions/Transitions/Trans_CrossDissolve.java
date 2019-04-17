@@ -115,7 +115,7 @@ public class Trans_CrossDissolve extends ColemanTransition
 				fps = Math.min(Math.max(Math.round(1000 / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			else fps = 60;//so fast that it didn't even take a full millisecond on average
 			
-			System.out.println("timeInc: " + timeInc + " numIterations: " + numIterations + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
+			//System.out.println("timeInc: " + timeInc + " numIterations: " + numIterations + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 	
