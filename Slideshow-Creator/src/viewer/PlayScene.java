@@ -223,7 +223,7 @@ public class PlayScene extends Scene {
 			//right button
 			rightButton = new JButton(forwardIcon);
 			rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			rightButton.setToolTipText("Previous Image");
+			rightButton.setToolTipText("Next Image");
 			rightButton.setBorder(BorderFactory.createEmptyBorder());
 			rightButton.setContentAreaFilled(false);
 			rightButton.setFocusable(false);
