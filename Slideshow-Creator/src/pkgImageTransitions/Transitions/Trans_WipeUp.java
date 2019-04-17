@@ -15,6 +15,8 @@ package pkgImageTransitions.Transitions;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import core.SliderColor;
@@ -78,7 +80,11 @@ public class Trans_WipeUp extends ColemanTransition
 			
 			// Draw part of B into A
 			gA.drawImage(contImageB, 0, startDraw, imgWidth, endDraw, 0, startDraw, imgWidth, endDraw, null); // Draw portion of ImageB into ImageA
-			gPan.drawImage(contImageA, 0, 0, imgPanel);
+			
+			//Draw A onto the panel
+			imgPanel.removeAll();
+			imgPanel.add(new JLabel(new ImageIcon(contImageA)));
+			imgPanel.revalidate();
 			
 			// Pause a bit
 			try 
@@ -105,7 +111,7 @@ public class Trans_WipeUp extends ColemanTransition
 				fps = Math.min(Math.max(Math.round(1000 / avgElapsedTime), 5), 60);//limit framerate to between 5 and 60 fps
 			else fps = 60;//so fast that it didn't even take a full millisecond on average
 			
-			//System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
+			System.out.println("timeInc: " + timeInc + " avgElapsedTime: " + avgElapsedTime + "\nprevFps: " + prevFps + " fps: " + fps);
 		}
 	}
 	
