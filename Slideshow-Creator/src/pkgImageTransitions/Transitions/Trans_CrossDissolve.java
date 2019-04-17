@@ -80,11 +80,9 @@ public class Trans_CrossDissolve extends ColemanTransition
 			bAlpha += alphaInc;//increment image B's alpha over time
 			
 			//draw A onto the screen
-			//gPan.drawImage(contImageA, 0, 0, imgPanel);
 			BufferedImage contImageAStacked = (BufferedImage) Thumbnail.cloneImage(contImageA);
 			
 			//draw the transparent image B onto the screen more visible every loop
-			//gPan.drawImage(contImageBFiltered, 0, 0, imgPanel);
 			contImageAStacked.createGraphics().drawImage(contImageBFiltered, 0, 0, null);
 			
 			imgPanel.removeAll();
@@ -102,7 +100,6 @@ public class Trans_CrossDissolve extends ColemanTransition
 			catch(InterruptedException ex) 
 			{
 			    Thread.currentThread().interrupt();
-			    ex.printStackTrace();
 			}
 		}
 		
