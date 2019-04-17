@@ -295,14 +295,14 @@ public class AudioPlayer implements ThreadOnCompleteListener
      */
     public void pauseCurrentAudio() {
     	
-    	if(audioList.get(currentIndex) != null) {
+    	if(currentIndex >= 0 && currentIndex < audioList.size() && audioList.get(currentIndex) != null) {
     		audioList.get(currentIndex).pausePlaying();
     	}
     }
     
     public void resumeCurrentAudio() {
     	 
-    	if(audioList.get(currentIndex) != null) {
+    	if(currentIndex >= 0 && currentIndex < audioList.size() && audioList.get(currentIndex) != null) {
     		audioList.get(currentIndex).resumePlaying();
     	}
     }
