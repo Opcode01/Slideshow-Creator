@@ -19,7 +19,6 @@ import core.*;
 import creator.ArrangeScene;
 import creator.DirectoryExplorer;
 import creator.SelectScene;
-import creator.WarningPane;
 
 public class ViewerMain
 {
