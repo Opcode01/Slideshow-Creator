@@ -15,6 +15,7 @@ package pkgImageTransitions.Transitions;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
@@ -68,23 +69,19 @@ public class Trans_CrossDissolve extends ColemanTransition
 			long startTime = System.currentTimeMillis();
 			
 			//make image b more visible
-			for (int h = 0; h < contImageB.getWidth(); h++) {
-	            for (int j = 0; j < contImageB.getHeight(); j++) {                    
-	                Color pixColor = new Color(contImageB.getRGB(h, j), true);
-	                
-	                if (pixColor.getAlpha() > 0) {
-	                	pixColor = new Color(pixColor.getRed(), pixColor.getGreen(), pixColor.getBlue(), (int) (255 * bAlpha));
-	                	contImageB.setRGB(h, j, pixColor.getRGB());
-	                }
-	            }
-	        }
+			
+			float[] scales = { 1.0f, 1.0f, 1.0f, bAlpha};
+			float[] offsets = new float[4];
+			RescaleOp rop = new RescaleOp(scales, offsets, null);
+			BufferedImage contImageBFiltered = rop.filter(contImageB, null);
+			
 			bAlpha += alphaInc;//increment image B's alpha over time
 			
 			//draw A onto the screen
 			gPan.drawImage(contImageA, 0, 0, imgPanel);
 			
 			//draw the transparent image B onto the screen more visible every loop
-			gPan.drawImage(contImageB, 0, 0, null);
+			gPan.drawImage(contImageBFiltered, 0, 0, imgPanel);
 			
 			//pause for a bit
 			try 
