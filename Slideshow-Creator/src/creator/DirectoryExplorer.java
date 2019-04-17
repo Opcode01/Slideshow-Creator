@@ -84,6 +84,8 @@ public class DirectoryExplorer extends Scene {
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		
+		setBackground(SliderColor.directory_gray);
+		
 		// Create images
 		selectDirectory = new ImageIcon(getClass().getResource("/creator/Images/selectDirectoryButton.png"));
 		highlightedSelectDirectory = new ImageIcon(getClass().getResource("/creator/Images/highlightedSelectDirectoryButton.png"));

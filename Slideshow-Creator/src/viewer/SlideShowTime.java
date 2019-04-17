@@ -53,5 +53,7 @@ public final class SlideShowTime {
 			//set transition length to what the transition wants because slide duration is irrelevant in manual slideshows
 			transitionDuration = (int) (timeline.transitionsList.getTransition(slideIndex).getTransitionLength() * 1000);
 		showSlideDuration = slideDuration - transitionDuration;
+		
+		//System.out.println("slideIndex: " + slideIndex + " slideDuration: " + slideDuration + " transitionDuration: " + transitionDuration + " showSlideDuration: " + showSlideDuration);
 	}
 }

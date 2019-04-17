@@ -71,6 +71,8 @@ public class FileSelectExplorer extends Scene {
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		
+		setBackground(SliderColor.white);
+		
 		// Create images
 		selectExisting = new ImageIcon(getClass().getResource("/viewer/Images/selectSliderFileButton.png"));
 		highlightedSelectExisting = new ImageIcon(getClass().getResource("/viewer/Images/highlightedSelectSliderFileButton.png"));

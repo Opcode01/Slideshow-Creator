@@ -333,6 +333,9 @@ public class PlayScene extends Scene {
 	
 	/**
 	 * pauses or plays the slideshow based on what it currently is
+	 * 
+	 * @author Timothy Couch
+	 * @author Austin Vickers
 	 */
 	private void togglePauseSlideshow()
 	{
@@ -388,6 +391,8 @@ public class PlayScene extends Scene {
 	
 	/**
 	 * update the left and right buttons to be gray or colored based on whether they have functionality at the moment
+	 * 
+	 * @author Timothy Couch
 	 */
 	private void setManualButtonIcons()
 	{

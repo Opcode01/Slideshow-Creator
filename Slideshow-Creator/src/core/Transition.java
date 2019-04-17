@@ -104,7 +104,11 @@ public class Transition {
 	 * @author Timothy Couch
 	 */
 	public void PlayTransition(JPanel display, Image prevImg, Image nextImg ) {
-		if (transitionLength > 0)
+		if (transitionLength > 0 && 
+				prevImg.getWidth(null) > 0 && prevImg.getHeight(null) > 0 && 
+				nextImg.getWidth(null) > 0 && nextImg.getHeight(null) > 0 && 
+				display.getWidth() > 0 && display.getHeight() > 0)
+		{
 			if (!isRunning())
 			{
 				transitionThread = new Thread() {
@@ -117,6 +121,8 @@ public class Transition {
 				transitionThread.start();
 			}
 			else System.out.println("Transition already running! Not playing transition!");
+		}
+		else System.out.println("Transition skipped! Length 0, container size 0, or either image size 0.");
 	}
 	
 	/**

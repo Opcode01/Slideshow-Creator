@@ -17,6 +17,9 @@ public final class SliderColor {
 	/** Create custom very light gray color */
 	public static final Color very_light_gray = new Color(61, 61, 61);
 	
+	/** Create custom color to match the confetti image in directory explorer */
+	public static final Color directory_gray = new Color(60, 60, 60);
+	
 	/** Create custom light gray color */
 	public static final Color light_gray = new Color(41, 41, 41);
 	
