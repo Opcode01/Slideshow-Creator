@@ -245,6 +245,7 @@ public class TransitionPane extends FloatingPane {
 		crossButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		crossButton.setBorder(BorderFactory.createEmptyBorder());
 		crossButton.setContentAreaFilled(false);
+		crossButton.setToolTipText("Cross Dissolve");
 		crossButton.setFocusable(false);
 		crossButton.setRolloverIcon(new ImageIcon(ImageHover(cross.getImage())));
 		crossButton.setSelectedIcon(new ImageIcon(ImageHover(cross.getImage())));
@@ -254,6 +255,7 @@ public class TransitionPane extends FloatingPane {
 		rightButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		rightButton.setBorder(BorderFactory.createEmptyBorder());
 		rightButton.setContentAreaFilled(false);
+		rightButton.setToolTipText("Wipe Right");
 		rightButton.setFocusable(false);
 		rightButton.setRolloverIcon(new ImageIcon(ImageHover(right.getImage())));
 		rightButton.setSelectedIcon(new ImageIcon(ImageHover(right.getImage())));
@@ -263,6 +265,7 @@ public class TransitionPane extends FloatingPane {
 		leftButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		leftButton.setBorder(BorderFactory.createEmptyBorder());
 		leftButton.setContentAreaFilled(false);
+		leftButton.setToolTipText("Wipe Left");
 		leftButton.setFocusable(false);
 		leftButton.setRolloverIcon(new ImageIcon(ImageHover(left.getImage())));
 		leftButton.setSelectedIcon(new ImageIcon(ImageHover(left.getImage())));
@@ -272,6 +275,7 @@ public class TransitionPane extends FloatingPane {
 		upButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		upButton.setBorder(BorderFactory.createEmptyBorder());
 		upButton.setContentAreaFilled(false);
+		upButton.setToolTipText("Wipe Up");
 		upButton.setFocusable(false);
 		upButton.setRolloverIcon(new ImageIcon(ImageHover(up.getImage())));
 		upButton.setSelectedIcon(new ImageIcon(ImageHover(up.getImage())));
@@ -281,6 +285,7 @@ public class TransitionPane extends FloatingPane {
 		downButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		downButton.setBorder(BorderFactory.createEmptyBorder());
 		downButton.setContentAreaFilled(false);
+		downButton.setToolTipText("Wipe Down");
 		downButton.setFocusable(false);
 		downButton.setRolloverIcon(new ImageIcon(ImageHover(down.getImage())));
 		downButton.setSelectedIcon(new ImageIcon(ImageHover(down.getImage())));
